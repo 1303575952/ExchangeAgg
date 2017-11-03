@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.alibaba.jstorm.esotericsoftware.minlog.Log;
 import com.alibaba.jstorm.metric.MetaType;
 import com.zdx.common.SortByPrice;
 import com.zdx.common.TickerFormat;
@@ -128,34 +129,36 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		int max=tmpData.size();
 		int min=1;
 		Random random = new Random();
-		s = random.nextInt(max)%(max-min+1) + min;
-		
+		s = random.nextInt(max)%(max-min+1);
+		System.out.println("sssssssssssssssssssssssssssss=============================="+s);
 		System.out.println(tmpData.get(s));
 		wsClient.send(tmpData.get(s));
 		logger.info("Exception11 ==================================================================");
 		logger.info("Exception11 ==================================================================");
 		System.out.println("Exception11 ==================================================================");
 		System.out.println("Exception11 ==================================================================");
-		if (this.wsClient != null){
-			if (tickerPairList.size() > 1){
-				StringBuilder sb = new StringBuilder();
-				sb.append("[");
-				for (int i1 = 0; i1 < tickerPairList.size(); i1++){
-					sb.append(tp.toJsonString());
-					if ( (i1 + 1) < tickerPairList.size()){
-						sb.append(",");
-					}
+		System.out.println("tickerPairList size is:"+tickerPairList.size());
+		if (tickerPairList.size() > 1){
+			StringBuilder sb = new StringBuilder();
+			sb.append("[");
+			for (int i1 = 0; i1 < tickerPairList.size(); i1++){
+				sb.append(tp.toJsonString());
+				if ( (i1 + 1) < tickerPairList.size()){
+					sb.append(",");
 				}
-				sb.append("]");
-				String pair = sb.toString();
-				System.out.println(pair);
-				System.out.println("{\"key\":\"pair\",\"val\":\"" + pair + "\"}");
-				
-				wsClient.send(pair);
 			}
+			sb.append("]");
+			String pair = sb.toString();
+			System.out.println(pair);
+			System.out.println("{\"key\":\"pair\",\"val\":\"" + pair + "\"}");
+			Log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+			if (this.wsClient != null){
+				wsClient.send(pair);
 
+			}else{
+				System.out.println("wsClient is null");
+			}
 		}
-
 
 
 

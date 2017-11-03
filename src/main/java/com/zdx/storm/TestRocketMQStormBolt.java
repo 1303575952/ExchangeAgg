@@ -46,12 +46,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 
 	public void prepare(Map stormConf, TopologyContext context,
 			OutputCollector collector) {
-		int max=20;
-		int min=10;
-		Random random = new Random();
 
-		s = random.nextInt(max)%(max-min+1) + min;
-		System.out.println("new random = " + s);
 
 		WebSocketLocalClient wsClient = null;
 		try {
@@ -109,7 +104,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 			logger.info("after Sorting = " + x.toJsonString() ); 
 		}
 		coinPrices.put(tickerType, cp);
-		
+
 		tickerPairList.clear();
 		TickerPair tp = new TickerPair();
 		for (int i1 = 0; i1 < coinPricesList.size(); i1 ++){
@@ -119,29 +114,50 @@ public class TestRocketMQStormBolt implements IRichBolt {
 			}
 		}
 		
-		StringBuilder sb = new StringBuilder();
-		sb.append("[");
-		for (int i1 = 0; i1 < tickerPairList.size(); i1++){
-			sb.append(tp.toJsonString());
-			if ( (i1 + 1) < tickerPairList.size()){
-				sb.append(",");
-			}
-		}
-		sb.append("]");
-		String pair = sb.toString();
-		System.out.println(pair);
-		System.out.println("{\"key\":\"pair\",\"val\":\"" + pair + "\"}");
+		ArrayList<String> tmpData = new ArrayList<String>();
+		String s1 = "[{\"mid\":\"0.01\",\"bid\":\"0.05\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
+		tmpData.add(s1);
+		String s2 = "[{\"mid\":\"0.02\",\"bid\":\"0.04\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
+		tmpData.add(s2);
+		String s3 = "[{\"mid\":\"0.03\",\"bid\":\"0.03\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
+		tmpData.add(s3);
+		String s4 = "[{\"mid\":\"0.04\",\"bid\":\"0.02\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
+		tmpData.add(s4);
+		String s5 = "[{\"mid\":\"0.05\",\"bid\":\"0.01\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
+		tmpData.add(s5);
+		int max=tmpData.size();
+		int min=1;
+		Random random = new Random();
+		s = random.nextInt(max)%(max-min+1) + min;
 		
+		System.out.println(tmpData.get(s));
+		wsClient.send(tmpData.get(s));
+		logger.info("Exception11 ==================================================================");
+		logger.info("Exception11 ==================================================================");
+		System.out.println("Exception11 ==================================================================");
+		System.out.println("Exception11 ==================================================================");
 		if (this.wsClient != null){
-			wsClient.send(pair);
+			if (tickerPairList.size() > 1){
+				StringBuilder sb = new StringBuilder();
+				sb.append("[");
+				for (int i1 = 0; i1 < tickerPairList.size(); i1++){
+					sb.append(tp.toJsonString());
+					if ( (i1 + 1) < tickerPairList.size()){
+						sb.append(",");
+					}
+				}
+				sb.append("]");
+				String pair = sb.toString();
+				System.out.println(pair);
+				System.out.println("{\"key\":\"pair\",\"val\":\"" + pair + "\"}");
+				
+				wsClient.send(pair);
+			}
 
 		}
 
 
-		logger.info("Exception11 ==================================================================");
-		logger.info("Exception11 ==================================================================");
-		System.out.println("Exception11 ==================================================================");
-		System.out.println("Exception11 ==================================================================");
+
 
 		/*try {
 

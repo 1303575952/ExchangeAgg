@@ -3,11 +3,11 @@
 <head>
     <title>Refresh from url after use data option</title>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="bootstrap.min.css">
-    <link rel="stylesheet" href="bootstrap-table.min.css">
-    <script src="jquery.min.js"></script>
-    <script src="bootstrap.min.js"></script>
-    <script src="bootstrap-table.min.js"></script>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap-table.min.css">
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/bootstrap-table.min.js"></script>
 
     <link rel="stylesheet" href="CSS3loader/loaders.css">
 
@@ -30,38 +30,55 @@
     <p><button id="button" class="btn btn-default">Refresh from url</button></p>
     <table id="table" class="table table-bordered">
         <thead>
-        <tr>
-            <th data-field="mid">ID</th>
-            <th data-field="bid">Item Name</th>
-            <th data-field="ask">Item Price</th>
-            <th data-field="last_price">Item Price</th>
-            <th data-field="low">Item Price</th>
-			<th data-field="high">Item Price</th>
-            <th data-field="volume">Item Price</th>
-            <th data-field="timestamp">Item Price</th>
+        <!--tr>
+            <th data-field="exchA">交易所</th>
+            <th data-field="coinA">交易对</th>
+            <th data-field="midAUSD">价格</th>
+			<th data-field="volA">交易量</th>
+            <th data-field="">差价</th>
+            <th data-field="exchB">交易所</th>
+			<th data-field="coinB">交易对</th>
+            <th data-field="midBUSD">价格</th>
+            <th data-field="volB">交易量</th>
+        </tr-->
+		<tr>
+            <th data-field="mid">交易所</th>
+            <th data-field="bid">交易对</th>
+            <th data-field="ask">价格</th>
+			<th data-field="last_price">交易量</th>
+            <th data-field="">差价</th>
+            <th data-field="low">交易所</th>
+			<th data-field="high">交易对</th>
+            <th data-field="volume">价格</th>
+            <th data-field="timestamp">交易量</th>
         </tr>
         </thead>
     </table>
 </div>
 <script>
 	var socket = new WebSocket("ws://182.92.150.57:8001");
+	var $table = $('#table');
 	socket.onopen = function (event) {
         alert("websocket连接建立成功...");
-        socket.send({"mid":"0.0396265","bid":"0.039626","ask":"0.039627","last_price":"0.039626","low":"0.037625","high":"0.04622","volume":"202898.86695984","timestamp":"1509630586.0410173"});
+        //socket.send({"mid":"0.0396265","bid":"0.039626","ask":"0.039627","last_price":"0.039626","low":"0.037625","high":"0.04622","volume":"202898.86695984","timestamp":"1509630586.0410173"});
     };
     socket.onclose = function (event) {
         alert("连接关闭");
     };
 	
     socket.onmessage = function (event) {
-		var $table = $('#table');
-		var xdata = [{"mid":"0.01","bid":"0.039626","ask":"0.039627","last_price":"0.039626","low":"0.037625","high":"0.04622","volume":"202898.86695984","timestamp":"1509630586.0410173"}];
-		var jsonStr = JSON.stringify(xdata);
-		var obj = JSON.parse(jsonStr); 
-		alert(jsonStr);
+		$("#table").bootstrapTable('refresh');
+		alert(event.data);
+		//var jsonStr = JSON.stringify(event.data);
 		$table.bootstrapTable({
-			data: obj
+			striped: true,                      //是否显示行间隔色
+			showRefresh: true,                  //是否显示刷新按钮
+			pagination: true,                   //是否显示分页（*）
+			sortable: false,                     //是否启用排序
+			sortOrder: "asc",                   //排序方式
+			data: JSON.parse(event.data)
         });
+		$table.bootstrapTable('refresh', {query: JSON.parse(event.data)});
 	};
     
 	

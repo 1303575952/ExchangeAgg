@@ -25,7 +25,9 @@ import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
+import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
+import backtype.storm.tuple.Values;
 
 public class TestRocketMQStormBolt implements IRichBolt {
 
@@ -115,7 +117,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 			}
 		}
 		
-		ArrayList<String> tmpData = new ArrayList<String>();
+		/*ArrayList<String> tmpData = new ArrayList<String>();
 		String s1 = "[{\"mid\":\"0.01\",\"bid\":\"0.05\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
 		tmpData.add(s1);
 		String s2 = "[{\"mid\":\"0.02\",\"bid\":\"0.04\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
@@ -132,7 +134,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		s = random.nextInt(max)%(max-min+1);
 		System.out.println("sssssssssssssssssssssssssssss=============================="+s);
 		System.out.println(tmpData.get(s));
-		wsClient.send(tmpData.get(s));
+		wsClient.send(tmpData.get(s));*/
 		logger.info("Exception11 ==================================================================");
 		logger.info("Exception11 ==================================================================");
 		System.out.println("Exception11 ==================================================================");
@@ -150,6 +152,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 			sb.append("]");
 			String pair = sb.toString();
 			System.out.println(pair);
+			collector.emit(new Values(pair));
 			System.out.println("{\"key\":\"pair\",\"val\":\"" + pair + "\"}");
 			Log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 			if (this.wsClient != null){
@@ -178,7 +181,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		// TODO Auto-generated method stub
+		declarer.declare(new Fields("pair"));
 
 	}
 

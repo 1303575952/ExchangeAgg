@@ -63,6 +63,8 @@ public class TestStormTopology {
 		builder.setBolt("TestRocketMQStormBolt", new TestRocketMQStormBolt(), 
 				boltParallel).fieldsGrouping("TestRocketMQStormSpout", 
 						new Fields("tickerType"));
+		builder.setBolt("TestRocketMQStormBolt2", new TestRocketMQStormBolt2(), 
+				boltParallel).allGrouping("TestRocketMQStormBolt");
 		return builder;
 	}
 

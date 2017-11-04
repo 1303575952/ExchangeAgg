@@ -13,15 +13,15 @@ public class TickerFormatBitstamp {
 		x.mid = (x.bid + x.ask) / 2;
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
-		x.volume = jsonObject.getDouble("vol");
+		x.volume = jsonObject.getDouble("volume");
 		x.last_price = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	public static void BitstampTest(){
 		TickerFormat tickerData = new TickerFormat();
-		String tickerinfo = "{\"high\":\"7500.00\",\"last\":\"7307.21\",\"timestamp\":\"1509726692\",\"bid\":\"7306.12\",\"vwap\":\"7167.06\",\"volume\":\"17203.29047620\",\"low\":\"6822.00\",\"ask\":\"7307.21\",\"open\":\"7030.00\"}";
-		String path = "btc_usd";
+		String tickerinfo = "{\"high\": \"0.04188990\", \"last\": \"0.04086000\", \"timestamp\": \"1509731854\", \"bid\": \"0.04078001\", \"vwap\": \"0.04070972\", \"volume\": \"7098.22041892\", \"low\": \"0.03930000\", \"ask\": \"0.04107129\", \"open\": \"0.04069880\"}";
+		String path = "eth_btc";
 		tickerData.exchangeName = "bitstamp";
 		String[] coinAB = path.split("_");
 		tickerData.coinA = coinAB[0];

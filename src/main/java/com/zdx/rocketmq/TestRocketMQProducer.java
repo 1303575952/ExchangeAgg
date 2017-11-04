@@ -61,7 +61,7 @@ public class TestRocketMQProducer {
 				"v2/ticker?book=eth_btc"
 				));
 		replaceLists.add(Arrays.asList(
-				//"api/v2/ticker/btcusd",
+				"api/v2/ticker/btcusd",
 				"api/v2/ticker/ethbtc"
 				));
 

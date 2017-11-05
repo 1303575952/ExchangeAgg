@@ -239,17 +239,17 @@ public class TestRocketMQStormBolt implements IRichBolt {
 					}
 				}
 				sb.append("]");*/
-				sb.append("[");
+				sb.append("{data:[");
 				for(int i1 = 0;i1 < tickerPairList.size();i1++){
 					sb.append(tickerPairList.get(i1).toJsonString());
 					if((i1+1)<tickerPairList.size()){
 						sb.append(",");
 					}
 				}
-				sb.append("]");
+				sb.append("]}");
 				String pair = sb.toString();
 				System.out.println(pair);
-				collector.emit(new Values(pair));
+				collector.emit(new Values(tickerType,pair));
 				Log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 				
 				wsClient.send(pair);
@@ -275,7 +275,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 	}
 
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {
-		declarer.declare(new Fields("pair"));
+		declarer.declare(new Fields("tickerType","pair"));
 
 	}
 

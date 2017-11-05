@@ -14,7 +14,7 @@ public class TickerFormatQuadrigacx {
 		x.mid = (x.bid + x.ask) / 2;
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
-		x.volume = jsonObject.getDouble("vol");
+		x.volume = jsonObject.getDouble("volume");
 		x.last_price = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();

@@ -4,6 +4,7 @@ import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Collections;
 
@@ -41,7 +42,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 	Map<String, Map<String, TickerFormat>> coinPrices = new HashMap<String,  Map<String, TickerFormat>>();	
 	ArrayList<TickerFormat> coinPricesList = new ArrayList<TickerFormat>();
 	ArrayList<TickerPair> tickerPairList = new ArrayList<TickerPair>();
-	int s = 0;
+	
 	public TestRocketMQStormBolt(){
 
 
@@ -78,45 +79,126 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		logger.info("Exception11 ==================================================================");
 		logger.info("Exception11 ==================================================================");
 
-
+		int max=5;
+		int min=1;
+		Random random = new Random();
+		int s1 = random.nextInt(max)%(max-min+1);
+		
+		
 		String tickerType = tuple.getValue(0).toString();
 		String tickerInfo = tuple.getValue(1).toString();
 		TickerFormat tickerData = new TickerFormat();
 
 		tickerData.formatJsonString(tickerInfo);
 
-		logger.info("put data = " + s + "----" + tickerInfo);
-		logger.info("put type = " + s + "----" + tickerType);
+		logger.info("put data = " + s1 + "----" + tickerInfo);
+		logger.info("put type = " + s1 + "----" + tickerType);
+		/*
+		 * 打印每个coinPrices中key对应数据，例
+		 * btc_usd	{}
+		 * 			{}
+		 * eth_btc	{}
+		 * 			{}
+		 * 			{}
+		 * */
+		for (Entry<String, Map<String, TickerFormat>> entry : coinPrices.entrySet()) {
+			logger.info("coinPrices before merge = " + s1 + "----" + entry.getKey());  
+			for (Map.Entry<String, TickerFormat> entry2 : entry.getValue().entrySet()) {
+				logger.info("coinPrices content= " + s1 + "----" + entry2.getKey() + ", Value = " + entry2.getValue().toJsonString());  
+			}
+		}
+		/*
+		 * cp拿到coinPrices中所有tickerType对应的数据，例
+		 * {}
+		 * {}
+		 * {}
+		 * */
 		Map<String, TickerFormat> cp = new HashMap<String, TickerFormat>();
-
 		if (coinPrices.containsKey(tickerType) ){
 			cp = coinPrices.get(tickerType);
 		}
-
+		/*
+		 * 打印tickertType对应的所有交易所数据
+		 */
 		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
-			logger.info("before Key = " + s + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
-		}		
+			logger.info("CP before put Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
+		}
+		/*
+		 * 新的tickerType数据对应的tickerData放入（更新）cp
+		 * */
 		cp.put(tickerData.exchangeName, tickerData);
-		coinPricesList.clear();
-		coinPricesList.addAll(cp.values());
-		Collections.sort(coinPricesList, new SortByPrice());
+		/*
+		 * 打印更新后的cp数据
+		 * */
 		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
-			logger.info("after Key = " + s + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
+			logger.info("CP after put Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
 		}
+		/*
+		 * coinPricesList clear 前
+		 * */
 		for (TickerFormat x: coinPricesList ){
-			logger.info("after Sorting = " + x.toJsonString() ); 
+			logger.info("before clear = "+ s1 + "----" + x.toJsonString() ); 
 		}
+		coinPricesList.clear();
+		/*
+		 * coinPricesList clear 后
+		 * */
+		for (TickerFormat x: coinPricesList ){
+			logger.info("after clear = "+ s1 + "----" + x.toJsonString() ); 
+		}
+		/*
+		 * coinPricesList放入cp的所有value
+		 * */
+		coinPricesList.addAll(cp.values());
+		/*coinPricesList更新后数据*/
+		for (TickerFormat x: coinPricesList ){
+			logger.info("after add all= "+ s1 + "----" + x.toJsonString() ); 
+		}
+		Collections.sort(coinPricesList, new SortByPrice());
+		for (TickerFormat x: coinPricesList ){
+			logger.info("after sort= "+ s1 + "----" + x.toJsonString() ); 
+		}
+		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
+			logger.info("after Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
+		}
+		//TODO cp的顺序没有sort就放进coinPrices ????
 		coinPrices.put(tickerType, cp);
-
-		tickerPairList.clear();
-		TickerPair tp = new TickerPair();
-		for (int i1 = 0; i1 < coinPricesList.size(); i1 ++){
-			for (int i2 = i1+1; i2 < coinPricesList.size(); i2 ++){
-				tp.formatTickerPair(coinPricesList.get(i1), coinPricesList.get(i2));				
-				tickerPairList.add(tp);
+		for (Entry<String, Map<String, TickerFormat>> entry : coinPrices.entrySet()) {
+			logger.info("coinPrices after put = " + s1 + "----" + entry.getKey());  
+			for (Map.Entry<String, TickerFormat> entry2 : entry.getValue().entrySet()) {
+				logger.info("coinPrices content= " + s1 + "----" + entry2.getKey() + ", Value = " + entry2.getValue().toJsonString());  
 			}
 		}
-		
+		for (TickerPair x: tickerPairList){
+			logger.info("tickerPairList before clear = "+ s1 + "----" + x.toJsonString() ); 
+		}
+		tickerPairList.clear();
+		for (TickerPair x: tickerPairList){
+			logger.info("tickerPairList after clear = "+ s1 + "----" + x.toJsonString() ); 
+		}
+		for (TickerFormat x: coinPricesList ){
+			logger.info("coinPricesList before compute pair = "+ s1 + "----" + x.toJsonString() ); 
+		}
+		TickerPair tp = new TickerPair();
+		if(coinPricesList.size() > 1){
+			for (int i1 = 0; i1 < coinPricesList.size(); i1 ++){
+				for (int i2 = i1+1; i2 < coinPricesList.size(); i2 ++){
+					tp.formatTickerPair(coinPricesList.get(i1), coinPricesList.get(i2));
+					System.out.println("tickerPairList size is:"+tickerPairList.size());
+					System.out.println("tptptptptp:"+tp.toJsonString());
+					tickerPairList.add(tp);
+					System.out.println("after added,tickerPairList "+tickerPairList.get(tickerPairList.size()).toJsonString());
+				}
+			}
+			//TODO tp数据没错，加到tickerPairList中tickerPairList是错的，后面把前面的更新了？？？？？
+			for(int i3 = 0;i3<tickerPairList.size();i3++){
+				System.out.println("tickerPairList"+"&&&&&"+i3+"\t"+tickerPairList.get(i3).toJsonString());
+			}
+		}
+		for (TickerPair x: tickerPairList){
+			logger.info("tickerPairList after add pair= "+ s1 + "----" + x.toJsonString() ); 
+		}
+
 		/*ArrayList<String> tmpData = new ArrayList<String>();
 		String s1 = "[{\"mid\":\"0.01\",\"bid\":\"0.05\",\"ask\":\"0.039627\",\"last_price\":\"0.039626\",\"low\":\"0.037625\",\"high\":\"0.04622\",\"volume\":\"202898.86695984\",\"timestamp\":\"1509630586.0410173\"}]";
 		tmpData.add(s1);
@@ -140,29 +222,27 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		System.out.println("Exception11 ==================================================================");
 		System.out.println("Exception11 ==================================================================");
 		System.out.println("tickerPairList size is:"+tickerPairList.size());
-		if (tickerPairList.size() > 1){
-			StringBuilder sb = new StringBuilder();
-			sb.append("[");
-			for (int i1 = 0; i1 < tickerPairList.size(); i1++){
-				sb.append(tp.toJsonString());
-				if ( (i1 + 1) < tickerPairList.size()){
-					sb.append(",");
+		if (this.wsClient != null){
+			if (tickerPairList.size() >= 1){
+				StringBuilder sb = new StringBuilder();
+				sb.append("[");
+				for (int i1 = 0; i1 < tickerPairList.size(); i1++){
+					sb.append(tp.toJsonString());
+					if ( (i1 + 1) < tickerPairList.size()){
+						sb.append(",");
+					}
 				}
-			}
-			sb.append("]");
-			String pair = sb.toString();
-			System.out.println(pair);
-			collector.emit(new Values(pair));
-			System.out.println("{\"key\":\"pair\",\"val\":\"" + pair + "\"}");
-			Log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-			if (this.wsClient != null){
+				sb.append("]");
+				String pair = sb.toString();
+				System.out.println(pair);
+				collector.emit(new Values(pair));
+				Log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+				
 				wsClient.send(pair);
-
-			}else{
-				System.out.println("wsClient is null");
-			}
+				}
+		}else{
+			System.out.println("wsClient is null");
 		}
-
 
 
 		/*try {

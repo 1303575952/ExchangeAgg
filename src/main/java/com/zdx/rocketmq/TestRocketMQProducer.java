@@ -103,6 +103,11 @@ public class TestRocketMQProducer {
 				pc.prepareHttpGet("/$JOB_ID")
 				.setProtocol(RequestProtocol.HTTPS)
 				.setHttpPort(443)
+				.setPingTimeoutMillis(10000)
+				.setSshConnectionTimeoutMillis(10000)
+				.setTcpConnectTimeoutMillis(10000)
+				.setTcpIdleTimeoutSec(10000)
+				.setUdpIdleTimeoutSec(10000)
 				.setReplaceVarMapToMultipleTarget("JOB_ID", replaceLists, targetHosts)
 				.setResponseContext(responseContext);
 		System.out.println("%%%%%%%%%%%%%%%%%%%"+ptb);

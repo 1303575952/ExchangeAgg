@@ -161,7 +161,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
 			logger.info("after Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
 		}
-		//TODO cp的顺序没有sort就放进coinPrices ????
+		
 		coinPrices.put(tickerType, cp);
 		for (Entry<String, Map<String, TickerFormat>> entry : coinPrices.entrySet()) {
 			logger.info("coinPrices after put = " + s1 + "----" + entry.getKey());  
@@ -179,18 +179,24 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		for (TickerFormat x: coinPricesList ){
 			logger.info("coinPricesList before compute pair = "+ s1 + "----" + x.toJsonString() ); 
 		}
-		TickerPair tp = new TickerPair();
+		
 		if(coinPricesList.size() > 1){
 			for (int i1 = 0; i1 < coinPricesList.size(); i1 ++){
 				for (int i2 = i1+1; i2 < coinPricesList.size(); i2 ++){
+					TickerPair tp = new TickerPair();
 					tp.formatTickerPair(coinPricesList.get(i1), coinPricesList.get(i2));
-					System.out.println("tickerPairList size is:"+tickerPairList.size());
+					System.out.println("111tickerPairList size is:"+tickerPairList.size());
 					System.out.println("tptptptptp:"+tp.toJsonString());
 					tickerPairList.add(tp);
-					System.out.println("after added,tickerPairList "+tickerPairList.get(tickerPairList.size()).toJsonString());
+					System.out.println("222tickerPairList size is:"+tickerPairList.size());
+					for(int i4 = 0;i4<tickerPairList.size();i4++){
+						System.out.println("after added,tickerPairList "+"i4"+tickerPairList.get(i4).toJsonString());
+					}
+					
+					//这里的tickerPairList数据被覆盖！！！！！
 				}
 			}
-			//TODO tp数据没错，加到tickerPairList中tickerPairList是错的，后面把前面的更新了？？？？？
+			//下面这里的tickerPairList怎么就不一样了？？每一个和最后一个add进来的一样
 			for(int i3 = 0;i3<tickerPairList.size();i3++){
 				System.out.println("tickerPairList"+"&&&&&"+i3+"\t"+tickerPairList.get(i3).toJsonString());
 			}
@@ -225,10 +231,18 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		if (this.wsClient != null){
 			if (tickerPairList.size() >= 1){
 				StringBuilder sb = new StringBuilder();
-				sb.append("[");
+				/*sb.append("[");
 				for (int i1 = 0; i1 < tickerPairList.size(); i1++){
 					sb.append(tp.toJsonString());
 					if ( (i1 + 1) < tickerPairList.size()){
+						sb.append(",");
+					}
+				}
+				sb.append("]");*/
+				sb.append("[");
+				for(int i1 = 0;i1 < tickerPairList.size();i1++){
+					sb.append(tickerPairList.get(i1).toJsonString());
+					if((i1+1)<tickerPairList.size()){
 						sb.append(",");
 					}
 				}

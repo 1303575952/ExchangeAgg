@@ -40,57 +40,57 @@ public class TestRocketMQProducer {
 
 		List<String> targetHosts = new ArrayList<String>(Arrays.asList(
 				"www.okcoin.com",
-				//"api.bitfinex.com",
+				"api.bitfinex.com",
 				"api.quadrigacx.com",
 				"www.bitstamp.net"
 				));
 		List<List<String>> replaceLists = new ArrayList<List<String>>();
 
 		replaceLists.add(Arrays.asList(
-				"api/v1/ticker.do?symbol=btc_usd"
-				//"api/v1/ticker.do?symbol=eth_usd",
-				//"api/v1/ticker.do?symbol=ltc_usd"
+				"api/v1/ticker.do?symbol=btc_usd",
+				"api/v1/ticker.do?symbol=eth_usd",
+				"api/v1/ticker.do?symbol=ltc_usd"
 				));
 		 
-		/*replaceLists.add(Arrays.asList(
+		replaceLists.add(Arrays.asList(
 				"v1/pubticker/ethbtc",
 				"v1/pubticker/zecbtc"
-				));*/
-		replaceLists.add(Arrays.asList(
-				"v2/ticker?book=btc_usd"
-				//"v2/ticker?book=eth_btc"
 				));
 		replaceLists.add(Arrays.asList(
-				"api/v2/ticker/btcusd"
-				//"api/v2/ticker/ethbtc"
+				"v2/ticker?book=btc_usd",
+				"v2/ticker?book=eth_btc"
+				));
+		replaceLists.add(Arrays.asList(
+				"api/v2/ticker/btcusd",
+				"api/v2/ticker/ethbtc"
 				));
 
 		final Map<String, String> hostMap = new HashMap<String, String>();
 		hostMap.put("www.okcoin.com", "okcoin.com");
-		//hostMap.put("api.bitfinex.com", "bitfinex");
+		hostMap.put("api.bitfinex.com", "bitfinex");
 		hostMap.put("api.quadrigacx.com", "quadrigacx");
 		hostMap.put("www.bitstamp.net", "bitstamp");
 
 		final Map<String, String> pathMap = new HashMap<String, String>();
 		pathMap.put("/api/v1/ticker.do?symbol=btc_usd", "btc_usd");
-		//pathMap.put("/api/v1/ticker.do?symbol=eth_usd", "eth_usd");
-		//pathMap.put("/api/v1/ticker.do?symbol=ltc_usd", "ltc_usd");
-		//pathMap.put("/v1/pubticker/ethbtc", "eth_btc");
-		//pathMap.put("/v1/pubticker/zecbtc", "zec_btc");
+		pathMap.put("/api/v1/ticker.do?symbol=eth_usd", "eth_usd");
+		pathMap.put("/api/v1/ticker.do?symbol=ltc_usd", "ltc_usd");
+		pathMap.put("/v1/pubticker/ethbtc", "eth_btc");
+		pathMap.put("/v1/pubticker/zecbtc", "zec_btc");
 		pathMap.put("/v2/ticker?book=btc_usd", "btc_usd");
-		//pathMap.put("/v2/ticker?book=eth_btc", "eth_btc");
+		pathMap.put("/v2/ticker?book=eth_btc", "eth_btc");
 		pathMap.put("/api/v2/ticker/btcusd", "btc_usd");
-		//pathMap.put("/api/v2/ticker/ethbtc", "eth_btc");
+		pathMap.put("/api/v2/ticker/ethbtc", "eth_btc");
 		final List<String> pathList = new LinkedList<String>();
 		pathList.add("/api/v1/ticker.do?symbol=btc_usd");
-		//pathList.add("/api/v1/ticker.do?symbol=eth_usd");
-		//pathList.add("/api/v1/ticker.do?symbol=ltc_usd");
-		//pathList.add("/v1/pubticker/ethbtc");
-		//pathList.add("/v1/pubticker/zecbtc");
+		pathList.add("/api/v1/ticker.do?symbol=eth_usd");
+		pathList.add("/api/v1/ticker.do?symbol=ltc_usd");
+		pathList.add("/v1/pubticker/ethbtc");
+		pathList.add("/v1/pubticker/zecbtc");
 		pathList.add("/v2/ticker?book=btc_usd");
-		//pathList.add("/v2/ticker?book=eth_btc");
+		pathList.add("/v2/ticker?book=eth_btc");
 		pathList.add("/api/v2/ticker/btcusd");
-		//pathList.add("/api/v2/ticker/ethbtc");
+		pathList.add("/api/v2/ticker/ethbtc");
 
 		responseContext.put("pathList", pathList);
 		System.out.println("responseContext"+responseContext);

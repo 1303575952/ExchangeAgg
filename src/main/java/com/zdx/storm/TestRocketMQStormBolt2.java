@@ -35,10 +35,10 @@ public class TestRocketMQStormBolt2 implements IRichBolt{
 		System.out.println("Exception22 111111111111111111111111111111111111111111111111111111111111111111");
 		System.out.println("Exception22 111111111111111111111111111111111111111111111111111111111111111111");
 		System.out.println("Exception22 111111111111111111111111111111111111111111111111111111111111111111");
-		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+		System.out.println("***********************************************");
 		System.out.println("bolt2 key:"+tuple.getValue(0));
 		System.out.println("bolt2 value:"+tuple.getValue(1));
-		System.out.println("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%");
+		System.out.println("***********************************************");
 		String key = tuple.getValue(0).toString();
 		JSONObject value = (JSONObject) tuple.getValue(0);
 		

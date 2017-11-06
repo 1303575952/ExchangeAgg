@@ -3,10 +3,9 @@ package com.zdx.storm;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 import com.zdx.common.TickerFormat;
 
 import backtype.storm.task.OutputCollector;
@@ -23,7 +22,6 @@ public class TestRocketMQStormBolt2 implements IRichBolt{
 	private static final long serialVersionUID = 1L;
 	protected OutputCollector collector;
 	Map<String, Object> coin2coinORcoin2cashDetail = new HashMap<String,Object>();
-	
 	@Override
 	public void prepare(Map stormConf, TopologyContext context, OutputCollector collector) {
 		this.collector  = collector;
@@ -35,35 +33,48 @@ public class TestRocketMQStormBolt2 implements IRichBolt{
 		System.out.println("Exception22 111111111111111111111111111111111111111111111111111111111111111111");
 		System.out.println("Exception22 111111111111111111111111111111111111111111111111111111111111111111");
 		System.out.println("Exception22 111111111111111111111111111111111111111111111111111111111111111111");
-		System.out.println("***********************************************");
-		System.out.println("bolt2 key:"+tuple.getValue(0));
-		System.out.println("bolt2 value:"+tuple.getValue(1));
-		System.out.println("***********************************************");
+		System.out.println(tuple.getValue(0));
+		System.out.println(tuple.getValue(1));
 		String key = tuple.getValue(0).toString();
-		JSONObject value = (JSONObject) tuple.getValue(0);
-		
+		JSONObject value = JSON.parseObject((String) tuple.getValue(1));
+		System.out.println(value);
 		if(coin2coinORcoin2cashDetail.containsKey(key)){
 			//TODO 拿到该key对应value和新来的value对比更新
 			JSONObject oldPair = (JSONObject) coin2coinORcoin2cashDetail.get(key);
 			JSONArray oldPairArray = oldPair.getJSONArray("data");
 			JSONArray newPairArray = value.getJSONArray("data");
-			for(int i1 = 0;i1<oldPairArray.size();i1++){
-				JsonObject tempOld = (JsonObject) oldPairArray.get(i1);
-				String coinAOld = tempOld.get("coinA").toString();
-				String coinBOld = tempOld.get("coinB").toString();
-				for(int i2=0;i2<newPairArray.size();i2++){
-					JsonObject tempNew = (JsonObject) newPairArray.get(i2);
-					String coinANew = tempNew.get("coinA").toString();
-					String coinBNew = tempNew.get("coinB").toString();
-					if(coinAOld.equals(coinANew)&&coinBOld.equals(coinBNew)){
+			System.out.println("oldPairArray size:"+oldPairArray.size());
+			System.out.println("newPairArray size:"+newPairArray.size());
+			for(int i2 = 0;i2<newPairArray.size();i2++){
+				int count = 0;//记录当前是和oldPairArray的第几个比较
+				JSONObject tempNew = (JSONObject) newPairArray.get(i2);
+				System.out.println("newPairArray"+"第"+i2+"个"+tempNew);
+				String exchANew = tempNew.get("exchA").toString();
+				String exchBNew = tempNew.get("exchB").toString();
+				for(int i1=0;i1<oldPairArray.size();i1++){
+					JSONObject tempOld = (JSONObject) oldPairArray.get(i1);
+					System.out.println("oldPairArray"+"第"+i1+"个"+tempOld);
+					String exchAOld = tempOld.get("exchA").toString();
+					String exchBOld = tempOld.get("exchB").toString();
+					if(exchAOld.equals(exchANew)&&exchBOld.equals(exchBNew)){//host相同，则替换
+						System.out.println("替换exchAOld:"+exchAOld+"exchANew"+exchANew+"exchBOld:"+exchBOld+"exchBNew"+exchBNew);
 						//替换
 						oldPairArray.set(i1, tempNew);
-					}else if((!coinAOld.equals(coinANew))&&(!coinBOld.equals(coinBNew))){
-						//加到data来
-						oldPairArray.add(tempNew);
+						break;
+					}else if((!exchAOld.equals(exchANew))&&(!exchBOld.equals(exchBNew))){//host不相同，则替换
+						count++;
+						if(count == oldPairArray.size()){
+							System.out.println("添加exchAOld:"+exchAOld+"exchANew"+exchANew+"exchBOld:"+exchBOld+"exchBNew"+exchBNew);
+							//tickerType不一样就加到data来
+							System.out.println("添加前："+oldPairArray);
+							oldPairArray.add(tempNew);
+							System.out.println("添加后："+oldPairArray);
+						}
+						
 					}else{
 						System.out.println("GOD , SOMETHING MUST BE WRONG !");
 					}
+					
 				}
 			}
 			//现在是新的oldPairArray

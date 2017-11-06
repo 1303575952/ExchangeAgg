@@ -239,7 +239,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 					}
 				}
 				sb.append("]");*/
-				sb.append("{data:[");
+				sb.append("{\"data\":[");
 				for(int i1 = 0;i1 < tickerPairList.size();i1++){
 					sb.append(tickerPairList.get(i1).toJsonString());
 					if((i1+1)<tickerPairList.size()){

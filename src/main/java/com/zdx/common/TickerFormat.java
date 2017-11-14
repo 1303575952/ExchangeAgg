@@ -4,110 +4,84 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public class TickerFormat {
-	public String exchangeName = "";
-	public String exchangeType = "";
-	public String coinA = "";
-	public String coinB = "";		
-	public Double mid = 0.0;
-	public Double bid = 0.0;
-	public Double ask = 0.0;
-	public Double last_price = 0.0;
-	public Double low = 0.0;
-	public Double high = 0.0;
-	public Double volume = 0.0;
-	public Long timestamp;	
-	public Double midUSD = 0.0;
-	
-	public TickerFormat(){
+
+
+	public static void format(String tickerJsonString, String exchangeName, TickerStandardFormat x){
+		JSONObject jsonObject = JSON.parseObject(tickerJsonString);
+		if ("bitfinex".equals(exchangeName)){
+			BitfinexFormat(jsonObject, x);
+		}else if ("gate-io".equals(exchangeName)) {
+			System.out.println("format111");
+			GateFormat(jsonObject, x);
+			System.out.println("format222");
+		}
 	}
 
-	public String toJsonString(){
-		return "{\"exchangeName\":\"" + exchangeName + 
-				"\",\"exchangeType\":\"" + exchangeType +
-				"\",\"coinA\":\"" + coinA + 
-				"\",\"coinB\":\"" + coinB +
-				"\",\"midUSD\":\"" + midUSD +
-				"\",\"mid\":\"" + mid +
-				"\",\"bid\":\"" + bid +
-				"\",\"ask\":\"" + ask +
-				"\",\"last_price\":\"" + last_price +
-				"\",\"low\":\"" + low +
-				"\",\"high\":\"" + high +
-				"\",\"volume\":\"" + volume +
-				"\",\"timestamp\":\"" + timestamp +
-				"\"}";
-
+	private static void BitfinexFormat(JSONObject jsonObject, TickerStandardFormat x){
+		String tmp = jsonObject.getString("timestamp");
+		x.timestamp = Long.parseLong(tmp.substring(0, tmp.indexOf(".")));
+		x.bid = jsonObject.getDouble("bid");
+		x.ask = jsonObject.getDouble("ask");
+		x.mid = jsonObject.getDouble("mid");
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.last_price = jsonObject.getDouble("last_price");
+		x.setExchangeType();
+		x.setMidUSD();
 	}
 
-	public JSONObject toJson(){
-		return JSON.parseObject(this.toJsonString());
+	public static void BitstampFormat(JSONObject jsonObject, TickerStandardFormat x){
+		x.timestamp = jsonObject.getLong("timestamp");
+		x.bid = jsonObject.getDouble("bid");
+		x.ask = jsonObject.getDouble("ask");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.last_price = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x.setMidUSD();
 	}
 
-	public TickerFormat setExchangeType(){
-		if (this.coinB.isEmpty()){
-			return this;
-		} else {
-			if (CoinCashCommon.getCashSet().contains(this.coinB)){
-				this.exchangeType = "coin2cash";
-			} else {
-				this.exchangeType = "coin2coin";
-			}
-			return this;
-		}
-	}
-	
-	public TickerFormat formatJsonString(String jsonString){
-		JSONObject jsonObject = JSON.parseObject(jsonString);
-		if (jsonObject.containsKey("exchangeName")){
-			this.exchangeName = jsonObject.getString("exchangeName");
-		}
-		if (jsonObject.containsKey("exchangeType")){
-			this.exchangeType = jsonObject.getString("exchangeType");
-		}
-		if (jsonObject.containsKey("coinA")){
-			this.coinA = jsonObject.getString("coinA");
-		}
-		if (jsonObject.containsKey("coinB")){
-			this.coinB = jsonObject.getString("coinB");
-		}
-		if (jsonObject.containsKey("midUSD")){
-			this.midUSD = jsonObject.getDouble("midUSD");
-		}
-		if (jsonObject.containsKey("mid")){
-			this.mid = jsonObject.getDouble("mid");
-		}
-		if (jsonObject.containsKey("bid")){
-			this.bid = jsonObject.getDouble("bid");
-		}
-		if (jsonObject.containsKey("ask")){
-			this.ask = jsonObject.getDouble("ask");
-		}
-		if (jsonObject.containsKey("last_price")){
-			this.last_price = jsonObject.getDouble("last_price");
-		}
-		if (jsonObject.containsKey("low")){
-			this.low = jsonObject.getDouble("low");
-		}
-		if (jsonObject.containsKey("high")){
-			this.high = jsonObject.getDouble("high");
-		}
-		if (jsonObject.containsKey("volume")){
-			this.volume = jsonObject.getDouble("volume");
-		}
-		if (jsonObject.containsKey("timestamp")){
-			this.timestamp = jsonObject.getLong("timestamp");
-		}
-		return this;
+	public static void OkcoinFormat(JSONObject jsonObject, TickerStandardFormat x){
+		x.timestamp = jsonObject.getLong("date");
+		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("ticker"));
+		x.bid = tickerJsonObject.getDouble("buy");
+		x.ask = tickerJsonObject.getDouble("sell");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = tickerJsonObject.getDouble("low");
+		x.high = tickerJsonObject.getDouble("high");
+		x.volume = tickerJsonObject.getDouble("vol");
+		x.last_price = tickerJsonObject.getDouble("last");
+		x.setExchangeType();
+		x.setMidUSD();
 	}
 	
-	public TickerFormat setMidUSD(){
-		System.out.println(this.toJsonString());
-		if (CoinCashCommon.getCashSet().contains(this.coinB)){
-			CashExchange ce = new CashExchange();
-			this.midUSD = ce.toUSD(this.coinB, this.mid);//coin 2 cash
-		} else {
-			this.midUSD = this.mid;//coin 2 coin
-		}
-		return this;
+	public static void QuadrigacxFormat(JSONObject jsonObject, TickerStandardFormat x){
+		x.timestamp = jsonObject.getLong("timestamp");
+		x.bid = jsonObject.getDouble("bid");
+		x.ask = jsonObject.getDouble("ask");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.last_price = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x.setMidUSD();
+	}
+	
+	public static void GateFormat(JSONObject jsonObject, TickerStandardFormat x){
+		x.timestamp = System.currentTimeMillis();
+		x.bid = jsonObject.getDouble("highestBid");
+		x.ask = jsonObject.getDouble("lowestAsk");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low24hr");
+		x.high = jsonObject.getDouble("high24hr");
+		x.volume = jsonObject.getDouble("baseVolume");
+		x.last_price = jsonObject.getDouble("last");
+		x.setExchangeType();
+		System.out.println("x.exchangetype:"+x.exchangeType);
+		x.setMidUSD();
 	}
 }

@@ -11,11 +11,14 @@ public class CoinCashCommon {
 		coinSet.add("eth");
 		coinSet.add("zec");
 		coinSet.add("ltc");
+		coinSet.add("etc");
+		coinSet.add("zec");
 		return coinSet;
 	}
 	public static HashSet<String> getCashSet(){
 		cashSet.add("usd");
 		cashSet.add("cny");
+		cashSet.add("usdt");
 		return cashSet;
 	}
 }

@@ -1,0 +1,28 @@
+[
+    {
+        "exchangeURL": "gate.io",
+        "exchangeName": "gate-io",
+        "endpoints": [
+            {
+                "pairName": "eth_usdt",
+                "pairPath": "api2/1/ticker/eth_usdt"
+            },
+            {
+                "pairName": "btc_usdt",
+                "pairPath": "api2/1/ticker/btc_usdt"
+            },
+            {
+                "pairName": "etc_eth",
+                "pairPath": "api2/1/ticker/etc_eth"
+            },
+            {
+                "pairName": "etc_usdt",
+                "pairPath": "api2/1/ticker/etc_usdt"
+            },
+            {
+                "pairName": "eth_btc",
+                "pairPath": "api2/1/ticker/eth_btc"
+            }
+        ]
+    }
+]

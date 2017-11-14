@@ -34,7 +34,7 @@ public class TickerPair {
 		return JSON.parseObject(this.toJsonString());
 	}
 
-	public TickerPair formatTickerPair(TickerFormat a, TickerFormat b){
+	public TickerPair formatTickerPair(TickerStandardFormat a, TickerStandardFormat b){
 		this.exchA = a.exchangeName;
 		this.exchB = b.exchangeName;
 		this.coinA = a.coinA + "_" + a.coinB;

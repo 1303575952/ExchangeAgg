@@ -1,8 +1,7 @@
 package com.zdx.rocketmq;
-import java.util.ArrayList;
-import java.util.Arrays;
+
+
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -11,13 +10,9 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+import com.zdx.common.LoadConf;
 import com.zdx.common.TickerFormat;
-import com.zdx.common.TickerFormatBitfinex;
-import com.zdx.common.TickerFormatBitstamp;
-import com.zdx.common.TickerFormatOkcoin;
-import com.zdx.common.TickerFormatQuadrigacx;
+import com.zdx.common.TickerStandardFormat;
 
 import io.parallec.core.ParallecResponseHandler;
 import io.parallec.core.ParallelClient;
@@ -27,72 +22,23 @@ import io.parallec.core.ResponseOnSingleTask;
 
 public class TestRocketMQProducer {
 	public static String serverUrl = "182.92.150.57:9876";
-
+	public final static HashMap<String, Object> responseContext = new HashMap<String, Object>();
+	
 	public static void main(String[] args) throws MQClientException, InterruptedException{
+		String path = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\ticker.json";
+		TickerConfInfo tcConf = LoadConf.loadTickerConf(path);
+		List<String> targetHosts = tcConf.targetHosts;
+		List<List<String>> replaceLists = tcConf.replaceLists;
+		final Map<String, String> hostMap = tcConf.exchangeSymbolMap;
+		final Map<String, String> pathMap = tcConf.pathSymbolMap;
+		System.out.println(tcConf.toString());
 		ParallelClient pc = new ParallelClient();
-
-		final HashMap<String, Object> responseContext = new HashMap<String, Object>();
 
 		DefaultMQProducer producer = new DefaultMQProducer("WufengTest1");
 		producer.setNamesrvAddr(serverUrl);		
 		producer.start();
 		responseContext.put("producer", producer);
 
-		List<String> targetHosts = new ArrayList<String>(Arrays.asList(
-				"www.okcoin.com",
-				"api.bitfinex.com",
-				"api.quadrigacx.com",
-				"www.bitstamp.net"
-				));
-		List<List<String>> replaceLists = new ArrayList<List<String>>();
-
-		replaceLists.add(Arrays.asList(
-				"api/v1/ticker.do?symbol=btc_usd",
-				"api/v1/ticker.do?symbol=eth_usd",
-				"api/v1/ticker.do?symbol=ltc_usd"
-				));
-		 
-		replaceLists.add(Arrays.asList(
-				"v1/pubticker/ethbtc",
-				"v1/pubticker/zecbtc"
-				));
-		replaceLists.add(Arrays.asList(
-				"v2/ticker?book=btc_usd",
-				"v2/ticker?book=eth_btc"
-				));
-		replaceLists.add(Arrays.asList(
-				"api/v2/ticker/btcusd",
-				"api/v2/ticker/ethbtc"
-				));
-
-		final Map<String, String> hostMap = new HashMap<String, String>();
-		hostMap.put("www.okcoin.com", "okcoin.com");
-		hostMap.put("api.bitfinex.com", "bitfinex");
-		hostMap.put("api.quadrigacx.com", "quadrigacx");
-		hostMap.put("www.bitstamp.net", "bitstamp");
-
-		final Map<String, String> pathMap = new HashMap<String, String>();
-		pathMap.put("/api/v1/ticker.do?symbol=btc_usd", "btc_usd");
-		pathMap.put("/api/v1/ticker.do?symbol=eth_usd", "eth_usd");
-		pathMap.put("/api/v1/ticker.do?symbol=ltc_usd", "ltc_usd");
-		pathMap.put("/v1/pubticker/ethbtc", "eth_btc");
-		pathMap.put("/v1/pubticker/zecbtc", "zec_btc");
-		pathMap.put("/v2/ticker?book=btc_usd", "btc_usd");
-		pathMap.put("/v2/ticker?book=eth_btc", "eth_btc");
-		pathMap.put("/api/v2/ticker/btcusd", "btc_usd");
-		pathMap.put("/api/v2/ticker/ethbtc", "eth_btc");
-		final List<String> pathList = new LinkedList<String>();
-		pathList.add("/api/v1/ticker.do?symbol=btc_usd");
-		pathList.add("/api/v1/ticker.do?symbol=eth_usd");
-		pathList.add("/api/v1/ticker.do?symbol=ltc_usd");
-		pathList.add("/v1/pubticker/ethbtc");
-		pathList.add("/v1/pubticker/zecbtc");
-		pathList.add("/v2/ticker?book=btc_usd");
-		pathList.add("/v2/ticker?book=eth_btc");
-		pathList.add("/api/v2/ticker/btcusd");
-		pathList.add("/api/v2/ticker/ethbtc");
-
-		responseContext.put("pathList", pathList);
 		System.out.println("responseContext"+responseContext);
 		/*
 		 .setReplaceVarMapToSingleTargetSingleVar("JOB_ID", Arrays.asList("api/v1/ticker.do?symbol=btc_usd", 
@@ -115,45 +61,29 @@ public class TestRocketMQProducer {
 		while (f1){
 			ptb.execute(new ParallecResponseHandler(){
 				public void onCompleted(ResponseOnSingleTask res, Map<String, Object> responseContext) {
+					System.out.println("whilewhilewhilewhilewhile");
 					Message msg = new Message();
 					msg.setTopic("ticker");
 					msg.setTags("TagA");
-
-					TickerFormat tickerData = new TickerFormat();
-
-					String host = res.getRequest().getHostUniform(); //www.okcoin.com
-					String path = res.getRequest().getResourcePath(); ///api/v1/ticker.do?symbol=btc_usd
-					System.out.println("11111111111111111111111111111111111111111111");
-					System.out.println(host);
-					System.out.println(path);
-					System.out.println("22222222222222222222222222222222222222222222");
-					tickerData.exchangeName = hostMap.get(host);
-					String[] coinAB = pathMap.get(path).split("_");
-					tickerData.coinA = coinAB[0];
-					tickerData.coinB = coinAB[1];				
-					System.out.println(tickerData.coinA);
+					System.out.println("msgmsgmsg");
+					TickerStandardFormat tsf = new TickerStandardFormat();
+					String host = res.getRequest().getHostUniform();
+					System.out.println("host:"+host);
+					String exchangeName = hostMap.get(host);
+					tsf.exchangeName = exchangeName;
+					String path = res.getRequest().getResourcePath().substring(1, res.getRequest().getResourcePath().length());
 					
-					System.out.println(tickerData.coinB);
-					if (host.contains("okcoin")){
-						System.out.println("***");
-						System.out.println(res.getResponseContent());
-						System.out.println("***");
-						TickerFormatOkcoin.format(res.getResponseContent(), tickerData);
-						System.out.println("okcoin:::::::::::::"+tickerData.toJsonString());
-					} else if (host.contains("bitfinex")){
-						TickerFormatBitfinex.format(res.getResponseContent(), tickerData);
-						System.out.println("bitfinex:::::::::::::"+tickerData.toJsonString());
-					} else if (host.contains("quadrigacx")){
-						TickerFormatQuadrigacx.format(res.getResponseContent(), tickerData);
-						System.out.println("quadrigacx:::::::::::::"+tickerData.toJsonString());
-					} 		else if (host.contains("bitstamp")) {
-						System.out.println("************************");
-						System.out.println(res.getResponseContent());
-						System.out.println("*************");
-						TickerFormatBitstamp.format(res.getResponseContent(), tickerData);
-						System.out.println("bitstamp:::::::::::::"+tickerData.toJsonString());
-					}
-					msg.setBody(tickerData.toJsonString().getBytes());
+					System.out.println("path:"+path);
+					System.out.println("====="+pathMap.get(path));
+					String[] coinAB = pathMap.get(path).split("_");
+					
+					tsf.coinA = coinAB[0];
+					tsf.coinB = coinAB[1];
+					System.out.println("coinA:"+tsf.coinA+" coinB:"+tsf.coinB);
+					TickerFormat.format(res.getResponseContent(), exchangeName, tsf);
+					System.out.println("res:"+res);
+					msg.setBody(tsf.toJsonString().getBytes());
+					System.out.println("tsf:"+tsf.toJsonString());
 					try {
 						System.out.println("-");
 						DefaultMQProducer producer = (DefaultMQProducer)responseContext.get("producer");

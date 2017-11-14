@@ -74,11 +74,16 @@ public class TestRocketMQStormSpout extends BaseRichSpout implements MessageList
 		for (MessageExt msg : msgs) {
 			String body = new String(msg.getBody());
 			JSONObject jsonObject = JSON.parseObject(body);
-			//System.out.println("Spout Message body = " + body);
-			logger.info("Spout Message body = " + body);
+			System.out.println("Coin label ================1");
+			System.out.println("Coin label ================2");
+			//logger.info("Coin label ================0");
+			//logger.info("Spout Message body = " + body);
+			//logger.info("Coin label ================1");
 			String key = jsonObject.getString("exchangeType");
-			System.out.println("Coin label ================" + key);
-			System.out.println("Coin label ================" + key);
+			//logger.info("Coin label ================2" + key);
+			//logger.info("Coin label ================3" + jsonObject.toJSONString());
+			//System.out.println("Coin label ================" + key);
+			//System.out.println("Coin label ================" + key);
 			if ("coin2coin".equals(key)){
 				//coin to coin
 				System.out.println("Coin label ================111");

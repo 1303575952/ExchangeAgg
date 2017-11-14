@@ -20,6 +20,7 @@ import com.alibaba.jstorm.metric.MetaType;
 import com.zdx.common.SortByPrice;
 import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerPair;
+import com.zdx.common.TickerStandardFormat;
 import com.zdx.rocketmq.WebSocketLocalClient;
 
 import backtype.storm.task.OutputCollector;
@@ -39,8 +40,8 @@ public class TestRocketMQStormBolt implements IRichBolt {
 
 	WebSocketLocalClient wsClient = null;
 
-	Map<String, Map<String, TickerFormat>> coinPrices = new HashMap<String,  Map<String, TickerFormat>>();	
-	ArrayList<TickerFormat> coinPricesList = new ArrayList<TickerFormat>();
+	Map<String, Map<String, TickerStandardFormat>> coinPrices = new HashMap<String,  Map<String, TickerStandardFormat>>();	
+	ArrayList<TickerStandardFormat> coinPricesList = new ArrayList<TickerStandardFormat>();
 	ArrayList<TickerPair> tickerPairList = new ArrayList<TickerPair>();
 	
 	public TestRocketMQStormBolt(){
@@ -87,7 +88,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		
 		String tickerType = tuple.getValue(0).toString();
 		String tickerInfo = tuple.getValue(1).toString();
-		TickerFormat tickerData = new TickerFormat();
+		TickerStandardFormat tickerData = new TickerStandardFormat();
 
 		tickerData.formatJsonString(tickerInfo);
 
@@ -101,9 +102,9 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		 * 			{}
 		 * 			{}
 		 * */
-		for (Entry<String, Map<String, TickerFormat>> entry : coinPrices.entrySet()) {
+		for (Entry<String, Map<String, TickerStandardFormat>> entry : coinPrices.entrySet()) {
 			logger.info("coinPrices before merge = " + s1 + "----" + entry.getKey());  
-			for (Map.Entry<String, TickerFormat> entry2 : entry.getValue().entrySet()) {
+			for (Entry<String, TickerStandardFormat> entry2 : entry.getValue().entrySet()) {
 				logger.info("coinPrices content= " + s1 + "----" + entry2.getKey() + ", Value = " + entry2.getValue().toJsonString());  
 			}
 		}
@@ -113,14 +114,14 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		 * {}
 		 * {}
 		 * */
-		Map<String, TickerFormat> cp = new HashMap<String, TickerFormat>();
+		Map<String, TickerStandardFormat> cp = new HashMap<String, TickerStandardFormat>();
 		if (coinPrices.containsKey(tickerType) ){
 			cp = coinPrices.get(tickerType);
 		}
 		/*
 		 * 打印tickertType对应的所有交易所数据
 		 */
-		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
+		for (Entry<String, TickerStandardFormat> entry : cp.entrySet()) {
 			logger.info("CP before put Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
 		}
 		/*
@@ -130,20 +131,20 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		/*
 		 * 打印更新后的cp数据
 		 * */
-		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
+		for (Entry<String, TickerStandardFormat> entry : cp.entrySet()) {
 			logger.info("CP after put Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
 		}
 		/*
 		 * coinPricesList clear 前
 		 * */
-		for (TickerFormat x: coinPricesList ){
+		for (TickerStandardFormat x: coinPricesList ){
 			logger.info("before clear = "+ s1 + "----" + x.toJsonString() ); 
 		}
 		coinPricesList.clear();
 		/*
 		 * coinPricesList clear 后
 		 * */
-		for (TickerFormat x: coinPricesList ){
+		for (TickerStandardFormat x: coinPricesList ){
 			logger.info("after clear = "+ s1 + "----" + x.toJsonString() ); 
 		}
 		/*
@@ -151,21 +152,21 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		 * */
 		coinPricesList.addAll(cp.values());
 		/*coinPricesList更新后数据*/
-		for (TickerFormat x: coinPricesList ){
+		for (TickerStandardFormat x: coinPricesList ){
 			logger.info("after add all= "+ s1 + "----" + x.toJsonString() ); 
 		}
 		Collections.sort(coinPricesList, new SortByPrice());
-		for (TickerFormat x: coinPricesList ){
+		for (TickerStandardFormat x: coinPricesList ){
 			logger.info("after sort= "+ s1 + "----" + x.toJsonString() ); 
 		}
-		for (Map.Entry<String, TickerFormat> entry : cp.entrySet()) {
+		for (Entry<String, TickerStandardFormat> entry : cp.entrySet()) {
 			logger.info("after Key = " + s1 + "----" + entry.getKey() + ", Value = " + entry.getValue().toJsonString());  
 		}
 		
 		coinPrices.put(tickerType, cp);
-		for (Entry<String, Map<String, TickerFormat>> entry : coinPrices.entrySet()) {
+		for (Entry<String, Map<String, TickerStandardFormat>> entry : coinPrices.entrySet()) {
 			logger.info("coinPrices after put = " + s1 + "----" + entry.getKey());  
-			for (Map.Entry<String, TickerFormat> entry2 : entry.getValue().entrySet()) {
+			for (Entry<String, TickerStandardFormat> entry2 : entry.getValue().entrySet()) {
 				logger.info("coinPrices content= " + s1 + "----" + entry2.getKey() + ", Value = " + entry2.getValue().toJsonString());  
 			}
 		}
@@ -176,7 +177,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		for (TickerPair x: tickerPairList){
 			logger.info("tickerPairList after clear = "+ s1 + "----" + x.toJsonString() ); 
 		}
-		for (TickerFormat x: coinPricesList ){
+		for (TickerStandardFormat x: coinPricesList ){
 			logger.info("coinPricesList before compute pair = "+ s1 + "----" + x.toJsonString() ); 
 		}
 		

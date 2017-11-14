@@ -5,6 +5,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -13,6 +14,7 @@ import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListener;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -36,13 +38,13 @@ import backtype.storm.tuple.Fields;
 
 //import backtype.storm.topology.IRichSpout;
 
-public class TriSpout extends BaseRichSpout implements MessageListenerConcurrently{  
+public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{  
 	private static final long serialVersionUID = -3085994102089532269L;   
 	private SpoutOutputCollector collector;  
 	private transient DefaultMQPushConsumer consumer; 
 	private static final Logger logger = LoggerFactory.getLogger(TriSpout.class);
 	private static final HashMap<String, ArrayList<String>> tickerTripleMap = new HashMap<String, ArrayList<String>>();
-	private volatile static HashMap<String, TriArbitrageInfo> tripleInfoMap = new HashMap<String, TriArbitrageInfo>();
+	private static final HashMap<String, TriArbitrageInfo> tripleInfoMap = new HashMap<String, TriArbitrageInfo>();
 
 	@SuppressWarnings("rawtypes")  
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
@@ -57,15 +59,16 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 		consumer.setNamesrvAddr(TriConfig.getRocketMQNameServerAddress());
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		//set to broadcast mode
-		consumer.setMessageModel(MessageModel.BROADCASTING);
+		//consumer.setMessageModel(MessageModel.BROADCASTING);
 		//consumer.setConsumeThreadMax(10);
 		try {
-			consumer.subscribe("ticker", "*");
+			consumer.subscribe("tickerTest", "*");
 		} catch (MQClientException e) {  
 			e.printStackTrace();
 		}  
 		consumer.registerMessageListener(this);
-		  
+        
+		
 		try {  
 			consumer.start();  
 		} catch (MQClientException e) {  
@@ -90,8 +93,8 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 	}
 
 	@Override
-	public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
-			ConsumeConcurrentlyContext context) {  
+	public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs,
+			ConsumeOrderlyContext context) {  
 		for (MessageExt msg : msgs) {
 			
 			String body = new String(msg.getBody());
@@ -99,39 +102,39 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			logger.info("Spout Message body = " + body);
 
 			JSONObject jsonObject = JSON.parseObject(body);
-			logger.info("Spout Message body = " + jsonObject.isEmpty());
+			logger.info("1 = " + jsonObject.isEmpty());
 			String exchangeName = jsonObject.getString("exchangeName");
-			logger.info("Spout Message body = " + jsonObject.getString("exchangeName"));
+			logger.info("2 = " + jsonObject.getString("exchangeName"));
 			String coinA =  jsonObject.getString("coinA");
-			logger.info("Spout Message body = " + jsonObject.getString("coinA"));
+			logger.info("3 = " + jsonObject.getString("coinA"));
 			String coinB =  jsonObject.getString("coinB");
-			logger.info("Spout Message body = " + jsonObject.getString("coinB"));
+			logger.info("4 = " + jsonObject.getString("coinB"));
 			String pair = coinA + "/" + coinB;
-			logger.info("Spout Message body = " + pair);
+			logger.info("5 = " + pair);
 			String key1 = exchangeName + "@@" + pair;
-			logger.info("Spout Message body = " + key1);
+			logger.info("6 = " + key1);
 			double ask = jsonObject.getDoubleValue("ask");
-			logger.info("Spout Message body = " + ask);
+			logger.info("7 = " + ask);
 			double bid = jsonObject.getDoubleValue("bid");
-			logger.info("Spout Message body = " + bid);
+			logger.info("8 = " + bid);
 			ArrayList<String> triList = new ArrayList<String>();
 			if (tickerTripleMap.containsKey(key1)){
 				triList = tickerTripleMap.get(key1);
-				logger.info("Spout Message body = " + triList.toString());
+				logger.info("9 = " + triList.toString());
 			} else {
-				logger.info("Spout Message body = " + "error");				
-				logger.info("Spout Message body = " + tickerTripleMap.keySet().toString());
+				logger.info("10 = " + "error");				
+				logger.info("11 = " + tickerTripleMap.keySet().toString());
 			}
 
 
 			for (String tri : triList){
 				TriArbitrageInfo triInfo = tripleInfoMap.get(tri);
-				logger.info("tri = " + tri);
+				logger.info("12 = " + tri);
 				boolean isValid = false;
 				String[] tmp = tri.split("@@");
 				if (tmp.length == 3){
 					triInfo.groupId = tmp[2];
-					logger.info("triInfo.groupId = " + triInfo.groupId);
+					logger.info("13 = " + triInfo.groupId);
 					String[] tmp2 = tmp[1].split("-");
 					if (tmp2.length == 3){
 						isValid = true;
@@ -153,12 +156,12 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 				}
 				logger.info("isValid = " + isValid);
 				if (isValid){
-					logger.info("Spout Message body = " + body);
-					logger.info("Spout Message body = " + triInfo.toString());
+					logger.info("14 = " + body);
+					logger.info("15 = " + triInfo.toString());
 					triInfo.updateProfitByGroupId();
-					logger.info("triInfo.profitVal = " + triInfo.profitVal);
+					logger.info("16 = " + triInfo.profitVal);
 					tripleInfoMap.put(tri, triInfo);
-					logger.info("Profit Update tri = " + triInfo.toString());
+					logger.info("17 = " + triInfo.toString());
 				}
 
 			}
@@ -168,7 +171,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			//System.out.println("send Coin data ================" + jsonObject.toJSONString());
 
 		}  
-		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;  
+		return ConsumeOrderlyStatus.SUCCESS;  
 	}
 
 	public static void loadTickerTripleMapFromFile(String path){

@@ -63,7 +63,7 @@ public class TestRocketMQProducer {
 				public void onCompleted(ResponseOnSingleTask res, Map<String, Object> responseContext) {
 					System.out.println("whilewhilewhilewhilewhile");
 					Message msg = new Message();
-					msg.setTopic("ticker");
+					msg.setTopic("tickerTest");
 					msg.setTags("TagA");
 					System.out.println("msgmsgmsg");
 					TickerStandardFormat tsf = new TickerStandardFormat();

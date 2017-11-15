@@ -10,7 +10,7 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 
-import com.zdx.common.LoadConf;
+import com.zdx.common.LoadConfig;
 import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerStandardFormat;
 
@@ -26,7 +26,7 @@ public class TestRocketMQProducer {
 	
 	public static void main(String[] args) throws MQClientException, InterruptedException{
 		String path = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\ticker.json";
-		TickerConfInfo tcConf = LoadConf.loadTickerConf(path);
+		TickerConfInfo tcConf = LoadConfig.loadTickerConf(path);
 		List<String> targetHosts = tcConf.targetHosts;
 		List<List<String>> replaceLists = tcConf.replaceLists;
 		final Map<String, String> hostMap = tcConf.exchangeSymbolMap;

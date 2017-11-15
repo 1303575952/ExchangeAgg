@@ -15,7 +15,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.zdx.rocketmq.TickerConfInfo;
 
-public class LoadConf {
+public class LoadConfig {
 	
 	public static TickerConfInfo loadTickerConf(String path){
 		TickerConfInfo tconf = new TickerConfInfo();
@@ -116,7 +116,7 @@ public class LoadConf {
 		return ret;
 	}
 
-	public static HashMap<Object, Object> LoadStormConf(String arg) {
+	public static HashMap<Object, Object> LoadConf(String arg) {
 		HashMap<Object, Object> ret = null;
 
 		if (arg.endsWith("yaml")) {

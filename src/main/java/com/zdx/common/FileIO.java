@@ -10,6 +10,15 @@ import java.io.PrintWriter;
 
 public class FileIO {
 	public static String ReadFile(String path){
+		String[] tt = path.split("/");
+		path = "";
+		for (int i= 0; i < tt.length; i++){
+			if (i==0){
+				path = tt[i];
+			} else {
+				path = path + File.separator + tt[i];
+			}
+		}
 		String laststr="";
 		File file=new File(path);// 打开文件  
 		BufferedReader reader=null;

@@ -17,7 +17,7 @@ public class TickerStandardFormat {
 	public Double volume = 0.0;
 	public Long timestamp;	
 	public Double midUSD = 0.0;
-	
+
 	public TickerStandardFormat(){
 	}
 
@@ -58,7 +58,7 @@ public class TickerStandardFormat {
 			return this;
 		}
 	}
-	
+
 	public TickerStandardFormat formatJsonString(String jsonString){
 		JSONObject jsonObject = JSON.parseObject(jsonString);
 		if (jsonObject.containsKey("exchangeName")){
@@ -102,7 +102,7 @@ public class TickerStandardFormat {
 		}
 		return this;
 	}
-	
+
 	public TickerStandardFormat setMidUSD(){
 		System.out.println(this.toJsonString());
 		if (CoinCashCommon.getCashSet().contains(this.coinB)){
@@ -113,5 +113,22 @@ public class TickerStandardFormat {
 		}
 		return this;
 	}
-	
+
+	public int hashCodeWithoutTimeStamp(){
+		String s1 = "{\"exchangeName\":\"" + exchangeName + 
+				"\",\"exchangeType\":\"" + exchangeType +
+				"\",\"coinA\":\"" + coinA + 
+				"\",\"coinB\":\"" + coinB +
+				"\",\"midUSD\":\"" + midUSD +
+				"\",\"mid\":\"" + mid +
+				"\",\"bid\":\"" + bid +
+				"\",\"ask\":\"" + ask +
+				"\",\"last_price\":\"" + last_price +
+				"\",\"low\":\"" + low +
+				"\",\"high\":\"" + high +
+				"\",\"volume\":\"" + volume +				
+				"\"}";
+		return s1.hashCode();
+	}
+
 }

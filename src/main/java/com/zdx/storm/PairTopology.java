@@ -15,7 +15,7 @@ import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 
 import com.alibaba.jstorm.utils.JStormUtils;
-import com.zdx.common.LoadConf;
+import com.zdx.common.LoadConfig;
 
 /**
  * MonitorTopology
@@ -35,7 +35,7 @@ public class PairTopology {
 			System.err.println("Please input configuration file");
 			System.exit(-1);
 		}
-		conf = LoadConf.LoadStormConf(args[0]);
+		conf = LoadConfig.LoadConf(args[0]);
 		/*
 		URL url = TestStormTopology.class.getClassLoader().getResource("stormtest.yaml");
 		System.out.println(url.getFile());

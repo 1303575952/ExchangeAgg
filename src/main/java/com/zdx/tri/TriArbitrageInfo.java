@@ -18,12 +18,12 @@ public class TriArbitrageInfo {
 
 	public void updateProfitByGroupId(){
 		if (groupId.equals("abbcca")){
-			if((bid1 * bid2 * bid3 > 1.0 / (ask1 * ask2 * ask3))&&(bid1 * bid2 * bid3  > 1.0)){
+			if(((bid1 * bid2 * bid3) > (1.0 / (ask1 * ask2 * ask3)))&&((bid1 * bid2 * bid3)  > 1.00)){
 				profitVal = bid1 * bid2 * bid3;
 				path1 = "abc";
 				path2 = "bca";
 				path3 = "cab";
-			}else if((bid1 * bid2 * bid3 < 1.0 / (ask1 * ask2 * ask3))&&(1.0 / (ask1 * ask2 * ask3) > 1.0)){
+			}else if(((bid1 * bid2 * bid3) < (1.0 / (ask1 * ask2 * ask3)))&&((1.0 / (ask1 * ask2 * ask3)) > 1.00)){
 				profitVal = 1.0 / (ask1 * ask2 * ask3);
 				path1 = "acb";
 				path2 = "cba";
@@ -31,61 +31,61 @@ public class TriArbitrageInfo {
 			}
 
 		} else if (groupId.equals("abcbca")){
-			if((bid1 * bid3 / ask2 > 1.0 / (bid2 / (ask1 * ask3)))&&(bid1 * bid3 / ask2 > 1.0)){
+			if(((bid1 * bid3 / ask2) > (1.0 / (bid2 / (ask1 * ask3))))&&(bid1 * bid3 / ask2 > 1.00)){
 				profitVal = bid1 * bid3 / ask2;
 				path1 = "abc";
 				path2 = "bca";
 				path3 = "cab";
-			}else if((bid1 * bid3 / ask2 < (bid2 / (ask1 * ask3)))&&(bid2 / (ask1 * ask3) > 1.0)){
-				profitVal = 1.0 / (bid2 / (ask1 * ask3));
+			}else if((bid1 * bid3 / ask2 < (bid2 / (ask1 * ask3)))&&(bid2 / (ask1 * ask3) > 1.00)){
+				profitVal = bid2 / (ask1 * ask3);
 				path1 = "acb";
 				path2 = "cba";
 				path3 = "bac";
 			}
 		}else if (groupId.equals("abbcac")) {
-			if((bid1 * bid2 / ask3 > bid3 / (ask1 * ask2))&&(bid1 * bid2 / ask3 > 1.0)){
-				profitVal = bid1 * bid2 * bid3;
+			if(((bid1 * bid2 / ask3) > (bid3 / (ask1 * ask2)))&&((bid1 * bid2 / ask3) > 1.00)){
+				profitVal = bid1 * bid2 / ask3;
 				path1 = "abc";
 				path2 = "bca";
 				path3 = "cab";
-			}else if((bid1 * bid2 / ask3 < bid3 / (ask1 * ask2))&&(bid3 / (ask1 * ask2) > 1.0)){
+			}else if(((bid1 * bid2 / ask3) < (bid3 / (ask1 * ask2)))&&((bid3 / (ask1 * ask2)) > 1.00)){
 				profitVal = bid3 / (ask1 * ask2);
 				path1 = "acb";
 				path2 = "cba";
 				path3 = "bac";
 			}
 		}else if(groupId.equals("abcbac")){
-			if((bid1 / (ask2 * ask3) > bid2 * bid3 / ask1)&&(bid1 / (ask2 * ask3) > 1.0)){
+			if(((bid1 / (ask2 * ask3)) > (bid2 * bid3 / ask1))&&(bid1 / (ask2 * ask3) > 1.00)){
 				profitVal = bid1 / (ask2 * ask3);
 				path1 = "abc";
 				path2 = "bca";
 				path3 = "cab";
-			}else if((bid1 / (ask2 * ask3) < bid2 * bid3 / ask1)&&(bid2 * bid3 / ask1 > 1.0)){
+			}else if(((bid1 / (ask2 * ask3)) < (bid2 * bid3 / ask1))&&((bid2 * bid3 / ask1) > 1.00)){
 				profitVal = bid2 * bid3 / ask1;
 				path1 = "acb";
 				path2 = "cba";
 				path3 = "bac";
 			}
 		}else if(groupId.equals("abcabc")){
-			if((bid1 * bid2 * bid3 > 1.0 / (ask1 * ask2 * ask3))&&(bid1 * bid2 * bid3 > 1.0)){
+			if(((bid1 * bid2 * bid3) > (1.0 / (ask1 * ask2 * ask3)))&&((bid1 * bid2 * bid3) > 1.00)){
 				profitVal = bid1 * bid2 * bid3;
 				path1 = "abc";
 				path2 = "bca";
 				path3 = "cab";
-			}else if((bid1 * bid2 * bid3 < 1.0 / (ask1 * ask2 * ask3))&&(1.0 / (ask1 * ask2 * ask3) >1.0)){
+			}else if(((bid1 * bid2 * bid3) < (1.0 / (ask1 * ask2 * ask3)))&&((1.0 / (ask1 * ask2 * ask3)) >1.00)){
 				profitVal = 1.0 / (ask1 * ask2 * ask3);
 				path1 = "acb";
 				path2 = "cba";
 				path3 = "bac";
 			}
 		}else if(groupId.equals("abacbc")){
-			if((bid1 * bid2 / ask3 > bid3 / (ask1 * ask2))&&(bid1 * bid2 / ask3 > 1.0)){
-				profitVal = bid1 * bid2 * bid3;
+			if(((bid1 * bid3 / ask2) > (bid2 / (ask1 * ask3)))&&((bid1 * bid3 / ask2) > 1.00)){
+				profitVal = bid1 * bid3 / ask2;
 				path1 = "abc";
 				path2 = "bca";
 				path3 = "cab";
-			}else if((bid1 * bid2 / ask3 < bid3 / (ask1 * ask2))&&(bid3 / (ask1 * ask2) > 1.0)){
-				profitVal = bid3 / (ask1 * ask2);
+			}else if(((bid1 * bid3 / ask2) < (bid2 / (ask1 * ask3)))&&(((bid2 / (ask1 * ask3)) > 1.00))){
+				profitVal = bid2 / (ask1 * ask3);
 				path1 = "acb";
 				path2 = "cba";
 				path3 = "bac";

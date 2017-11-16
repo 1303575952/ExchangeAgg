@@ -57,14 +57,20 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			System.out.println("hashCode:"+hashCode);
 			System.out.println("res:"+res);			
 			System.out.println("tsf:"+tsf.toJsonString());			
-			String hashCodeOld = failedTickerMap.get(url);			
-			if (!hashCodeOld.equals("code=" + hashCode)){			
+			String hashCodeOld = failedTickerMap.get(url);
+			System.out.println("hashCodeOld:"+hashCodeOld);
+			System.out.println("111 " + hashCode);
+			System.out.println((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode)));
+			if ((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode))){
+				System.out.println("222 " + hashCode);
 				failedTickerMap.put(url,"code=" + hashCode);
 				try {
 					Message msg = new Message();
 					msg.setTopic("tickerTest");
 					msg.setTags("TagA");
 					msg.setBody(tsf.toJsonString().getBytes());
+					System.out.println("##########################");
+					System.out.println("#tsf:"+tsf.toJsonString());
 					DefaultMQProducer producer = (DefaultMQProducer)responseContext.get("producer");
 					producer.sendOneway(msg);
 				} catch (MQClientException e) {

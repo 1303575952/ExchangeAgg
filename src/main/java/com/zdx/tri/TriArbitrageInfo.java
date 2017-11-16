@@ -14,7 +14,7 @@ public class TriArbitrageInfo {
 	String path2 = "";
 	String path3 = "";
 	public double profitVal = 0.0;
-	double lowerLimit = 1.00;
+	double lowerLimit = 0.00;
 
 
 	public void updateProfitByGroupId(){
@@ -95,6 +95,8 @@ public class TriArbitrageInfo {
 			}else{
 				System.out.println("ERROR ERROR ERROR");
 			}
+		}else {
+			profitVal = 0;
 		}
 
 	}

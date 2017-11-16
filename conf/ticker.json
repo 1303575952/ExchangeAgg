@@ -20,14 +20,6 @@
                 "pairPath": "api2/1/ticker/btm_eth"
             },
             {
-                "pairName": "done_btc",
-                "pairPath": "api2/1/ticker/done_btc"
-            },
-            {
-                "pairName": "bcc_usdt",
-                "pairPath": "api2/1/ticker/bcc_usdt"
-            },
-            {
                 "pairName": "btc_usdt",
                 "pairPath": "api2/1/ticker/btc_usdt"
             },
@@ -162,10 +154,6 @@
             {
                 "pairName": "llt_usdt",
                 "pairPath": "api2/1/ticker/llt_usdt"
-            },
-            {
-                "pairName": "bcc_btc",
-                "pairPath": "api2/1/ticker/bcc_btc"
             },
             {
                 "pairName": "eth_btc",

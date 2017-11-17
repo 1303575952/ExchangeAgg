@@ -1,11 +1,14 @@
 package com.zdx.producer;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.common.message.Message;
+import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
 
 import com.zdx.common.TickerFormat;
@@ -69,10 +72,21 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 					msg.setTopic("tickerTest");
 					msg.setTags("TagA");
 					msg.setBody(tsf.toJsonString().getBytes());
-					System.out.println("##########################");
-					System.out.println("#tsf:"+tsf.toJsonString());
 					DefaultMQProducer producer = (DefaultMQProducer)responseContext.get("producer");
-					producer.sendOneway(msg);
+					String tmp = tsf.coinA + "-" + tsf.coinB;
+					int id = Math.abs(tmp.hashCode()%10);
+					producer.sendOneway(msg,new MessageQueueSelector() {
+						
+						@Override
+						public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
+							Integer id = (Integer) arg;
+							System.out.println("mqs.size" + mqs.size());
+							int index = id % mqs.size();
+							System.out.println("index" + index);
+							System.out.println("mqs.get(index)" + mqs.get(index));
+							return mqs.get(index);
+						}
+					}, id);
 				} catch (MQClientException e) {
 					System.out.println("Exception1 ==================================================================");
 					e.printStackTrace();

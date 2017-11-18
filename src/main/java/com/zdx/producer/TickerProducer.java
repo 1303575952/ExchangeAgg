@@ -7,11 +7,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 
 import com.zdx.common.JsonFormatTool;
 import com.zdx.common.LoadConfig;
+import com.zdx.demo.ToyConsumer;
 import com.zdx.rocketmq.TickerConfInfo;
 
 import io.parallec.core.ParallelClient;
@@ -19,10 +21,10 @@ import io.parallec.core.ParallelTaskBuilder;
 import io.parallec.core.RequestProtocol;
 
 public class TickerProducer {
+	private static Logger logger = Logger.getLogger(TickerProducer.class);
 	final static HashMap<String, String> failedTickerMap = new HashMap<String, String>();
 	final static HashMap<String, Object> responseContext = new HashMap<String, Object>();
-	final static long startTime = System.currentTimeMillis();
-	final static String destDir = System.getProperty("user.dir") + File.separator + "Currency" + File.separator + startTime;
+	final static long startTime = System.currentTimeMillis();	
 	private static Map<Object, Object> tickerConf = new HashMap<Object, Object>();
 	static List<String> targetHosts = new ArrayList<String>();
 	static List<List<String>> replaceLists = new ArrayList<List<String>>();
@@ -35,7 +37,7 @@ public class TickerProducer {
 
 	public static void loadConf(String tickerConfPath){
 		tickerConf = LoadConfig.LoadConf(tickerConfPath);
-		serverUrl = String.valueOf(tickerConf.get("ServerUrl"));
+		serverUrl = String.valueOf(tickerConf.get("GatewayURL"));
 		tickerInfoPath = String.valueOf(tickerConf.get("TickerInfoPath"));
 
 		TickerConfInfo tcConf = LoadConfig.loadTickerConf(tickerInfoPath );
@@ -50,9 +52,9 @@ public class TickerProducer {
 				tickerNames.add(host + "/" + url);
 			}
 		}
-		System.out.println("-------------1---------------");
-		System.out.println(tickerNames.toString());
-		System.out.println("-------------2---------------");
+		logger.info("-------------1---------------");
+		logger.info(tickerNames.toString());
+		logger.info("-------------2---------------");
 	}
 
 	public static void execute(String tickerConfPath) throws InterruptedException{
@@ -121,7 +123,7 @@ public class TickerProducer {
 				done = true;//两轮结果一样，
 			}
 			oneBatch(targetHostsLeft, replaceListsLeft);
-			System.out.println(tickerNamesLeft.toString());
+			logger.info(tickerNamesLeft.toString());
 			try {
 				Thread.sleep(20000);
 			} catch (InterruptedException e) {

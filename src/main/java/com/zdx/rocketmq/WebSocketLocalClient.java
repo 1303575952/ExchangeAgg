@@ -2,16 +2,19 @@ package com.zdx.rocketmq;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.apache.log4j.Logger;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
 
+import com.zdx.demo.ToyConsumer;
+
 /** This example demonstrates how to create a websocket connection to a server. 
  * Only the most important callbacks are overloaded. */
 public class WebSocketLocalClient extends WebSocketClient {
-
+	private static Logger logger = Logger.getLogger(WebSocketLocalClient.class);
 	public WebSocketLocalClient( URI serverUri , Draft draft ) {
 		super( serverUri, draft );
 	}
@@ -22,24 +25,24 @@ public class WebSocketLocalClient extends WebSocketClient {
 
 	@Override
 	public void onOpen( ServerHandshake handshakedata ) {
-		System.out.println( "opened connection" );
+		logger.info( "opened connection" );
 		// if you plan to refuse connection based on ip or httpfields overload: onWebsocketHandshakeReceivedAsClient
 	}
 
 	@Override
 	public void onMessage( String message ) {
-		System.out.println( "received: " + message );
+		logger.info( "received: " + message );
 	}
 
 	@Override
 	public void onFragment( Framedata fragment ) {
-		System.out.println( "received fragment: " + new String( fragment.getPayloadData().array() ) );
+		logger.info( "received fragment: " + new String( fragment.getPayloadData().array() ) );
 	}
 
 	@Override
 	public void onClose( int code, String reason, boolean remote ) {
 		// The codecodes are documented in class org.java_websocket.framing.CloseFrame
-		System.out.println( "Connection closed by " + ( remote ? "remote peer" : "us" ) );
+		logger.info( "Connection closed by " + ( remote ? "remote peer" : "us" ) );
 	}
 
 	@Override

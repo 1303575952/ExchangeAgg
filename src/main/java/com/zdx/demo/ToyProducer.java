@@ -4,6 +4,7 @@ package com.zdx.demo;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -17,7 +18,7 @@ import com.alibaba.fastjson.JSONObject;
 
 
 public class ToyProducer {
-
+	private static Logger logger = Logger.getLogger(ToyProducer.class);
 
 	public static void main(String[] args) throws Exception {
 
@@ -38,7 +39,7 @@ public class ToyProducer {
 			e2.printStackTrace();
 		}
 		for (int i = 0; i < td.size(); i++) {
-			System.out.println("Send ---- " + i + "-----begin" );
+			logger.info("Send ---- " + i + "-----begin" );
 			Message msg = new Message();
 			msg.setTopic("toyTickerTest");
 			msg.setTags("TagA");
@@ -52,10 +53,10 @@ public class ToyProducer {
 					public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
 						// TODO Auto-generated method stub
 						Integer id = (Integer) arg;
-						System.out.println("mqs.size" + mqs.size());
+						logger.info("mqs.size" + mqs.size());
 						int index = id % mqs.size();
-						System.out.println("index" + index);
-						System.out.println("mqs.get(index)" + mqs.get(index));
+						logger.info("index" + index);
+						logger.info("mqs.get(index)" + mqs.get(index));
 						return mqs.get(index);
 					}
 				}, id);
@@ -67,7 +68,7 @@ public class ToyProducer {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			System.out.println("Send ---- " + i + "-----done" );
+			logger.info("Send ---- " + i + "-----done" );
 		}
 		producer.shutdown();
 

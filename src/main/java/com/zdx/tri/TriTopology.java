@@ -18,21 +18,17 @@ import com.zdx.common.LoadConfig;
 
 public class TriTopology {
 
-	private static Logger LOG = Logger.getLogger(TriTopology.class);
+	private static Logger logger = Logger.getLogger(TriTopology.class);
 	private static Map<Object, Object> conf = new HashMap<Object, Object>();
 	
 	public static void main(String[] args) throws Exception {
 		
 		if (args.length == 0) {
-			System.err.println("Please input configuration file");
+			logger.error("Please input configuration file");
 			System.exit(-1);
 		}
 		conf = LoadConfig.LoadConf(args[0]);
-		/*
-		URL url = TestStormTopology.class.getClassLoader().getResource("stormtest.yaml");
-		System.out.println(url.getFile());
-		LoadConf(url.getFile());
-		*/
+		
 		TopologyBuilder builder = setupBuilder();
 
 		submitTopology(builder);
@@ -51,8 +47,7 @@ public class TriTopology {
 		builder.setSpout("TriSpout", spout, spoutParallel);
 		builder.setBolt("TriBolt", new TriBolt(), 
 				boltParallel).fieldsGrouping("TriSpout", 
-						new Fields("exchangeName"));
-		System.out.println("topologybuilder");
+						new Fields("triName"));
 		return builder;
 	}
 
@@ -76,7 +71,7 @@ public class TriTopology {
 			}
 
 		} catch (Exception e) {
-			LOG.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e.getCause());
 		}
 	}
 

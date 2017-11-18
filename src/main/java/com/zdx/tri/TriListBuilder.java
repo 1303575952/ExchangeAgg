@@ -2,17 +2,22 @@ package com.zdx.tri;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.zdx.common.FileIO;
 import com.zdx.common.JsonFormatTool;
+import com.zdx.demo.ToyConsumer;
 
 public class TriListBuilder {
+	private static Logger logger = Logger.getLogger(TriListBuilder.class);
 	/*
 	 * 通过单个交易所的所有pair获取单个交易所得所有三元组，传入参数是单个交易所所有pair
 	 */
 	public static ArrayList<ArrayList<JSONObject>> triSearch(ArrayList<JSONObject> al) {
+		
 		ArrayList<ArrayList<JSONObject>> allTriSearch = new ArrayList<ArrayList<JSONObject>>();
 
 
@@ -67,7 +72,7 @@ public class TriListBuilder {
 						}
 					}
 				}else {
-					//System.out.println("can not be a pair");
+					//logger.info("can not be a pair");
 				}
 
 			}

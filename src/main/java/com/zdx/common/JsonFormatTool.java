@@ -1,6 +1,9 @@
 package com.zdx.common;
 
+import org.apache.log4j.Logger;
+
 public class JsonFormatTool {
+	private static Logger logger = Logger.getLogger(JsonFormatTool.class);
 	/**
 	 * 单位缩进字符串。
 	 */

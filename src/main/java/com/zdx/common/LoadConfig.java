@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Properties;
 
+import org.apache.log4j.Logger;
 import org.yaml.snakeyaml.Yaml;
 
 import com.alibaba.fastjson.JSON;
@@ -16,7 +17,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.zdx.rocketmq.TickerConfInfo;
 
 public class LoadConfig {
-	
+	private static Logger logger = Logger.getLogger(LoadConfig.class);
 	public static TickerConfInfo loadTickerConf(String path){
 		TickerConfInfo tconf = new TickerConfInfo();
 		HashMap<String, ArrayList<String>>  exchangeTickerListMap = new HashMap<String, ArrayList<String>>();
@@ -86,7 +87,7 @@ public class LoadConfig {
 			ret = new HashMap<Object, Object>();
 			ret.putAll(properties);
 		} catch (FileNotFoundException e) {
-			System.out.println("No such file " + prop);
+			logger.info("No such file " + prop);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -106,7 +107,7 @@ public class LoadConfig {
 			}
 
 		} catch (FileNotFoundException e) {
-			System.out.println("No such file " + confPath);
+			logger.info("No such file " + confPath);
 			throw new RuntimeException("No config file");
 		} catch (Exception e1) {
 			e1.printStackTrace();

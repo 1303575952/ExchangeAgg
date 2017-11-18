@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicLong;
 
+import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -15,15 +16,14 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.zdx.common.CoinCashCommon;
 import com.zdx.common.FileIO;
 import com.zdx.tri.TriArbitrageInfo;
-import com.zdx.tri.TriConfig;
+
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -32,6 +32,7 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 
 public class ToyConsumer {
+	private static Logger logger = Logger.getLogger(ToyConsumer.class);
 	private static final HashMap<String, ArrayList<String>> tickerTripleMap = new HashMap<String, ArrayList<String>>();
 	private static final HashMap<String, TriArbitrageInfo> tripleInfoMap = new HashMap<String, TriArbitrageInfo>();
 	AtomicLong consumeTimes = new AtomicLong(0);
@@ -55,7 +56,7 @@ public class ToyConsumer {
                 // 设置自动提交  
                 context.setAutoCommit(true);  
                 for (MessageExt msg : msgs) {  
-                    System.out.println(msg + ",内容：" + new String(msg.getBody()));  
+                    logger.info(msg + ",内容：" + new String(msg.getBody()));  
                 }  
   
                 try {  
@@ -83,7 +84,7 @@ public class ToyConsumer {
 			}
 
 		}
-		System.out.println("-----------1----------- " + tickerTripleMap.keySet().toString());
+		logger.info("-----------1----------- " + tickerTripleMap.keySet().toString());
 	}
 
 	public static void loadTickerTripleMapFromFile(String path){
@@ -93,13 +94,13 @@ public class ToyConsumer {
 		for (String e : ttStringList){
 
 			e = e.toLowerCase();
-			System.out.println("-----------3----------- " + e);
+			logger.info("-----------3----------- " + e);
 			JSONObject jsonObj = JSON.parseObject(e);
 
 			String tickerName = String.valueOf(jsonObj.get("tickerpair"));
-			System.out.println("-----------4----------- " + tickerName);
+			logger.info("-----------4----------- " + tickerName);
 			String tmp = String.valueOf(jsonObj.get("trilist"));
-			System.out.println("-----------5----------- " + tmp);
+			logger.info("-----------5----------- " + tmp);
 			if (tmp.contains("[")){
 				tmp = tmp.replaceAll("\\[", "");
 			}
@@ -112,16 +113,17 @@ public class ToyConsumer {
 			String[] tmp2 = tmp.split(",");
 			ArrayList<String> trList = new ArrayList<String>();
 			for(String tmp3 : tmp2){
-				System.out.println("-----------6----------- " + tmp3);
+				logger.info("-----------6----------- " + tmp3);
 				trList.add(tmp3);
 			}
 
 			tickerTripleMap.put(tickerName, trList);
 		}
-		System.out.println("-----------1----------- " + tickerTripleMap.keySet().toString());
+		logger.info("-----------1----------- " + tickerTripleMap.keySet().toString());
 	}
 }
 class ToyTriSpout extends BaseRichSpout implements MessageListenerOrderly{
+	private static Logger logger = Logger.getLogger(ToyTriSpout.class);
 	HashMap<String, String> tmp = new HashMap<String, String>();
 	
 	private transient DefaultMQPushConsumer consumer; 
@@ -146,19 +148,19 @@ class ToyTriSpout extends BaseRichSpout implements MessageListenerOrderly{
 
 			System.out.printf(Thread.currentThread().getName() + "----" + System.currentTimeMillis() + " Receive New Messages: " + msgs + "%n");
 			String body = new String(msg.getBody());
-			System.out.println("before update-------------1--------------");
-			System.out.println(body);
-			//System.out.println(tmp.toString());
-			//System.out.println("before update---------------------------");
+			logger.info("before update-------------1--------------");
+			logger.info(body);
+			//logger.info(tmp.toString());
+			//logger.info("before update---------------------------");
 			JSONObject jsonObject = JSON.parseObject(body);			
 			tmp.put("coinA", (String) jsonObject.get("bid"));
 			//tmp.put("coinA", (String) jsonObject.get("as"));
-			//System.out.println("after update---------------------------");
-			System.out.println(tmp.toString());
-			System.out.println("after update---------------------------");
+			//logger.info("after update---------------------------");
+			logger.info(tmp.toString());
+			logger.info("after update---------------------------");
 			//collector.emit(new Values(key1, body));
 
-			//System.out.println("send Coin data ================" + jsonObject.toJSONString());
+			//logger.info("send Coin data ================" + jsonObject.toJSONString());
 
 		}  
 		return ConsumeOrderlyStatus.SUCCESS;  

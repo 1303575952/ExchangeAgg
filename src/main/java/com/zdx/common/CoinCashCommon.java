@@ -2,7 +2,10 @@ package com.zdx.common;
 
 import java.util.HashSet;
 
+import org.apache.log4j.Logger;
+
 public class CoinCashCommon {
+	private static Logger logger = Logger.getLogger(CoinCashCommon.class);
 	public static HashSet<String> coinSet = new HashSet<String>();
 	public static HashSet<String> cashSet = new HashSet<String>();
 

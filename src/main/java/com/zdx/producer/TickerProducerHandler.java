@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -13,15 +14,15 @@ import org.apache.rocketmq.remoting.exception.RemotingException;
 
 import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerStandardFormat;
+import com.zdx.demo.ToyConsumer;
 
 import io.parallec.core.ParallecResponseHandler;
 import io.parallec.core.ResponseOnSingleTask;
 
 public class TickerProducerHandler implements ParallecResponseHandler {
+	private static Logger logger = Logger.getLogger(TickerProducerHandler.class);
 	@SuppressWarnings("unchecked")
 	public void onCompleted(ResponseOnSingleTask res, Map<String, Object> responseContext) {
-
-		Long startTime = (Long) responseContext.get("startTime");
 
 		HashMap<String, String> failedTickerMap = (HashMap<String, String>) responseContext.get("failedTickerMap");
 		Map<String, String> hostMap = (Map<String, String>) responseContext.get("hostMap");
@@ -31,7 +32,7 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 		String hostName = res.getRequest().getHostUniform();
 		String pathName = res.getRequest().getResourcePath();
 		String url = hostName + pathName;
-		System.out.println("url == " + url);
+		logger.info("url == " + url);
 		if (res.getError()){
 			failedTickerMap.put(url,"ParallecError");
 			return;
@@ -39,7 +40,7 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			failedTickerMap.put(url,"StatusNot200");
 			return;
 		} else if (res.getStatusCodeInt() == 200){			
-			System.out.println("msgmsgmsg");
+			logger.info("msgmsgmsg");
 			TickerStandardFormat tsf = new TickerStandardFormat();
 			String host = res.getRequest().getHostUniform();
 			String exchangeName = hostMap.get(host);
@@ -50,22 +51,22 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			tsf.coinB = coinAB[1];
 			TickerFormat.format(res.getResponseContent(), exchangeName, tsf);
 			
-			System.out.println("host:"+host);
-			System.out.println("path:"+path);
-			System.out.println("====="+pathMap.get(path));
-			System.out.println("coinA:"+tsf.coinA+" coinB:"+tsf.coinB);
+			logger.info("host:"+host);
+			logger.info("path:"+path);
+			logger.info("====="+pathMap.get(path));
+			logger.info("coinA:"+tsf.coinA+" coinB:"+tsf.coinB);
 			
 			
 			int hashCode = tsf.hashCodeWithoutTimeStamp();
-			System.out.println("hashCode:"+hashCode);
-			System.out.println("res:"+res);			
-			System.out.println("tsf:"+tsf.toJsonString());			
+			logger.info("hashCode:"+hashCode);
+			logger.info("res:"+res);			
+			logger.info("tsf:"+tsf.toJsonString());			
 			String hashCodeOld = failedTickerMap.get(url);
-			System.out.println("hashCodeOld:"+hashCodeOld);
-			System.out.println("111 " + hashCode);
-			System.out.println((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode)));
+			logger.info("hashCodeOld:"+hashCodeOld);
+			logger.info("111 " + hashCode);
+			logger.info((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode)));
 			if ((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode))){
-				System.out.println("222 " + hashCode);
+				logger.info("222 " + hashCode);
 				failedTickerMap.put(url,"code=" + hashCode);
 				try {
 					Message msg = new Message();
@@ -80,21 +81,21 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 						@Override
 						public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
 							Integer id = (Integer) arg;
-							System.out.println("mqs.size" + mqs.size());
+							logger.info("mqs.size" + mqs.size());
 							int index = id % mqs.size();
-							System.out.println("index" + index);
-							System.out.println("mqs.get(index)" + mqs.get(index));
+							logger.info("index" + index);
+							logger.info("mqs.get(index)" + mqs.get(index));
 							return mqs.get(index);
 						}
 					}, id);
 				} catch (MQClientException e) {
-					System.out.println("Exception1 ==================================================================");
+					logger.info("Exception1 ==================================================================");
 					e.printStackTrace();
 				} catch (RemotingException e) {
-					System.out.println("Exception2 ==================================================================");
+					logger.info("Exception2 ==================================================================");
 					e.printStackTrace();
 				} catch (InterruptedException e) {
-					System.out.println("Exception3 ==================================================================");
+					logger.info("Exception3 ==================================================================");
 					e.printStackTrace();				
 				}
 			}

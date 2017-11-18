@@ -13,6 +13,7 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
@@ -26,6 +27,7 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
+import backtype.storm.tuple.Values;
 
 //import backtype.storm.topology.IRichSpout;
 
@@ -37,39 +39,37 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 	private static final HashMap<String, ArrayList<String>> tickerTripleMap = new HashMap<String, ArrayList<String>>();
 	private static final HashMap<String, TriArbitrageInfo> tripleInfoMap = new HashMap<String, TriArbitrageInfo>();
 
-	@SuppressWarnings("rawtypes")  
-	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
-		String filePath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t3.json";
+	private static double threshold = 0.01;
 
+	@SuppressWarnings("rawtypes")  
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
+		String filePath = (String) conf.get("TripleInfoPath");
+		
+		threshold = Double.parseDouble((String) conf.get("TriArbitrageThreshold"));
+		
 		loadTickerTripleMapFromFile(filePath);
 		buildTripleInfoMap();
-		logger.info("----------2------------ " + tickerTripleMap.keySet().toString());
+		
+		logger.debug("----------2------------ " + tickerTripleMap.keySet().toString());
 
-		logger.info("init DefaultMQPushConsumer");  
-		consumer = new DefaultMQPushConsumer(TriConfig.consumerGroup); 
-		consumer.setNamesrvAddr(TriConfig.getRocketMQNameServerAddress());
+		logger.debug("init DefaultMQPushConsumer");  
+		consumer = new DefaultMQPushConsumer((String) conf.get("ConsumerGroup")); 
+		consumer.setNamesrvAddr((String) conf.get("RocketMQNameServerAddress"));
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		//set to broadcast mode
-		//consumer.setMessageModel(MessageModel.BROADCASTING);
-		//consumer.setConsumeThreadMax(10);
+		consumer.setMessageModel(MessageModel.BROADCASTING);
 		try {
-			consumer.subscribe("tickerTest", "*");
+			consumer.subscribe("toyTickerTest", "*");
 		} catch (MQClientException e) {  
 			e.printStackTrace();
 		}  
 		consumer.registerMessageListener(this);
-        
-		
 		try {  
 			consumer.start();  
 		} catch (MQClientException e) {  
 			e.printStackTrace();  
 		} 
-		System.out.println("Consumer Started.");  
-		logger.info("Consumer Started.");  
-
-
-
+		logger.debug("Consumer Started.");  
 		this.collector = collector;  
 	}  
 
@@ -80,58 +80,55 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 
 	@Override  
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {  
-		declarer.declare(new Fields("exchangeName"));
+		declarer.declare(new Fields("triName"));
 	}
 
 	@Override
 	public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs,
 			ConsumeOrderlyContext context) {  
 		for (MessageExt msg : msgs) {
-			
 			String body = new String(msg.getBody());
-
-			logger.info("Spout Message body = " + body);
-
+			logger.debug("Spout Message body = " + body);
 			JSONObject jsonObject = JSON.parseObject(body);
-			logger.info("1 = " + jsonObject.isEmpty());
+			logger.debug("1 = " + jsonObject.isEmpty());
 			String exchangeName = jsonObject.getString("exchangeName");
-			logger.info("2 = " + jsonObject.getString("exchangeName"));
+			logger.debug("2 = " + jsonObject.getString("exchangeName"));
 			String coinA =  jsonObject.getString("coinA");
-			logger.info("3 = " + jsonObject.getString("coinA"));
+			logger.debug("3 = " + jsonObject.getString("coinA"));
 			String coinB =  jsonObject.getString("coinB");
-			logger.info("4 = " + jsonObject.getString("coinB"));
+			logger.debug("4 = " + jsonObject.getString("coinB"));
 			String pair = coinA + "/" + coinB;
-			logger.info("5 = " + pair);
+			logger.debug("5 = " + pair);
 			String key1 = exchangeName + "@@" + pair;
-			logger.info("6 = " + key1);
+			logger.debug("6 = " + key1);
 			double ask = jsonObject.getDoubleValue("ask");
-			logger.info("7 = " + ask);
+			logger.debug("7 = " + ask);
 			double bid = jsonObject.getDoubleValue("bid");
-			logger.info("8 = " + bid);
+			logger.debug("8 = " + bid);
 			ArrayList<String> triList = new ArrayList<String>();
 			if (tickerTripleMap.containsKey(key1)){
 				triList = tickerTripleMap.get(key1);
-				logger.info("9 = " + triList.toString());
+				logger.debug("9 = " + triList.toString());
 			} else {
-				logger.info("10 = " + "error");				
-				logger.info("11 = " + tickerTripleMap.keySet().toString());
+				logger.debug("10 = " + "error");				
+				logger.debug("11 = " + tickerTripleMap.keySet().toString());
 			}
 
 
 			for (String tri : triList){
 				TriArbitrageInfo triInfo = tripleInfoMap.get(tri);
-				logger.info("12 = " + tri);
+				logger.debug("12 = " + tri);
 				boolean isValid = false;
 				String[] tmp = tri.split("@@");
 				if (tmp.length == 3){
 					triInfo.groupId = tmp[2];
-					logger.info("13 = " + triInfo.groupId);
+					logger.debug("13 = " + triInfo.groupId);
 					String[] tmp2 = tmp[1].split("-");
 					if (tmp2.length == 3){
 						isValid = true;
-						logger.info("tmp2[0] = " + tmp2[0]);
-						logger.info("tmp2[1] = " + tmp2[1]);
-						logger.info("tmp2[2] = " + tmp2[2]);
+						logger.debug("tmp2[0] = " + tmp2[0]);
+						logger.debug("tmp2[1] = " + tmp2[1]);
+						logger.debug("tmp2[2] = " + tmp2[2]);
 						if (pair.equals(tmp2[0])){
 							triInfo.ask1 = ask;
 							triInfo.bid1 = bid;
@@ -145,21 +142,20 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 
 					}
 				}
-				logger.info("isValid = " + isValid);
+				logger.debug("isValid = " + isValid);
 				if (isValid){
-					logger.info("14 = " + body);
-					logger.info("15 = " + triInfo.toString());
+					logger.debug("14 = " + body);
+					logger.debug("15 = " + triInfo.toString());
 					triInfo.updateProfitByGroupId();
-					logger.info("16 = " + triInfo.profitVal);
+					if (triInfo.profitVal - 1 >= threshold){
+						collector.emit(new Values(tri, triInfo.toString()));
+					}
+					logger.debug("16 = " + triInfo.profitVal);
 					tripleInfoMap.put(tri, triInfo);
-					logger.info("17 = " + triInfo.toString());
+					logger.debug("17 = " + triInfo.toString());
 				}
 
 			}
-
-			//collector.emit(new Values(key1, body));
-
-			//System.out.println("send Coin data ================" + jsonObject.toJSONString());
 
 		}  
 		return ConsumeOrderlyStatus.SUCCESS;  
@@ -172,13 +168,13 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 		for (String e : ttStringList){
 
 			e = e.toLowerCase();
-			logger.info("-----------3----------- " + e);
+			logger.debug("-----------3----------- " + e);
 			JSONObject jsonObj = JSON.parseObject(e);
 
 			String tickerName = String.valueOf(jsonObj.get("tickerpair"));
-			logger.info("-----------4----------- " + tickerName);
+			logger.debug("-----------4----------- " + tickerName);
 			String tmp = String.valueOf(jsonObj.get("trilist"));
-			logger.info("-----------5----------- " + tmp);
+			logger.debug("-----------5----------- " + tmp);
 			if (tmp.contains("[")){
 				tmp = tmp.replaceAll("\\[", "");
 			}
@@ -191,13 +187,13 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 			String[] tmp2 = tmp.split(",");
 			ArrayList<String> trList = new ArrayList<String>();
 			for(String tmp3 : tmp2){
-				logger.info("-----------6----------- " + tmp3);
+				logger.debug("-----------6----------- " + tmp3);
 				trList.add(tmp3);
 			}
 
 			tickerTripleMap.put(tickerName, trList);
 		}
-		logger.info("-----------1----------- " + tickerTripleMap.keySet().toString());
+		logger.debug("-----------1----------- " + tickerTripleMap.keySet().toString());
 	}
 
 	public void buildTripleInfoMap(){
@@ -209,6 +205,6 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 			}
 
 		}
-		logger.info("-----------1----------- " + tickerTripleMap.keySet().toString());
+		logger.debug("-----------1----------- " + tickerTripleMap.keySet().toString());
 	}
 }  

@@ -1,4 +1,4 @@
-package com.zdx.storm;
+package com.zdx.pair;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,17 +17,12 @@ import backtype.storm.tuple.Fields;
 import com.alibaba.jstorm.utils.JStormUtils;
 import com.zdx.common.LoadConfig;
 
-/**
- * MonitorTopology
- * 
- * @author longda/zhiyuan.ls
- * 
- */
+
 public class PairTopology {
 
 	private static Map<Object, Object> conf = new HashMap<Object, Object>();
 
-	private static Logger LOG = Logger.getLogger(PairTopology.class);
+	private static Logger logger = Logger.getLogger(PairTopology.class);
 
 	public static void main(String[] args) throws Exception {
 		
@@ -38,7 +33,7 @@ public class PairTopology {
 		conf = LoadConfig.LoadConf(args[0]);
 		/*
 		URL url = TestStormTopology.class.getClassLoader().getResource("stormtest.yaml");
-		System.out.println(url.getFile());
+		logger.info(url.getFile());
 		LoadConf(url.getFile());
 		*/
 		TopologyBuilder builder = setupBuilder();
@@ -55,14 +50,14 @@ public class PairTopology {
 
 		int spoutParallel = JStormUtils.parseInt(
 				conf.get("topology.spout.parallel"), 1);
-		IRichSpout spout = new TestRocketMQStormSpout();
-		builder.setSpout("TestRocketMQStormSpout", spout, spoutParallel);
+		IRichSpout spout = new PairSpout();
+		builder.setSpout("PairSpout", spout, spoutParallel);
 
-		builder.setBolt("TestRocketMQStormBolt", new TestRocketMQStormBolt(), 
-				boltParallel).fieldsGrouping("TestRocketMQStormSpout", 
+		builder.setBolt("PairBolt1", new PairBolt1(), 
+				boltParallel).fieldsGrouping("PairSpout", 
 						new Fields("tickerType"));
-		builder.setBolt("TestRocketMQStormBolt2", new TestRocketMQStormBolt2(), 
-				boltParallel).allGrouping("TestRocketMQStormBolt");
+		builder.setBolt("PairBolt2", new PairBolt2(), 
+				boltParallel).allGrouping("PairBolt1");
 		return builder;
 	}
 
@@ -86,10 +81,11 @@ public class PairTopology {
 			}
 
 		} catch (Exception e) {
-			LOG.error(e.getMessage(), e.getCause());
+			logger.error(e.getMessage(), e.getCause());
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public static boolean local_mode(Map conf) {
 		String mode = (String) conf.get(Config.STORM_CLUSTER_MODE);
 		if (mode != null) {
@@ -97,9 +93,7 @@ public class PairTopology {
 				return true;
 			}
 		}
-
 		return false;
-
 	}
 
 }

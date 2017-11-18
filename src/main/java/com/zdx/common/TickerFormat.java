@@ -1,19 +1,21 @@
 package com.zdx.common;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public class TickerFormat {
-
+	private static Logger logger = Logger.getLogger(TickerFormat.class);
 
 	public static void format(String tickerJsonString, String exchangeName, TickerStandardFormat x){
 		JSONObject jsonObject = JSON.parseObject(tickerJsonString);
 		if ("bitfinex".equals(exchangeName)){
 			BitfinexFormat(jsonObject, x);
 		}else if ("gate-io".equals(exchangeName)) {
-			System.out.println("format111");
+			logger.info("format111");
 			GateFormat(jsonObject, x);
-			System.out.println("format222");
+			logger.info("format222");
 		}
 	}
 
@@ -81,7 +83,7 @@ public class TickerFormat {
 		x.volume = jsonObject.getDouble("baseVolume");
 		x.last_price = jsonObject.getDouble("last");
 		x.setExchangeType();
-		System.out.println("x.exchangetype:"+x.exchangeType);
+		logger.info("x.exchangetype:"+x.exchangeType);
 		x.setMidUSD();
 	}
 }

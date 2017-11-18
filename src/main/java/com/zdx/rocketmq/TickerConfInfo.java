@@ -4,7 +4,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.apache.log4j.Logger;
+
+import com.zdx.demo.ToyConsumer;
+
 public class TickerConfInfo {
+	private static Logger logger = Logger.getLogger(TickerConfInfo.class);
 	public HashMap<String, ArrayList<String>>  exchangeTickerListMap = new HashMap<String, ArrayList<String>>();
 
 	public HashMap<String, String> exchangeSymbolMap = new HashMap<String, String>();

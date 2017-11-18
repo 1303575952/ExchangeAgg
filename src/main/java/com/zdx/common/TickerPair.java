@@ -1,9 +1,12 @@
 package com.zdx.common;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public class TickerPair {
+	private static Logger logger = Logger.getLogger(TickerPair.class);
 	public String exchA = "";
 	public String exchB = "";
 	public String coinA = "";

@@ -1,9 +1,12 @@
 package com.zdx.common;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 public class TickerStandardFormat {
+	private static Logger logger = Logger.getLogger(TickerStandardFormat.class);
 	public String exchangeName = "";
 	public String exchangeType = "";
 	public String coinA = "";
@@ -44,12 +47,12 @@ public class TickerStandardFormat {
 	}
 
 	public TickerStandardFormat setExchangeType(){
-		System.out.println("setExchangeType");
+		logger.info("setExchangeType");
 		if (this.coinB.isEmpty()){
-			System.out.println("coinB is empty");
+			logger.info("coinB is empty");
 			return this;
 		} else {
-			System.out.println("coinB is not empty");
+			logger.info("coinB is not empty");
 			if (CoinCashCommon.getCashSet().contains(this.coinB)){
 				this.exchangeType = "coin2cash";
 			} else {
@@ -104,7 +107,7 @@ public class TickerStandardFormat {
 	}
 
 	public TickerStandardFormat setMidUSD(){
-		System.out.println(this.toJsonString());
+		logger.info(this.toJsonString());
 		if (CoinCashCommon.getCashSet().contains(this.coinB)){
 			CashExchange ce = new CashExchange();
 			this.midUSD = ce.toUSD(this.coinB, this.mid);//coin 2 cash

@@ -8,7 +8,10 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 
+import org.apache.log4j.Logger;
+
 public class FileIO {
+	private static Logger logger = Logger.getLogger(FileIO.class);
 	public static String ReadFile(String path){
 		String[] tt = path.split("/");
 		path = "";

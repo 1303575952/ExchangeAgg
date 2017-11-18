@@ -1,8 +1,11 @@
 package com.zdx.tri;
 
+import org.apache.log4j.Logger;
 
+import com.zdx.demo.ToyConsumer;
 
 public class TriArbitrageInfo {
+	private static Logger logger = Logger.getLogger(TriArbitrageInfo.class);
 	public double bid1 = 0.0;
 	public double bid2 = 0.0;
 	public double bid3 = 0.0;
@@ -93,7 +96,7 @@ public class TriArbitrageInfo {
 					path3 = "bac";
 				}
 			}else{
-				System.out.println("ERROR ERROR ERROR");
+				logger.error("ERROR ERROR ERROR");
 			}
 		}else {
 			profitVal = 0;

@@ -3,6 +3,8 @@ package com.zdx.rocketmq;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 
 
@@ -15,11 +17,13 @@ import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.java_websocket.drafts.Draft_6455;
 
+import com.zdx.demo.ToyConsumer;
+
 /**
  * This example shows how to subscribe and consume messages using providing {@link DefaultMQPushConsumer}.
  */
 public class TestRocketMQConsumer {
-
+	private static Logger logger = Logger.getLogger(TestRocketMQConsumer.class);
 	public static String serverUrl = "182.92.150.57:9876";
 
 	public static String webSocketServerIP = "182.92.150.57";
@@ -49,7 +53,7 @@ public class TestRocketMQConsumer {
 				for (int i = 0; i < msgs.size(); i++){
 					MessageExt msg = msgs.get(i);
 					String body = new String(msg.getBody());
-					System.out.println("Body = " + body);					
+					logger.info("Body = " + body);					
 					wsClient.send("rocketmq" + body);
 				}
 				return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
@@ -61,6 +65,6 @@ public class TestRocketMQConsumer {
 		 */
 		consumer.start();
 
-		System.out.println("Consumer Started...");
+		logger.info("Consumer Started...");
 	}
 }

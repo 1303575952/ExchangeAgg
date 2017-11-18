@@ -1,4 +1,4 @@
-package com.zdx.storm;
+package com.zdx.pair;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -8,17 +8,12 @@ import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Collections;
 
-import org.apache.commons.collections4.ListUtils;
 import org.java_websocket.drafts.Draft_6455;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.alibaba.jstorm.esotericsoftware.minlog.Log;
-import com.alibaba.jstorm.metric.MetaType;
 import com.zdx.common.SortByPrice;
-import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerPair;
 import com.zdx.common.TickerStandardFormat;
 import com.zdx.rocketmq.WebSocketLocalClient;
@@ -31,12 +26,12 @@ import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Tuple;
 import backtype.storm.tuple.Values;
 
-public class TestRocketMQStormBolt implements IRichBolt {
+public class PairBolt1 implements IRichBolt {
 
 	private static final long serialVersionUID = 2495121976857546346L;
-	private static final Logger logger = LoggerFactory.getLogger(TestRocketMQStormBolt.class);
+	private static final Logger logger = LoggerFactory.getLogger(PairBolt1.class);
 	protected OutputCollector collector;
-	java.text.DecimalFormat   df   =new   java.text.DecimalFormat("#.00"); 
+	java.text.DecimalFormat  df  = new java.text.DecimalFormat("#.00"); 
 
 	WebSocketLocalClient wsClient = null;
 
@@ -44,18 +39,18 @@ public class TestRocketMQStormBolt implements IRichBolt {
 	ArrayList<TickerStandardFormat> coinPricesList = new ArrayList<TickerStandardFormat>();
 	ArrayList<TickerPair> tickerPairList = new ArrayList<TickerPair>();
 	
-	public TestRocketMQStormBolt(){
+	public PairBolt1(){
 
 
 	}
 
-	public void prepare(Map stormConf, TopologyContext context,
+	@SuppressWarnings("rawtypes")
+	public void prepare(Map conf, TopologyContext context,
 			OutputCollector collector) {
-
-
+		
 		WebSocketLocalClient wsClient = null;
 		try {
-			wsClient = new WebSocketLocalClient( new URI( "ws://" + AggConfig.webSocketServerIP + ":" + AggConfig.webSocketServerPort), new Draft_6455() );
+			wsClient = new WebSocketLocalClient( new URI( "ws://" + (String)conf.get("GatewayURL")), new Draft_6455() );
 			wsClient.connectBlocking();
 			this.wsClient = wsClient;
 		} catch (URISyntaxException e1) {
@@ -68,15 +63,14 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		this.collector = collector;
 	}
 
-	@SuppressWarnings({ "null", "unchecked" })
 	public void execute(Tuple tuple) {
 		// TODO Auto-generated method stub
 		//MetaType metaTuple = (MetaType)tuple.getValue(0);
-		System.out.println(tuple.getValue(0).toString());
-		System.out.println(tuple.getValue(1).toString());
-		System.out.println("Exception11 ==================================================================");
-		System.out.println("Exception11 ==================================================================");
-		System.out.println("Exception11 ==================================================================");
+		logger.info(tuple.getValue(0).toString());
+		logger.info(tuple.getValue(1).toString());
+		logger.info("Exception11 ==================================================================");
+		logger.info("Exception11 ==================================================================");
+		logger.info("Exception11 ==================================================================");
 		logger.info("Exception11 ==================================================================");
 		logger.info("Exception11 ==================================================================");
 
@@ -186,12 +180,12 @@ public class TestRocketMQStormBolt implements IRichBolt {
 				for (int i2 = i1+1; i2 < coinPricesList.size(); i2 ++){
 					TickerPair tp = new TickerPair();
 					tp.formatTickerPair(coinPricesList.get(i1), coinPricesList.get(i2));
-					System.out.println("111tickerPairList size is:"+tickerPairList.size());
-					System.out.println("tptptptptp:"+tp.toJsonString());
+					logger.info("111tickerPairList size is:"+tickerPairList.size());
+					logger.info("tptptptptp:"+tp.toJsonString());
 					tickerPairList.add(tp);
-					System.out.println("222tickerPairList size is:"+tickerPairList.size());
+					logger.info("222tickerPairList size is:"+tickerPairList.size());
 					for(int i4 = 0;i4<tickerPairList.size();i4++){
-						System.out.println("after added,tickerPairList "+"i4"+tickerPairList.get(i4).toJsonString());
+						logger.info("after added,tickerPairList "+"i4"+tickerPairList.get(i4).toJsonString());
 					}
 					
 					//这里的tickerPairList数据被覆盖！！！！！
@@ -199,7 +193,7 @@ public class TestRocketMQStormBolt implements IRichBolt {
 			}
 			//下面这里的tickerPairList怎么就不一样了？？每一个和最后一个add进来的一样
 			for(int i3 = 0;i3<tickerPairList.size();i3++){
-				System.out.println("tickerPairList"+"&&&&&"+i3+"\t"+tickerPairList.get(i3).toJsonString());
+				logger.info("tickerPairList"+"&&&&&"+i3+"\t"+tickerPairList.get(i3).toJsonString());
 			}
 		}
 		for (TickerPair x: tickerPairList){
@@ -221,14 +215,14 @@ public class TestRocketMQStormBolt implements IRichBolt {
 		int min=1;
 		Random random = new Random();
 		s = random.nextInt(max)%(max-min+1);
-		System.out.println("sssssssssssssssssssssssssssss=============================="+s);
-		System.out.println(tmpData.get(s));
+		logger.info("sssssssssssssssssssssssssssss=============================="+s);
+		logger.info(tmpData.get(s));
 		wsClient.send(tmpData.get(s));*/
 		logger.info("Exception11 ==================================================================");
 		logger.info("Exception11 ==================================================================");
-		System.out.println("Exception11 ==================================================================");
-		System.out.println("Exception11 ==================================================================");
-		System.out.println("tickerPairList size is:"+tickerPairList.size());
+		logger.info("Exception11 ==================================================================");
+		logger.info("Exception11 ==================================================================");
+		logger.info("tickerPairList size is:"+tickerPairList.size());
 		if (this.wsClient != null){
 			if (tickerPairList.size() >= 1){
 				StringBuilder sb = new StringBuilder();
@@ -249,14 +243,14 @@ public class TestRocketMQStormBolt implements IRichBolt {
 				}
 				sb.append("]}");
 				String pair = sb.toString();
-				System.out.println(pair);
+				logger.info(pair);
 				collector.emit(new Values(tickerType,pair));
 				Log.info("&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
 				
 				wsClient.send(pair);
 				}
 		}else{
-			System.out.println("wsClient is null");
+			logger.info("wsClient is null");
 		}
 
 

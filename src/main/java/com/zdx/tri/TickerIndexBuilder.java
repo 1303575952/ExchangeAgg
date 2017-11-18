@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import org.apache.log4j.Logger;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.zdx.common.FileIO;
 import com.zdx.common.JsonFormatTool;
+import com.zdx.demo.ToyConsumer;
 
 
 
 public class TickerIndexBuilder {
+	private static Logger logger = Logger.getLogger(TickerIndexBuilder.class);
 	static HashMap<String, ArrayList<String>> tickerIndex = new HashMap<String, ArrayList<String>>();
 	
 	public void buildIndexFromFile(String path){
@@ -80,7 +84,6 @@ public class TickerIndexBuilder {
 			}			
 		}
 		
-		//regulateTriList();
 	}
 
 	private static String regulateTriList(String str) {
@@ -135,7 +138,7 @@ public class TickerIndexBuilder {
 				flags[1][1] = 'c';
 			}
 		}else {
-			System.out.println("ERROR ERROR ERROR");
+			logger.error("ERROR ERROR ERROR");
 		}
 		for(int i=0;i<3;i++){
 			for(int j=0;j<2;j++){
@@ -144,9 +147,7 @@ public class TickerIndexBuilder {
 		}
 		return flag;
 	}
-	public static void main(String[] args) {
-		regulateTriList("ETH/USDT-DPY/USDT-DPY/ETH");
-	}
+
 
 	public static HashMap<String, ArrayList<String>> loadTriListFromFile(String path){
 		HashMap<String, ArrayList<String>>  etListMap = new HashMap<String, ArrayList<String>>();

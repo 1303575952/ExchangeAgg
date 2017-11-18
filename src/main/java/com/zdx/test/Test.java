@@ -6,16 +6,42 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 
+import org.apache.log4j.Logger;
 import org.java_websocket.drafts.Draft_6455;
 
+import com.zdx.demo.ToyConsumer;
+import com.zdx.producer.TickerProducer;
 import com.zdx.rocketmq.WebSocketLocalClient;
-import com.zdx.storm.AggConfig;
+import com.zdx.tri.TickerIndexBuilder;
 
 public class Test {
+	private static Logger logger = Logger.getLogger(Test.class);
 	public static void main(String[] args) {
-		testWebSocket();
+		runProducer();
+		//testWebSocket();
 	}
-	public static void testWebSocket(){
+	
+	public static void run1(){
+		//String pairPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t1.json";
+		String triPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t2.json";
+		String tickerIndexPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t3.json";
+		//TriListBuilder.buildTriListFromPairFile(pairPath, triPath);
+		TickerIndexBuilder tib = new TickerIndexBuilder();
+		tib.buildIndexFromFile(triPath);
+		tib.saveToFile(tickerIndexPath);
+	}
+	
+	public static void runProducer(){
+		String confPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\TickerProducer.conf";
+		try {
+			TickerProducer.execute(confPath);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/*public static void testWebSocket(){
 		WebSocketLocalClient wsClient = null;
 		try {
 			wsClient = new WebSocketLocalClient( new URI( "ws://" + AggConfig.webSocketServerIP + ":" + AggConfig.webSocketServerPort), new Draft_6455() );
@@ -43,7 +69,7 @@ public class Test {
 			int min=0;
 			Random random = new Random();
 			int s = random.nextInt(max)%(max-min+1) + min;
-			System.out.println(tmpData.get(s));
+			logger.info(tmpData.get(s));
 			wsClient.send(tmpData.get(s));
 			try {
 				Thread.sleep(5000);
@@ -53,6 +79,6 @@ public class Test {
 			}
 
 		}
-	}
+	}*/
 }
 

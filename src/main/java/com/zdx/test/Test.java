@@ -10,6 +10,8 @@ import org.apache.log4j.Logger;
 import org.java_websocket.drafts.Draft_6455;
 
 import com.zdx.demo.ToyConsumer;
+import com.zdx.pair.ExchangeTopPairs;
+import com.zdx.pair.PariResetBolt1;
 import com.zdx.producer.TickerProducer;
 import com.zdx.rocketmq.WebSocketLocalClient;
 import com.zdx.tri.TickerIndexBuilder;
@@ -17,8 +19,17 @@ import com.zdx.tri.TickerIndexBuilder;
 public class Test {
 	private static Logger logger = Logger.getLogger(Test.class);
 	public static void main(String[] args) {
-		runProducer();
+		//runProducer();
 		//testWebSocket();
+		
+		PariResetBolt1 prb = new PariResetBolt1();
+		prb.loadExchangePair("C:\\ZDX\\code\\CoinMarkCapImport\\Exchange\\topVol100M.json");
+		prb.buildExchangePath();
+	}
+	
+	public static void testExchangeTopPairs(){
+		ExchangeTopPairs etp = new ExchangeTopPairs();
+		etp.buildTopVol100MPairFile("C:\\ZDX\\code\\CoinMarkCapImport\\Exchange\\1511079825594\\topVol100M.json");
 	}
 	
 	public static void run1(){

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.apache.rocketmq.client.exception.MQBrokerException;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.MessageQueueSelector;
@@ -22,7 +23,7 @@ public class ToyProducer {
 
 	public static void main(String[] args) throws Exception {
 
-		testCases(getTickerDataCase1());
+		testCases(getTickerDataCase3());
 		//testCases(getTickerDataCase2());
 
 
@@ -32,6 +33,10 @@ public class ToyProducer {
 		DefaultMQProducer producer = new DefaultMQProducer("TopProducer");	
 		String serverUrl = "182.92.150.57:9876";
 		producer.setNamesrvAddr(serverUrl);
+		//
+		//producer.setSendMessageWithVIPChannel(false);
+		//producer.setVipChannelEnabled(false);  
+
 		try {
 			producer.start();
 		} catch (MQClientException e2) {
@@ -60,9 +65,11 @@ public class ToyProducer {
 						return mqs.get(index);
 					}
 				}, id);
+				
+				//producer.send(msg);
 			} catch (MQClientException | RemotingException | InterruptedException e1) {
 				e1.printStackTrace();
-			}			
+			} 			
 			try {
 				Thread.sleep(1000);
 			} catch (InterruptedException e) {
@@ -93,6 +100,14 @@ public class ToyProducer {
 		td.add("{\"exchangeName\":\"gate-io\",\"exchangeType\":\"coin2cash\",\"coinA\":\"eth\",\"coinB\":\"usdt\",\"midUSD\":\"0.0\",\"mid\":\"332.021\",\"bid\":\"1\",\"ask\":\"2\",\"last_price\":\"332.1136\",\"low\":\"316.72\",\"high\":\"336.0008\",\"volume\":\"605576.4685\",\"timestamp\":\"1510740493123\"}");
 		td.add("{\"exchangeName\":\"gate-io\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usdt\",\"midUSD\":\"0.0\",\"mid\":\"332.021\",\"bid\":\"3\",\"ask\":\"4\",\"last_price\":\"332.1136\",\"low\":\"316.72\",\"high\":\"336.0008\",\"volume\":\"605576.4685\",\"timestamp\":\"1510740493123\"}");
 		td.add("{\"exchangeName\":\"gate-io\",\"exchangeType\":\"coin2cash\",\"coinA\":\"eth\",\"coinB\":\"btc\",\"midUSD\":\"0.0\",\"mid\":\"332.021\",\"bid\":\"5\",\"ask\":\"6\",\"last_price\":\"332.1136\",\"low\":\"316.72\",\"high\":\"336.0008\",\"volume\":\"605576.4685\",\"timestamp\":\"1510740493123\"}");		
+		return td;
+	}
+	
+	public static ArrayList<String> getTickerDataCase3(){
+		ArrayList<String> td = new ArrayList<String>();
+		td.add("{\"exchangeName\":\"livecoin\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"100.0\",\"ask\":\"200.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
+		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"eur\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"250.0\",\"ask\":\"350.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
+		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"400.0\",\"ask\":\"500.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");		
 		return td;
 	}
 }

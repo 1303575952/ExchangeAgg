@@ -1,0 +1,22 @@
+[
+   {
+      "pair":"BTC/CASH",
+      "exchangeA":"livecoin_BTC/USD",
+      "exchangeB":"bitstamp_BTC/EUR"
+   },
+   {
+      "pair":"BTC/CASH",
+      "exchangeA":"bitstamp_BTC/EUR",
+      "exchangeB":"livecoin_BTC/USD"
+   },
+   {
+      "pair":"BTC/CASH",
+      "exchangeA":"livecoin_BTC/USD",
+      "exchangeB":"bitstamp_BTC/USD"
+   },
+   {
+      "pair":"BTC/CASH",
+      "exchangeA":"bitstamp_BTC/USD",
+      "exchangeB":"livecoin_BTC/USD"
+   }
+]

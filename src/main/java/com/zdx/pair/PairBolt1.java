@@ -49,7 +49,7 @@ public class PairBolt1 implements IRichBolt {
 			OutputCollector collector) {
 		
 		WebSocketLocalClient wsClient = null;
-		try {
+		/*try {
 			wsClient = new WebSocketLocalClient( new URI( "ws://" + (String)conf.get("GatewayURL")), new Draft_6455() );
 			wsClient.connectBlocking();
 			this.wsClient = wsClient;
@@ -59,7 +59,7 @@ public class PairBolt1 implements IRichBolt {
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
+		}*/
 		this.collector = collector;
 	}
 

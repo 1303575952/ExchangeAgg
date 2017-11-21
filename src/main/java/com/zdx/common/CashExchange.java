@@ -13,6 +13,11 @@ public class CashExchange {
 	public CashExchange(){
 		priceToUSD.put("cny", 0.1512);
 		priceToUSD.put("usd", 1.0);
+		priceToUSD.put("jpy", 0.008892);
+		priceToUSD.put("usdt", 1.0);
+		priceToUSD.put("mxn", 0.05259);
+		priceToUSD.put("pln", 0.2776);
+		priceToUSD.put("cad", 0.7813);
 	}
 	public Double toUSD(String cashType, Double amount){
 		logger.info(cashType);

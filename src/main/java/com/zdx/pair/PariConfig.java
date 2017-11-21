@@ -16,17 +16,23 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zdx.common.TickerStandardFormat;
 
-public class PariResetBolt1 {
+public class PariConfig {
 
 	public HashMap<String, ArrayList<String>> exchangePairListMap = new HashMap<String, ArrayList<String>> ();
 	
 	//compute delta2
 	public HashMap<String, ArrayList<String>> pairPathMap = new HashMap<String, ArrayList<String>> ();
 	public HashMap<String, PathPrice> pathPriceMap = new HashMap<String, PathPrice> ();
-	public HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
+	
 	//compute delta 1
 	public HashMap<String, ArrayList<String>> pairFourthMap = new HashMap<String, ArrayList<String>>();
 	public HashMap<String, EnterPrice> fourthPriceMap = new HashMap<String, EnterPrice>();
+	
+	public void initPairConfig(String filePath1, String filePath2){
+		loadExchangePair(filePath1);
+		buildExchangePath();
+		loadFourthTuple(filePath2);
+	}
 	
 	public void loadExchangePair(String filePath){
 		ExchangeTopPairs etp = new ExchangeTopPairs();
@@ -68,42 +74,74 @@ public class PariResetBolt1 {
 			e2.printStackTrace();
 		}
 		String s1 = sb.toString();
-
+		s1 = s1.toLowerCase();
+		
 		if (!s1.isEmpty()){
 			JSONArray fourthList = JSON.parseArray(s1);
-			for (Object jsonObject : fourthList) {
+			
+			for (Object jsonObject : fourthList) {				
 				JSONObject js = JSONObject.parseObject(jsonObject.toString());
-				String exchangeNameA = (String)js.get("exchangeA");
-				String exchangeNameB = (String)js.get("exchangeB");
 				String pair = (String)js.get("pair");
-				String[] tmp = pair.split("/");
-				String coinA = tmp[0].toLowerCase();
-				String coinB = tmp[1].toLowerCase();
-				String info = exchangeNameA + "_" + exchangeNameB + "_" + coinA + "_" + coinB;
+				String s11 = (String)js.get("exchangea");				
+				String exchangeNameA = "";
+				String coinA = "";
+				String coinB = "";
+				if (s11.contains("_")){
+					String[] t1 = s11.split("_");
+					exchangeNameA = t1[0];					
+					String[] t2 = t1[1].split("/");
+					coinA = t2[0];
+					coinB = t2[1];
+				}
+			
+				String s22 = (String)js.get("exchangeb");				
+				String exchangeNameB = "";
+				String coinX = "";
+				String coinY = "";
+				if (s22.contains("_")){
+					String[] t1 = s22.split("_");
+					exchangeNameB = t1[0];					
+					String[] t2 = t1[1].split("/");
+					coinX = t2[0];
+					coinY = t2[1];
+				}
 				
-				ArrayList<String> s11 = new ArrayList<String>();
-				String key1 = exchangeNameA + "_" + coinA + "_" + coinB;
-				if (pairFourthMap.containsKey(key1)){
-					s11 = pairFourthMap.get(key1);
-				}
-				s11.add(info);
-				pairFourthMap.put(key1, s11);
-				ArrayList<String> s12 = new ArrayList<String>();
-				String key2 = exchangeNameB + "_" + coinA + "_" + coinB;
-				if (pairFourthMap.containsKey(key2)){
-					s12 = pairFourthMap.get(key2);
-				}
-				s11.add(info);
-				pairFourthMap.put(key2, s12);
 				EnterPrice ep = new EnterPrice();
-				ep.exchangeName1 = "";
-				ep.exchangeName2 = "";
-				ep.path1 = "";
-				ep.path2 = "";
-				fourthPriceMap.put(info, ep);
+				ep.exchangeName1 = exchangeNameA;
+				ep.path1 = coinA + "_" + coinB;
+				ep.exchangeName2 = exchangeNameB;
+				ep.path2 = coinX + "_" + coinY;
+				String info1 = exchangeNameA + "_" + coinA + "_" + coinB;
+				String info2 = exchangeNameB + "_" + coinX + "_" + coinY;
+
+				String info = info1 + "@@" + info2;
 				
+				ArrayList<String> s31 = new ArrayList<String>();
+				if (pairFourthMap.containsKey(info1)){
+					s31 = pairFourthMap.get(info1);
+				}		
+				s31.add(info);				
+				pairFourthMap.put(info1, s31);
+				
+				ArrayList<String> s32 = new ArrayList<String>();
+				if (pairFourthMap.containsKey(info2)){
+					s32 = pairFourthMap.get(info2);
+				}
+				s32.add(info);
+				pairFourthMap.put(info2, s32);	
+
+				fourthPriceMap.put(info, ep);
 			}
 		}
+		
+/*		for (Entry<String, ArrayList<String>> x: pairFourthMap.entrySet()){
+			System.out.println(x.getKey());
+			ArrayList<String> y = x.getValue();
+			for (String z:y){
+				System.out.println("    " + z);	
+			}
+			
+		}*/
 	}
 	
 	public void buildExchangePath(){
@@ -121,8 +159,7 @@ public class PariResetBolt1 {
 					String coinX = tmp2[0];
 					String coinY = tmp2[1];
 					if (coinB.equals(coinX) && !coinA.equals(coinY)){
-						String path = exchangeName + "_" + coinA + "_" + coinB + "_" + coinY;
-						System.out.println(path);
+						String path = exchangeName + "_" + coinA + "_" + coinB + "_" + coinY;						
 						PathPrice pp = new PathPrice();
 						pp.path1 = coinA + "_" + coinB;
 						pp.path2 = coinB + "_" + coinY;
@@ -167,97 +204,8 @@ public class PariResetBolt1 {
 			}
 		}
 	}
-	
-	public void updatePrice(TickerStandardFormat tsf){
-		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();		
-		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;		
-		//用ticker直接值更新最低价，如BTC-USD
-		updateLowestPrice(exchangePairName, pair, tsf.ask);
-		if (pairPathMap.containsKey(exchangePairName)){
-			ArrayList<String> pathNameList = pairPathMap.get(exchangePairName);
-			for (String pathName : pathNameList){
-				PathPrice pp =  pathPriceMap.get(pathName);
-				if (pair.equals(pp.path1)){
-					pp.ask1 = tsf.ask;
-				}
-				if (pair.equals(pp.path2)){
-					pp.ask2 = tsf.ask;
-				}
-				pp.price = (1 + pp.fee1) * pp.ask1 * (1 + pp.fee2) * pp.ask2;				
-				//更新etc-eth-usd间接价格
-				pathPriceMap.put(pathName, pp);
-				//用间接价格更新最低价，如etc-usd
-				String exchangePairName2 = tsf.exchangeName.toLowerCase() + pp.pair;
-				updateLowestPrice(exchangePairName2, pp.pair, pp.price);
-			}
-		}
-		
-		if (pairFourthMap.containsKey(exchangePairName)){
-			ArrayList<String> tmp1 = pairFourthMap.get(exchangePairName);
-			for (String x : tmp1){
-				if (fourthPriceMap.containsKey(x)){
-					EnterPrice ep = fourthPriceMap.get(x);
-					if (ep.exchangeName1.equals(tsf.exchangeName.toLowerCase())){
-						ep.ask1 = 0.0;
-						
-					} else if (ep.exchangeName2.equals(tsf.exchangeName.toLowerCase())){
-						ep.ask2 = 0.0;
-					}
-					ep.profit = 1;
-					if (ep.profit > 1.05){
-						//report
-						enterOportunity();
-					}
-					fourthPriceMap.put(x, ep);
-				}
-				
-			}
-		}
-	}
-	
-	
-
-	public void updateLowestPrice(String tickerName, String lowestPath, double lowestPrice){
-		if (pairPriceMap.containsKey(tickerName)){
-			LowestPrice lp = pairPriceMap.get(tickerName);
-			if (lowestPrice < lp.lowestPrice){
-				lp.lowestPath = lowestPath;
-				lp.lowestPrice = lowestPrice;
-			}
-			pairPriceMap.put(tickerName, lp);
-		} else {
-			LowestPrice lp = pairPriceMap.get(tickerName);
-			lp.lowestPath = lowestPath;
-			lp.lowestPrice = lowestPrice;
-			pairPriceMap.put(tickerName, lp);
-		}
-	}
-
-	public LowestPricePair getPairResetInfo(String exchangeTicker1, String exchangeTicker2){
-		LowestPricePair lpp = new LowestPricePair();		
-		LowestPrice lp1 = new LowestPrice();
-		LowestPrice lp2 = new LowestPrice();
-		if (pairPriceMap.containsKey(exchangeTicker1) && pairPriceMap.containsKey(exchangeTicker2)){
-			lp1 = pairPriceMap.get(exchangeTicker1);
-			lp2 = pairPriceMap.get(exchangeTicker2);
-		}
-		lpp.lowestPath1 = lp1.lowestPath;
-		lpp.lowestPrice1 = lp1.lowestPrice;
-		lpp.lowestPath2 = lp2.lowestPath;
-		lpp.lowestPrice2 = lp2.lowestPrice;
-		if (lpp.lowestPrice2 < Integer.MAX_VALUE){
-			lpp.resetFee = lpp.lowestPrice1 / lpp.lowestPrice2 - 1;
-		}
-		return lpp;
-	}
-	
-	public void enterOportunity(){
-		String exchangeTicker1 = "";
-		String exchangeTicker2 = "";
-		LowestPricePair lpp = getPairResetInfo(exchangeTicker1, exchangeTicker2);
-		double delta2 = lpp.resetFee;
-	}
 }
+
 
 class LowestPrice{
 	String lowestPath = "";
@@ -279,6 +227,8 @@ class PathPrice{
 	String pair = "";//A-C
 	double ask1 = 0.0;
 	double ask2 = 0.0;
+	double bid1 = 0.0;
+	double bid2 = 0.0;
 	double fee1 = 0.0;
 	double fee2 = 0.0;
 	double price = 0.0;
@@ -291,6 +241,8 @@ class EnterPrice{
 	String path2 = "";//B-C	
 	double ask1 = 0.0;
 	double ask2 = 0.0;
+	double bid1 = 0.0;
+	double bid2 = 0.0;	
 	double fee1 = 0.0;
 	double fee2 = 0.0;
 	double price = 0.0;

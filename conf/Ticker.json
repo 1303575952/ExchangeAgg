@@ -1,0 +1,101 @@
+[
+   
+   {
+      "exchangeURL":"gate.io",
+	  "exchangeName":"gate-io",
+      "endpoints":
+      [
+         {
+		 "pairName": "qtum_usdt",
+		 "pairPath": "api2/1/ticker/qtum_usdt"
+		 } 
+      ]
+   },
+   {
+      "exchangeURL":"tidex.com",
+	  "exchangeName":"tidex",
+      "endpoints":
+      [
+         {
+		 "pairName": "waves_btc",
+		 "pairPath": "api.tidex.com/api/3/ticker/waves_btc"
+		 }
+      ]
+   },        
+   {
+      "exchangeURL":"api.zaif.jp",
+	  "exchangeName":"zaif",
+      "endpoints":
+      [
+         {
+		 "pairName": "mona_jpy",
+		 "pairPath": "api/1/trades/mona_jpy"
+		 },
+         {
+		 "pairName": "xem_jpy",
+		 "pairPath": "api/1/trades/xem_jpy"
+		 }
+      ]
+   },         
+   {
+      "exchangeURL":"api.bitso.com",
+	  "exchangeName":"bitso",
+      "endpoints":
+      [
+		 {
+		 "pairName": "btc_mxn",
+		 "pairPath": "v3/ticker/?book=btc_mxn"
+		 },
+         {
+		 "pairName": "eth_mxn",
+		 "pairPath": "v3/ticker/?book=eth_mxn"
+		 }
+      ]
+   },
+   {
+	  "exchangeURL":"coinroom.com",
+	  "exchangeName":"coinroom",
+      "endpoints":
+      [
+		 {
+		 "pairName": "BTC_PLN",
+		 "pairPath": "api/ticker/BTC/PLN"
+		 }
+      ]	
+   },
+   {
+	  "exchangeURL":"api.quadrigacx.com",
+	  "exchangeName":"quadrigacx",
+      "endpoints":
+      [
+         {
+		 "pairName": "eth_cad",
+		 "pairPath": "v2/ticker?book=eth_cad"
+		 },
+         {
+		 "pairName": "eth_btc",
+		 "pairPath": "v2/ticker?book=eth_btc"
+		 },		
+         {
+		 "pairName": "bch_cad",
+		 "pairPath": "v2/ticker?book=bch_cad"
+		 },
+         {
+		 "pairName": "btc_cad",
+		 "pairPath": "v2/ticker?book=btc_cad"
+		 }	 
+      ]	
+   },
+   {
+	  "exchangeURL":"cryptopia.co.nz",
+	  "exchangeName":"cryptopia",
+      "endpoints":
+      [
+		 {
+		 "pairName": "ORME_BTC",
+		 "pairPath": "api/GetMarket/ORME_BTC"
+		 }	 
+      ]	
+   }
+   
+]

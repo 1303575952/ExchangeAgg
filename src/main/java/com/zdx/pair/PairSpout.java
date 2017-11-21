@@ -1,4 +1,5 @@
 package com.zdx.pair;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +16,7 @@ import org.slf4j.Logger;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zdx.common.TickerStandardFormat;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -30,12 +32,23 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 	private transient DefaultMQPushConsumer consumer; 
 	private static final Logger logger = LoggerFactory.getLogger(PairSpout.class);
     
-
+	public double threshold = 0.05;
+	public PariConfig pc;
+	
 	@SuppressWarnings("rawtypes")  
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
-
+		threshold = Double.parseDouble((String) conf.get("PairArbitrageThreshold"));
+		String filePath1 = (String) conf.get("TopVol100MPath");
+		String filePath2 = (String) conf.get("TopVol100MPairPath");
+		//String filePath1 = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\topVol100M.json";
+		//String filePath2 = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\ToyTopVol100MPair.json";
+		pc = new PariConfig();
+		pc.initPairConfig(filePath1, filePath2);
+		
+		
 		logger.info("init DefaultMQPushConsumer");
 		logger.info("###"+(String) conf.get("ConsumerGroup"));
+		
 		consumer = new DefaultMQPushConsumer((String) conf.get("ConsumerGroup")); 
 		consumer.setNamesrvAddr((String) conf.get("RocketMQNameServerAddress"));
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
@@ -70,35 +83,53 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 	public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs,
 			ConsumeOrderlyContext context) {  
 		for (MessageExt msg : msgs) {
+			
 			String body = new String(msg.getBody());
-			JSONObject jsonObject = JSON.parseObject(body);
-			logger.info("Coin label ================1");
-			logger.info("Coin label ================2");
-			//logger.info("Coin label ================0");
-			//logger.info("Spout Message body = " + body);
-			//logger.info("Coin label ================1");
-			String key = jsonObject.getString("exchangeType");
-			//logger.info("Coin label ================2" + key);
-			//logger.info("Coin label ================3" + jsonObject.toJSONString());
-			//logger.info("Coin label ================" + key);
-			//logger.info("Coin label ================" + key);
-			if ("coin2coin".equals(key)){
-				//coin to coin
-				logger.info("Coin label ================111");
-				String key1 = jsonObject.getString("coinA") + "_" + jsonObject.getString("coinB");
-				logger.info("Coin label ================" + key1);
-				collector.emit(new Values(key1, body));
-				
-				logger.info("send Coin data ================" + jsonObject.toJSONString());
-			} else if ("coin2cash".equals(key)) {
-				//coin to cash
-				logger.info("Coin label ================222");
-				String key2 = jsonObject.getString("coinA") + "_cash";
-				collector.emit(new Values(key2, body));
-				logger.info("cash label ================" + key2);
-				logger.info("send cash data ================" + jsonObject.toJSONString());
-			}
+			System.out.println("-----------1" + body);
+			TickerStandardFormat tsf = new TickerStandardFormat();
+			tsf.formatJsonString(body);
+			updatePairPrice(tsf);
 		}  
 		return ConsumeOrderlyStatus.SUCCESS;  
+	}
+	
+	public void updatePairPrice(TickerStandardFormat tsf){
+		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();
+		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;
+		if (pc.pairFourthMap.containsKey(exchangePairName)){
+			ArrayList<String> tmp1 = pc.pairFourthMap.get(exchangePairName);
+			for (String x : tmp1){
+				if (pc.fourthPriceMap.containsKey(x)){
+					EnterPrice ep = pc.fourthPriceMap.get(x);
+					if (ep.exchangeName1.equals(tsf.exchangeName.toLowerCase())){
+						ep.bid1 = tsf.bid;
+						ep.ask1 = tsf.ask;
+					} else if (ep.exchangeName2.equals(tsf.exchangeName.toLowerCase())){
+						ep.bid2 = tsf.bid;
+						ep.ask2 = tsf.ask;
+					}
+					if (ep.ask2 > 0.0){
+						ep.profit = ep.bid1 / ep.ask2;
+					}
+					if (ep.profit > 1 + threshold ){
+						
+						System.out.println("    ---2-" + ep.profit);
+						System.out.println("----------------------1----------------------");
+						System.out.println("----------------------1----------------------");
+						System.out.println("----------------------1----------------------");
+						String[] t1 = x.split("@@");
+						System.out.println("    fourthTuple = " + x);
+						System.out.println("    profit = " + ep.profit);
+						System.out.println("----------------------2----------------------");
+						System.out.println("----------------------2----------------------");
+						System.out.println("----------------------2----------------------");
+						//LowestPricePair lpp = getPairResetInfo(t1[0], t1[1]);
+						//System.out.println("    ---3-" + lpp.resetFee);
+					}
+					pc.fourthPriceMap.put(x, ep);
+				}
+
+			}
+		}
 	}
 }  

@@ -1,7 +1,10 @@
 package com.zdx.pair;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -34,8 +37,6 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 		threshold = Double.parseDouble((String) conf.get("PairArbitrageThreshold"));
 		String filePath1 = (String) conf.get("TopVol100MPath");
 		String filePath2 = (String) conf.get("TopVol100MPairPath");
-		//String filePath1 = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\topVol100M.json";
-		//String filePath2 = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\ToyTopVol100MPair.json";
 		pc = new PariConfig();
 		pc.initPairConfig(filePath1, filePath2);
 		
@@ -53,31 +54,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 			e.printStackTrace();  
 		}  
 		consumer.registerMessageListener(this);
-		/*consumer.registerMessageListener(new MessageListenerOrderly() {
-			
-			@Override
-			public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
-				context.setAutoCommit(true);  
-                for (MessageExt msg : msgs) {  
-                    logger.info(msg + ",内容：" + new String(msg.getBody()));
-                    TickerStandardFormat tsf = new TickerStandardFormat();
-                    String body = new String(msg.getBody());
-					tsf.formatJsonString(body);
-					updatePairPrice(tsf);
-                }  
-  
-                try {  
-                    TimeUnit.SECONDS.sleep(5L);  
-                } catch (InterruptedException e) {  
 
-                    e.printStackTrace();  
-                }  
-                ;  
-  
-                return ConsumeOrderlyStatus.SUCCESS;
-				
-			}
-		});*/
 		try {  
 			consumer.start();  
 		} catch (MQClientException e) {  
@@ -104,18 +81,27 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 		for (MessageExt msg : msgs) {
 			
 			String body = new String(msg.getBody());
+			/*
+			 * 接收到每一个ticker
+			 */
 			System.out.println("-----------1" + body);
 			TickerStandardFormat tsf = new TickerStandardFormat();
 			tsf.formatJsonString(body);
+			updatePrice(tsf);
 			updatePairPrice(tsf);
 		}  
 		return ConsumeOrderlyStatus.SUCCESS;  
 	}
 	
 	public void updatePairPrice(TickerStandardFormat tsf){
+		logger.info("updatePairPrice");
+		
 		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();
 		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;
+		logger.info(exchangePairName);
+		logger.info("pc.pairFourthMap"+pc.pairFourthMap.size());
 		if (pc.pairFourthMap.containsKey(exchangePairName)){
+			logger.info("pc.pairFourthMap.containsKey(exchangePairName)"+exchangePairName);
 			ArrayList<String> tmp1 = pc.pairFourthMap.get(exchangePairName);
 			for (String x : tmp1){
 				if (pc.fourthPriceMap.containsKey(x)){
@@ -142,7 +128,8 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 						System.out.println("----------------------2----------------------");
 						System.out.println("----------------------2----------------------");
 						System.out.println("----------------------2----------------------");
-						LowestPricePair lpp = PairBolt.getPairResetInfo(t1[0], t1[1]);
+						
+						LowestPricePair lpp = getPairResetInfo(t1[0], t1[1]);
 						System.out.println("    ---3-" + lpp.resetFee);
 					}
 					pc.fourthPriceMap.put(x, ep);
@@ -150,5 +137,94 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 
 			}
 		}
+	}
+	//****************************************************************************************
+	//public double threshold = 0.05;
+	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
+	//PariConfig pc = new PariConfig();
+	public void updatePrice(TickerStandardFormat tsf){
+		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();
+		//System.out.println("---1-" + pair);
+		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;
+		//System.out.println("---2-" + exchangePairName);
+		//用ticker直接值更新最低价，如BTC-USD
+		updateLowestPrice(exchangePairName, pair, tsf.ask);
+		if (pc.pairPathMap.containsKey(exchangePairName)){
+			ArrayList<String> pathNameList = pc.pairPathMap.get(exchangePairName);
+			//System.out.println("---9-" + pathNameList.toString());
+			for (String pathName : pathNameList){
+				//System.out.println("---10-" + pathName);
+				PathPrice pp =  pc.pathPriceMap.get(pathName);
+				if (pair.equals(pp.path1)){
+					pp.bid1 = tsf.bid;
+					pp.ask1 = tsf.ask;
+				}
+				if (pair.equals(pp.path2)){
+					pp.bid2 = tsf.bid;
+					pp.ask2 = tsf.ask;
+				}
+				//System.out.println("---11-" + pp.ask1);
+				//System.out.println("---12-" + pp.ask2);
+				pp.price = (1 + pp.fee1) * pp.ask1 * (1 + pp.fee2) * pp.ask2;				
+				//更新etc-eth-usd间接价格
+				pc.pathPriceMap.put(pathName, pp);
+				//用间接价格更新最低价，如etc-usd
+				String exchangePairName2 = tsf.exchangeName.toLowerCase() + "_" + pp.pair;
+				updateLowestPrice(exchangePairName2, pp.pair, pp.price);
+			}
+		}
+	}
+	
+	public static void updateLowestPrice(String tickerName, String lowestPath, double lowestPrice){
+		if (pairPriceMap.containsKey(tickerName)){
+			LowestPrice lp = pairPriceMap.get(tickerName);
+			if (lowestPrice < lp.lowestPrice){
+				lp.lowestPath = lowestPath;
+				lp.lowestPrice = lowestPrice;
+				//System.out.println("    ---3-" + lp.lowestPath);
+				//System.out.println("    ---4-" + lp.lowestPrice);
+				//System.out.println("    ---5-" + tickerName);
+			}
+			pairPriceMap.put(tickerName, lp);
+		} else {
+			LowestPrice lp = new LowestPrice();
+			lp.lowestPath = lowestPath;
+			lp.lowestPrice = lowestPrice;
+			//System.out.println("    ---6-" + lp.lowestPath);
+			//System.out.println("    ---7-" + lp.lowestPrice);
+			pairPriceMap.put(tickerName, lp);
+			//System.out.println("    ---8-" + tickerName);			
+		}
+	}
+
+	public static LowestPricePair getPairResetInfo(String exchangeTicker1, String exchangeTicker2){
+		LowestPricePair lpp = new LowestPricePair();		
+		LowestPrice lp1 = new LowestPrice();
+		LowestPrice lp2 = new LowestPrice();
+		logger.info("exchangeTicker1"+exchangeTicker1);
+		logger.info("exchangeTicker2"+exchangeTicker2);
+		logger.info("pairPriceMap.containsKey(exchangeTicker1):"+pairPriceMap.containsKey(exchangeTicker1));
+		logger.info("pairPriceMap.containsKey(exchangeTicker2):"+pairPriceMap.containsKey(exchangeTicker2));
+		logger.info("pairPriceMap.size()"+pairPriceMap.size());
+		for (Entry<String, LowestPrice> entry : pairPriceMap.entrySet()) {
+			logger.info("Key: " + entry.getKey() + " Value: " + entry.getValue().lowestPath+"\t"+entry.getValue().lowestPrice);
+		}
+		if (pairPriceMap.containsKey(exchangeTicker1) && pairPriceMap.containsKey(exchangeTicker2)){
+			lp1 = pairPriceMap.get(exchangeTicker1);
+			lp2 = pairPriceMap.get(exchangeTicker2);
+		}
+		
+		lpp.lowestPath1 = lp1.lowestPath;
+		lpp.lowestPrice1 = lp1.lowestPrice;
+		lpp.lowestPath2 = lp2.lowestPath;
+		lpp.lowestPrice2 = lp2.lowestPrice;
+		logger.info("lpp.lowestPath1:"+lpp.lowestPath1+
+				"\nlpp.lowestPrice1:"+lpp.lowestPrice1+
+				"\nlpp.lowestPath2:"+lpp.lowestPath2+
+				"\nlpp.lowestPrice2:"+lpp.lowestPrice2);
+		if (lpp.lowestPrice2 < Integer.MAX_VALUE){
+			lpp.resetFee = lpp.lowestPrice1 / lpp.lowestPrice2 - 1;
+		}
+		return lpp;
 	}
 }  

@@ -12,7 +12,6 @@ import org.java_websocket.drafts.Draft_6455;
 import com.zdx.common.TickerStandardFormat;
 import com.zdx.demo.ToyConsumer;
 import com.zdx.pair.ExchangeTopPairs;
-import com.zdx.pair.PairBolt;
 import com.zdx.pair.PariConfig;
 import com.zdx.producer.TickerProducer;
 import com.zdx.rocketmq.WebSocketLocalClient;

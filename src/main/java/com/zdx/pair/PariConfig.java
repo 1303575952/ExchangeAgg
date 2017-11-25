@@ -237,8 +237,8 @@ class PathPrice{
 class EnterPrice{
 	String exchangeName1 = "";
 	String exchangeName2 = "";
-	String path1 = "";//A-B
-	String path2 = "";//B-C	
+	String path1 = "";
+	String path2 = "";
 	double ask1 = 0.0;
 	double ask2 = 0.0;
 	double bid1 = 0.0;

@@ -2,7 +2,6 @@ package com.zdx.pair;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
@@ -10,12 +9,9 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
-import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
 import com.zdx.common.TickerStandardFormat;
 
 import backtype.storm.spout.SpoutOutputCollector;
@@ -23,8 +19,6 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Values;
-//import backtype.storm.topology.IRichSpout;
 
 public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{  
 	private static final long serialVersionUID = -3085994102089532269L;   
@@ -52,13 +46,38 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 		consumer = new DefaultMQPushConsumer((String) conf.get("ConsumerGroup")); 
 		consumer.setNamesrvAddr((String) conf.get("RocketMQNameServerAddress"));
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-		consumer.setMessageModel(MessageModel.BROADCASTING);
+		//consumer.setMessageModel(MessageModel.BROADCASTING);
 		try {
 			consumer.subscribe("toyTickerTest", "*");
 		} catch (MQClientException e) {  
 			e.printStackTrace();  
 		}  
-		consumer.registerMessageListener(this);  
+		consumer.registerMessageListener(this);
+		/*consumer.registerMessageListener(new MessageListenerOrderly() {
+			
+			@Override
+			public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {
+				context.setAutoCommit(true);  
+                for (MessageExt msg : msgs) {  
+                    logger.info(msg + ",内容：" + new String(msg.getBody()));
+                    TickerStandardFormat tsf = new TickerStandardFormat();
+                    String body = new String(msg.getBody());
+					tsf.formatJsonString(body);
+					updatePairPrice(tsf);
+                }  
+  
+                try {  
+                    TimeUnit.SECONDS.sleep(5L);  
+                } catch (InterruptedException e) {  
+
+                    e.printStackTrace();  
+                }  
+                ;  
+  
+                return ConsumeOrderlyStatus.SUCCESS;
+				
+			}
+		});*/
 		try {  
 			consumer.start();  
 		} catch (MQClientException e) {  
@@ -123,8 +142,8 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 						System.out.println("----------------------2----------------------");
 						System.out.println("----------------------2----------------------");
 						System.out.println("----------------------2----------------------");
-						//LowestPricePair lpp = getPairResetInfo(t1[0], t1[1]);
-						//System.out.println("    ---3-" + lpp.resetFee);
+						LowestPricePair lpp = PairBolt.getPairResetInfo(t1[0], t1[1]);
+						System.out.println("    ---3-" + lpp.resetFee);
 					}
 					pc.fourthPriceMap.put(x, ep);
 				}

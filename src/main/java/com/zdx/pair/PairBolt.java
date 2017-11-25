@@ -2,12 +2,19 @@ package com.zdx.pair;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.zdx.common.TickerStandardFormat;
 
 public class PairBolt {
+	private static final Logger logger = LoggerFactory.getLogger(PairBolt.class);
 	public double threshold = 0.05;
-	public HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
+	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
 	PariConfig pc = new PariConfig();
 
 	public void open(){
@@ -77,9 +84,9 @@ public class PairBolt {
 				updateLowestPrice(exchangePairName2, pp.pair, pp.price);
 			}
 		}
-
 	}
-	public void updateLowestPrice(String tickerName, String lowestPath, double lowestPrice){
+	
+	public static void updateLowestPrice(String tickerName, String lowestPath, double lowestPrice){
 		if (pairPriceMap.containsKey(tickerName)){
 			LowestPrice lp = pairPriceMap.get(tickerName);
 			if (lowestPrice < lp.lowestPrice){
@@ -101,14 +108,47 @@ public class PairBolt {
 		}
 	}
 
-	public LowestPricePair getPairResetInfo(String exchangeTicker1, String exchangeTicker2){
+	public static LowestPricePair getPairResetInfo(String exchangeTicker1, String exchangeTicker2){
 		LowestPricePair lpp = new LowestPricePair();		
 		LowestPrice lp1 = new LowestPrice();
 		LowestPrice lp2 = new LowestPrice();
+		logger.info("exchangeTicker1"+exchangeTicker1);
+		logger.info("exchangeTicker2"+exchangeTicker2);
+		logger.info("pairPriceMap.containsKey(exchangeTicker1):"+pairPriceMap.containsKey(exchangeTicker1));
+		logger.info("pairPriceMap.containsKey(exchangeTicker2):"+pairPriceMap.containsKey(exchangeTicker2));
+		logger.info("pairPriceMap.size()"+pairPriceMap.size());
+		for (Entry<String, LowestPrice> entry : pairPriceMap.entrySet()) {
+			System.out.println("Key: " + entry.getKey() + " Value: " + entry.getValue().lowestPath+"\t"+entry.getValue().lowestPrice);
+		}
 		if (pairPriceMap.containsKey(exchangeTicker1) && pairPriceMap.containsKey(exchangeTicker2)){
 			lp1 = pairPriceMap.get(exchangeTicker1);
 			lp2 = pairPriceMap.get(exchangeTicker2);
 		}
+		/*boolean flag1 = false;
+		boolean flag2 = false;
+		String key1 = "";
+		String key2 = "";
+		for(Map.Entry<String, LowestPrice> entry:pairPriceMap.entrySet()){
+			if(entry.getKey().toString().contains(exchangeTicker1)){
+				flag1 = true;
+				key1 = entry.getKey();
+				logger.info("key1:"+key1);
+				break;
+			}
+		}
+		for(Map.Entry<String, LowestPrice> entry:pairPriceMap.entrySet()){
+			if(entry.getKey().toString().contains(exchangeTicker2)){
+				flag2 = true;
+				key2 = entry.getKey();
+				logger.info("key2:"+key2);
+				break;
+			}
+		}
+		if(flag1 == true && flag2 == true){
+			lp1 = pairPriceMap.get(key1);
+			lp2 = pairPriceMap.get(key2);
+		}*/
+		
 		lpp.lowestPath1 = lp1.lowestPath;
 		lpp.lowestPrice1 = lp1.lowestPrice;
 		lpp.lowestPath2 = lp2.lowestPath;

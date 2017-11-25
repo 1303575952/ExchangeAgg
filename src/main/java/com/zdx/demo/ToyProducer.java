@@ -52,15 +52,18 @@ public class ToyProducer {
 			String tmp = (String) jsonObject.get("coinA") + "-" + jsonObject.get("coinB");
 			msg.setBody(td.get(i).getBytes());
 			try {
-				int id = tmp.hashCode()%10;
+				int id = Math.abs(tmp.hashCode()%10);
+				System.out.println("msg.setBody"+td.get(i));
 				producer.sendOneway(msg, new MessageQueueSelector(){
 					@Override
 					public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
 						// TODO Auto-generated method stub
 						Integer id = (Integer) arg;
+						logger.info("id"+id);
 						logger.info("mqs.size" + mqs.size());
 						int index = id % mqs.size();
 						logger.info("index" + index);
+						logger.info("msg:"+msg);
 						logger.info("mqs.get(index)" + mqs.get(index));
 						return mqs.get(index);
 					}
@@ -105,9 +108,13 @@ public class ToyProducer {
 	
 	public static ArrayList<String> getTickerDataCase3(){
 		ArrayList<String> td = new ArrayList<String>();
-		td.add("{\"exchangeName\":\"livecoin\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"100.0\",\"ask\":\"200.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
-		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"eur\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"250.0\",\"ask\":\"350.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
-		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"400.0\",\"ask\":\"500.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");		
+		td.add("{\"exchangeName\":\"livecoin\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"100.0\",\"ask\":\"150.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
+		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2cash\",\"coinA\":\"btc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"200.0\",\"ask\":\"250.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
+		td.add("{\"exchangeName\":\"livecoin\",\"exchangeType\":\"coin2coin\",\"coinA\":\"btc\",\"coinB\":\"eth\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"14.0\",\"ask\":\"15.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
+		td.add("{\"exchangeName\":\"livecoin\",\"exchangeType\":\"coin2cash\",\"coinA\":\"eth\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"9.0\",\"ask\":\"20.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");
+		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2cash\",\"coinA\":\"etc\",\"coinB\":\"usd\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"9.0\",\"ask\":\"10.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");		
+		td.add("{\"exchangeName\":\"bitstamp\",\"exchangeType\":\"coin2coin\",\"coinA\":\"btc\",\"coinB\":\"etc\",\"midUSD\":\"0.0\",\"mid\":\"7825.89805\",\"bid\":\"10.0\",\"ask\":\"15.0\",\"last_price\":\"7845.6886\",\"low\":\"7564.33\",\"high\":\"7860.8157\",\"volume\":\"238061.3136\",\"timestamp\":\"1\"}");		
+		
 		return td;
 	}
 }

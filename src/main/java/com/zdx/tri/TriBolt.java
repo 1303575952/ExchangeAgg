@@ -6,10 +6,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import com.alibaba.fastjson.JSON;
-
-//import com.alibaba.fastjson.JSONObject;
-
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.IRichBolt;

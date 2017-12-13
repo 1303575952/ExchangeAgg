@@ -48,6 +48,7 @@ public class TestRocketMQConsumer {
 		}
 
 		consumer.registerMessageListener(new MessageListenerConcurrently() {
+			@Override
 			public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs,
 					ConsumeConcurrentlyContext context) {
 				for (int i = 0; i < msgs.size(); i++){

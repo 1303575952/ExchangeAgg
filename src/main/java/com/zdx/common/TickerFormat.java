@@ -12,30 +12,30 @@ public class TickerFormat {
 
 	public static void format(String tickerJsonString, String exchangeName, TickerStandardFormat x){
 		JSONObject jsonObject = JSON.parseObject(tickerJsonString);
-		if ("bitfinex".equals(exchangeName)){
-			BitfinexFormat(jsonObject, x);
-		}else if ("bitstamp".equals(exchangeName)) {
-			BitstampFormat(jsonObject, x);
-		}else if ("okcoin".equals(exchangeName)) {
-			OkcoinFormat(jsonObject, x);
-		}else if("quadrigacx".equals(exchangeName)){
-			QuadrigacxFormat(jsonObject, x);
-		}else if ("gate-io".equals(exchangeName)) {
-			GateFormat(jsonObject, x);
-		}else if("tidex".equals(exchangeName)){
-			TidexFormat(jsonObject, x);
-		}else if("zaif".equals(exchangeName)){
-			ZaifFormat(jsonObject, x);
-		}else if("bitso".equals(exchangeName)){
-			BitsoFormat(jsonObject, x);
+		if (ExchangeName.BITFINEX.equals(exchangeName)){
+			bitfinexFormat(jsonObject, x);
+		}else if (ExchangeName.BITSTAMP.equals(exchangeName)) {
+			bitstampFormat(jsonObject, x);
+		}else if (ExchangeName.OKCOIN.equals(exchangeName)) {
+			okcoinFormat(jsonObject, x);
+		}else if(ExchangeName.QUADRIGACX.equals(exchangeName)){
+			quadrigacxFormat(jsonObject, x);
+		}else if (ExchangeName.GATEIO.equals(exchangeName)) {
+			gateFormat(jsonObject, x);
+		}else if(ExchangeName.TIDEX.equals(exchangeName)){
+			tidexFormat(jsonObject, x);
+		}else if(ExchangeName.ZAIF.equals(exchangeName)){
+			zaifFormat(jsonObject, x);
+		}else if(ExchangeName.BITSO.equals(exchangeName)){
+			bitsoFormat(jsonObject, x);
+		}else if(ExchangeName.COINROOM.equals(exchangeName)){
+			coinroomFormat(jsonObject, x);
 		}else if("coinroom".equals(exchangeName)){
-			CoinroomFormat(jsonObject, x);
-		}else if("coinroom".equals(exchangeName)){
-			CryptopiaFormat(jsonObject, x);
+			cryptopiaFormat(jsonObject, x);
 		}
 	}
 
-	private static void BitfinexFormat(JSONObject jsonObject, TickerStandardFormat x){
+	private static void bitfinexFormat(JSONObject jsonObject, TickerStandardFormat x){
 		String tmp = jsonObject.getString("timestamp");
 		x.timestamp = Long.parseLong(tmp.substring(0, tmp.indexOf(".")));
 		x.bid = jsonObject.getDouble("bid");
@@ -44,12 +44,12 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.last_price = jsonObject.getDouble("last_price");
+		x.lastPrice = jsonObject.getDouble("last_price");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 
-	public static void BitstampFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void bitstampFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = jsonObject.getLong("timestamp");
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -57,12 +57,12 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.last_price = jsonObject.getDouble("last");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 
-	public static void OkcoinFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void okcoinFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = jsonObject.getLong("date");
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("ticker"));
 		x.bid = tickerJsonObject.getDouble("buy");
@@ -71,12 +71,12 @@ public class TickerFormat {
 		x.low = tickerJsonObject.getDouble("low");
 		x.high = tickerJsonObject.getDouble("high");
 		x.volume = tickerJsonObject.getDouble("vol");
-		x.last_price = tickerJsonObject.getDouble("last");
+		x.lastPrice = tickerJsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	
-	public static void QuadrigacxFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void quadrigacxFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = jsonObject.getLong("timestamp");
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -84,12 +84,12 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.last_price = jsonObject.getDouble("last");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	
-	public static void GateFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void gateFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("highestBid");
 		x.ask = jsonObject.getDouble("lowestAsk");
@@ -97,13 +97,13 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low24hr");
 		x.high = jsonObject.getDouble("high24hr");
 		x.volume = jsonObject.getDouble("baseVolume");
-		x.last_price = jsonObject.getDouble("last");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		logger.info("x.exchangetype:"+x.exchangeType);
 		x.setMidUSD();
 	}
 	
-	public static void TidexFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void tidexFormat(JSONObject jsonObject, TickerStandardFormat x){
 		String[] str = jsonObject.toString().split("\\{");
 		String jsonStr = ("{"+str[2]).substring(0, ("{"+str[2]).length()-1);
 		JSONObject tickerJsonObject = JSON.parseObject(jsonStr);
@@ -114,12 +114,12 @@ public class TickerFormat {
 		x.low = tickerJsonObject.getDouble("low");
 		x.high = tickerJsonObject.getDouble("high");
 		x.volume = tickerJsonObject.getDouble("vol_cur");
-		x.last_price = tickerJsonObject.getDouble("last");
+		x.lastPrice = tickerJsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	
-	public static void ZaifFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void zaifFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -127,12 +127,12 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.last_price = jsonObject.getDouble("last");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	
-	public static void BitsoFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void bitsoFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -140,12 +140,12 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.last_price = jsonObject.getDouble("last");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	
-	public static void CoinroomFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void coinroomFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -153,12 +153,12 @@ public class TickerFormat {
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.last_price = jsonObject.getDouble("last");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}
 	
-	public static void CryptopiaFormat(JSONObject jsonObject, TickerStandardFormat x){
+	public static void cryptopiaFormat(JSONObject jsonObject, TickerStandardFormat x){
 		x.timestamp = System.currentTimeMillis();
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("Data"));
 		x.bid = tickerJsonObject.getDouble("BidPrice");
@@ -167,7 +167,7 @@ public class TickerFormat {
 		x.low = tickerJsonObject.getDouble("Low");
 		x.high = tickerJsonObject.getDouble("High");
 		x.volume = tickerJsonObject.getDouble("Volume");
-		x.last_price = tickerJsonObject.getDouble("LastPrice");
+		x.lastPrice = tickerJsonObject.getDouble("LastPrice");
 		x.setExchangeType();
 		x.setMidUSD();
 	}

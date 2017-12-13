@@ -51,7 +51,7 @@ public class ToyConsumer {
 		//consumer.registerMessageListener(trConsumer);
 		consumer.registerMessageListener(new MessageListenerOrderly() {  
             AtomicLong consumeTimes = new AtomicLong(0);  
-  
+            @Override
             public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs, ConsumeOrderlyContext context) {  
                 // 设置自动提交  
                 context.setAutoCommit(true);  
@@ -88,7 +88,7 @@ public class ToyConsumer {
 	}
 
 	public static void loadTickerTripleMapFromFile(String path){
-		String text = FileIO.ReadFile(path);
+		String text = FileIO.readFile(path);
 		ArrayList<String> ttStringList = JSON.parseObject(text, new TypeReference<ArrayList<String>>(){});
 
 		for (String e : ttStringList){

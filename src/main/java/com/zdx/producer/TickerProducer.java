@@ -22,9 +22,9 @@ import io.parallec.core.RequestProtocol;
 
 public class TickerProducer {
 	private static Logger logger = Logger.getLogger(TickerProducer.class);
-	final static HashMap<String, String> failedTickerMap = new HashMap<String, String>();
-	final static HashMap<String, Object> responseContext = new HashMap<String, Object>();
-	final static long startTime = System.currentTimeMillis();	
+	final static HashMap<String, String> FAILED_TICKER_MAP = new HashMap<String, String>();
+	final static HashMap<String, Object> RESPONSE_CONTEXT = new HashMap<String, Object>();
+	final static long START_TIME = System.currentTimeMillis();	
 	private static Map<Object, Object> tickerConf = new HashMap<Object, Object>();
 	static List<String> targetHosts = new ArrayList<String>();
 	static List<List<String>> replaceLists = new ArrayList<List<String>>();
@@ -36,7 +36,7 @@ public class TickerProducer {
 	static String tickerInfoPath = "";
 
 	public static void loadConf(String tickerConfPath){
-		tickerConf = LoadConfig.LoadConf(tickerConfPath);
+		tickerConf = LoadConfig.loadConf(tickerConfPath);
 		serverUrl = String.valueOf(tickerConf.get("GatewayURL"));
 		tickerInfoPath = String.valueOf(tickerConf.get("TickerInfoPath"));
 
@@ -70,9 +70,9 @@ public class TickerProducer {
 		} catch (MQClientException e) {
 			e.printStackTrace();
 		}
-		responseContext.put("producer", producer);
-		responseContext.put("hostMap", hostMap);
-		responseContext.put("pathMap", pathMap);
+		RESPONSE_CONTEXT.put("producer", producer);
+		RESPONSE_CONTEXT.put("hostMap", hostMap);
+		RESPONSE_CONTEXT.put("pathMap", pathMap);
 		while (true){
 			oneFullBathWithoutRetry();
 			try {
@@ -105,8 +105,8 @@ public class TickerProducer {
 				for (String url : urls){
 					tickerNames.add(host + "/" + url);
 					String key = host + "/" + url;
-					String status = failedTickerMap.get(key);
-					if (!failedTickerMap.containsKey(key) || !(status.contains("code") || "OtherError".equals(status)) ){
+					String status = FAILED_TICKER_MAP.get(key);
+					if (!FAILED_TICKER_MAP.containsKey(key) || !(status.contains("code") || "OtherError".equals(status)) ){
 						replaceListsLeft2.add(url);
 						tickerNamesLeft.add(host + "/" + url);
 					}
@@ -139,9 +139,9 @@ public class TickerProducer {
 				.setProtocol(RequestProtocol.HTTPS)
 				.setHttpPort(443)
 				.setReplaceVarMapToMultipleTarget("JOB_ID", replaceListsLeft, targetHostsLeft)
-				.setResponseContext(responseContext);
-		responseContext.put("startTime", startTime);
-		responseContext.put("failedTickerMap", failedTickerMap);
+				.setResponseContext(RESPONSE_CONTEXT);
+		RESPONSE_CONTEXT.put("startTime", START_TIME);
+		RESPONSE_CONTEXT.put("failedTickerMap", FAILED_TICKER_MAP);
 
 		TickerProducerHandler tpHandler = new TickerProducerHandler(); 
 		ptb.execute(tpHandler);
@@ -149,7 +149,7 @@ public class TickerProducer {
 
 	public static String failedToString(){
 		StringBuffer sb = new StringBuffer();
-		for (Entry<String, String> entry : failedTickerMap.entrySet()){
+		for (Entry<String, String> entry : FAILED_TICKER_MAP.entrySet()){
 			String key = entry.getKey();
 			String val = entry.getValue();
 			if (!"True".equals(val)){
@@ -158,12 +158,12 @@ public class TickerProducer {
 				sb.append("\"status\":\"" + val + "\"},");
 			}
 		}
-		String sb_tmp = sb.toString();
-		if (!sb_tmp.isEmpty()){
-			sb_tmp = sb_tmp.substring(0, sb_tmp.lastIndexOf(","));
+		String sbTmp = sb.toString();
+		if (!sbTmp.isEmpty()){
+			sbTmp = sbTmp.substring(0, sbTmp.lastIndexOf(","));
 		}
-		sb_tmp = "[" + sb_tmp + "]";
-		sb_tmp = JsonFormatTool.formatJson(sb_tmp);
-		return sb_tmp;
+		sbTmp = "[" + sbTmp + "]";
+		sbTmp = JsonFormatTool.formatJson(sbTmp);
+		return sbTmp;
 	}
 }

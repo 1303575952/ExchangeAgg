@@ -29,6 +29,7 @@ public class TickerIndexBuilder {
 		FileIO.writeFile(triPath, JsonFormatTool.formatJson(result));
 	}
 	
+	@Override
 	public String toString(){
 		StringBuffer sb = new StringBuffer();
 		for (java.util.Map.Entry<String, ArrayList<String>> x : tickerIndex.entrySet()){
@@ -151,7 +152,7 @@ public class TickerIndexBuilder {
 
 	public static HashMap<String, ArrayList<String>> loadTriListFromFile(String path){
 		HashMap<String, ArrayList<String>>  etListMap = new HashMap<String, ArrayList<String>>();
-		String text = FileIO.ReadFile(path);
+		String text = FileIO.readFile(path);
 		if (text.isEmpty()){
 			return etListMap ;
 		}

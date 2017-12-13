@@ -14,7 +14,7 @@ public class TickerStandardFormat {
 	public Double mid = 0.0;
 	public Double bid = 0.0;
 	public Double ask = 0.0;
-	public Double last_price = 0.0;
+	public Double lastPrice = 0.0;
 	public Double low = 0.0;
 	public Double high = 0.0;
 	public Double volume = 0.0;
@@ -33,7 +33,7 @@ public class TickerStandardFormat {
 				"\",\"mid\":\"" + mid +
 				"\",\"bid\":\"" + bid +
 				"\",\"ask\":\"" + ask +
-				"\",\"last_price\":\"" + last_price +
+				"\",\"last_price\":\"" + lastPrice +
 				"\",\"low\":\"" + low +
 				"\",\"high\":\"" + high +
 				"\",\"volume\":\"" + volume +
@@ -64,17 +64,17 @@ public class TickerStandardFormat {
 
 	public TickerStandardFormat formatJsonString(String jsonString){
 		JSONObject jsonObject = JSON.parseObject(jsonString);
-		if (jsonObject.containsKey("exchangeName")){
-			this.exchangeName = jsonObject.getString("exchangeName");
+		if (jsonObject.containsKey(CommonConst.EXCHANGE_NAME)){
+			this.exchangeName = jsonObject.getString(CommonConst.EXCHANGE_NAME);
 		}
-		if (jsonObject.containsKey("exchangeType")){
-			this.exchangeType = jsonObject.getString("exchangeType");
+		if (jsonObject.containsKey(CommonConst.EXCHANGE_TYPE)){
+			this.exchangeType = jsonObject.getString(CommonConst.EXCHANGE_TYPE);
 		}
-		if (jsonObject.containsKey("coinA")){
-			this.coinA = jsonObject.getString("coinA");
+		if (jsonObject.containsKey(CommonConst.COIN_A)){
+			this.coinA = jsonObject.getString(CommonConst.COIN_A);
 		}
-		if (jsonObject.containsKey("coinB")){
-			this.coinB = jsonObject.getString("coinB");
+		if (jsonObject.containsKey(CommonConst.COIN_B)){
+			this.coinB = jsonObject.getString(CommonConst.COIN_B);
 		}
 		if (jsonObject.containsKey("midUSD")){
 			this.midUSD = jsonObject.getDouble("midUSD");
@@ -89,7 +89,7 @@ public class TickerStandardFormat {
 			this.ask = jsonObject.getDouble("ask");
 		}
 		if (jsonObject.containsKey("last_price")){
-			this.last_price = jsonObject.getDouble("last_price");
+			this.lastPrice = jsonObject.getDouble("last_price");
 		}
 		if (jsonObject.containsKey("low")){
 			this.low = jsonObject.getDouble("low");
@@ -110,9 +110,11 @@ public class TickerStandardFormat {
 		logger.info(this.toJsonString());
 		if (CoinCashCommon.getCashSet().contains(this.coinB)){
 			CashExchange ce = new CashExchange();
-			this.midUSD = ce.toUSD(this.coinB, this.mid);//coin 2 cash
+			//coin 2 cash
+			this.midUSD = ce.toUSD(this.coinB, this.mid);
 		} else {
-			this.midUSD = this.mid;//coin 2 coin
+			//coin 2 coin
+			this.midUSD = this.mid;
 		}
 		return this;
 	}
@@ -126,7 +128,7 @@ public class TickerStandardFormat {
 				"\",\"mid\":\"" + mid +
 				"\",\"bid\":\"" + bid +
 				"\",\"ask\":\"" + ask +
-				"\",\"last_price\":\"" + last_price +
+				"\",\"last_price\":\"" + lastPrice +
 				"\",\"low\":\"" + low +
 				"\",\"high\":\"" + high +
 				"\",\"volume\":\"" + volume +				

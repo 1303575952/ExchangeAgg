@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 
 public class FileIO {
 	private static Logger logger = Logger.getLogger(FileIO.class);
-	public static String ReadFile(String path){
+	public static String readFile(String path){
 		String[] tt = path.split("/");
 		path = "";
 		for (int i= 0; i < tt.length; i++){
@@ -23,11 +23,11 @@ public class FileIO {
 			}
 		}
 		String laststr="";
-		File file=new File(path);// 打开文件  
+		File file=new File(path);
 		BufferedReader reader=null;
 		try{
 			FileInputStream in = new FileInputStream(file);
-			reader=new BufferedReader(new InputStreamReader(in,"UTF-8"));// 读取文件  
+			reader=new BufferedReader(new InputStreamReader(in,"UTF-8"));
 			String tempString=null;
 			while((tempString=reader.readLine())!=null){
 				laststr=laststr+tempString;

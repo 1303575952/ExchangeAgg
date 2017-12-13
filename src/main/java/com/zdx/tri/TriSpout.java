@@ -29,19 +29,18 @@ import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.Values;
 
-//import backtype.storm.topology.IRichSpout;
-
 public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{  
 	private static final long serialVersionUID = -3085994102089532269L;   
 	private SpoutOutputCollector collector;  
 	private transient DefaultMQPushConsumer consumer; 
 	private static final Logger logger = LoggerFactory.getLogger(TriSpout.class);
-	private static final HashMap<String, ArrayList<String>> tickerTripleMap = new HashMap<String, ArrayList<String>>();
-	private static final HashMap<String, TriArbitrageInfo> tripleInfoMap = new HashMap<String, TriArbitrageInfo>();
+	private static final HashMap<String, ArrayList<String>> TICKER_TRIPLE_MAP = new HashMap<String, ArrayList<String>>();
+	private static final HashMap<String, TriArbitrageInfo> TRIPLE_INFO_MAP = new HashMap<String, TriArbitrageInfo>();
 
 	private static double threshold = 0.01;
 
 	@SuppressWarnings("rawtypes")  
+	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		String filePath = (String) conf.get("TripleInfoPath");
 		
@@ -104,8 +103,8 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 			double bid = jsonObject.getDoubleValue("bid");
 			//logger.debug("8 = " + bid);
 			ArrayList<String> triList = new ArrayList<String>();
-			if (tickerTripleMap.containsKey(key1)){
-				triList = tickerTripleMap.get(key1);
+			if (TICKER_TRIPLE_MAP.containsKey(key1)){
+				triList = TICKER_TRIPLE_MAP.get(key1);
 				//logger.debug("9 = " + triList.toString());
 			} else {
 				//logger.debug("10 = " + "error");				
@@ -114,7 +113,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 
 
 			for (String tri : triList){
-				TriArbitrageInfo triInfo = tripleInfoMap.get(tri);
+				TriArbitrageInfo triInfo = TRIPLE_INFO_MAP.get(tri);
 				//logger.debug("12 = " + tri);
 				boolean isValid = false;
 				String[] tmp = tri.split("@@");
@@ -149,7 +148,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 						collector.emit(new Values(tri, triInfo.toString()));
 					}
 					//logger.debug("16 = " + triInfo.profitVal);
-					tripleInfoMap.put(tri, triInfo);
+					TRIPLE_INFO_MAP.put(tri, triInfo);
 					//logger.debug("17 = " + triInfo.toString());
 				}
 
@@ -160,7 +159,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 	}
 
 	public static void loadTickerTripleMapFromFile(String path){
-		String text = FileIO.ReadFile(path);
+		String text = FileIO.readFile(path);
 		ArrayList<String> ttStringList = JSON.parseObject(text, new TypeReference<ArrayList<String>>(){});
 
 		for (String e : ttStringList){
@@ -189,17 +188,17 @@ public class TriSpout extends BaseRichSpout implements MessageListenerOrderly{
 				trList.add(tmp3);
 			}
 
-			tickerTripleMap.put(tickerName, trList);
+			TICKER_TRIPLE_MAP.put(tickerName, trList);
 		}
 		//logger.debug("-----------1----------- " + tickerTripleMap.keySet().toString());
 	}
 
 	public void buildTripleInfoMap(){
-		for ( Entry<String, ArrayList<String>> e : tickerTripleMap.entrySet()){
+		for ( Entry<String, ArrayList<String>> e : TICKER_TRIPLE_MAP.entrySet()){
 			ArrayList<String> val1 = e.getValue();
 			for (String s : val1){							
 				TriArbitrageInfo m = new TriArbitrageInfo();
-				tripleInfoMap.put(s, m);
+				TRIPLE_INFO_MAP.put(s, m);
 			}
 
 		}

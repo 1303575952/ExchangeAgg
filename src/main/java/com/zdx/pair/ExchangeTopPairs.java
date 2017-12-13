@@ -21,6 +21,23 @@ import com.zdx.common.JsonFormatTool;
 public class ExchangeTopPairs {
 
 	public HashMap<String, HashSet<String>> loadTopVol100MSetFromFile(String filePath){
+		/* Example Data topVol100M.json
+		 * {
+		      "exchangeName":"huobi",
+		      "tickerPair":
+		      [
+		         "ETH/USDT",
+		         "BTC/USDT",
+		         "LTC/BTC",
+		         "ETH/BTC",
+		         "BCC/BTC",
+		         "ETC/BTC",
+		         "BCC/USDT",
+		         "LTC/USDT",
+		         "ETC/USDT"
+		      ]
+
+		   }*/
 		HashMap<String, HashSet<String>> topVol100MMap = new HashMap<String, HashSet<String>>(); 
 		StringBuffer sb = new StringBuffer();
 		InputStream is;
@@ -129,6 +146,17 @@ public class ExchangeTopPairs {
 	}
 
 	public HashMap<String, ArrayList<String>> buildTopVol100MPair(HashMap<String, ArrayList<String>> pairExchangeMap){
+		   /*Output Format  topVol100MPair.json
+		    * {
+			      "pair":"NXT/BTC",
+			      "exchangeA":"bittrex",
+			      "exchangeB":"hitbtc"
+			   },
+			   {
+			      "pair":"XMR/CASH",
+			      "exchangeA":"poloniex_XMR/USDT",
+			      "exchangeB":"bithumb_XMR/KRW"
+			   }*/
 		HashMap<String, ArrayList<String>> pairExchangePairMap = new HashMap<String, ArrayList<String>> ();		
 		for (Entry<String, ArrayList<String>> tmp : pairExchangeMap.entrySet()){
 			String pair = tmp.getKey();			
@@ -151,7 +179,7 @@ public class ExchangeTopPairs {
 	}
 
 	public static String topVol100MPairToString(HashMap<String, ArrayList<String>> pairExchangePairMap){		
-		String sb_tmp = "";
+		String sbTmp = "";
 		StringBuffer sb = new StringBuffer();
 		for (Entry<String, ArrayList<String>> tmp : pairExchangePairMap.entrySet()){
 			String pair = tmp.getKey();
@@ -171,12 +199,12 @@ public class ExchangeTopPairs {
 				}
 			}
 		}
-		sb_tmp = sb.toString();
-		if (!sb_tmp.isEmpty()){
-			sb_tmp = sb_tmp.substring(0, sb_tmp.lastIndexOf(","));
+		sbTmp = sb.toString();
+		if (!sbTmp.isEmpty()){
+			sbTmp = sbTmp.substring(0, sbTmp.lastIndexOf(","));
 		}
-		sb_tmp = "[" + sb_tmp + "]";
-		sb_tmp = JsonFormatTool.formatJson(sb_tmp);
-		return sb_tmp;
+		sbTmp = "[" + sbTmp + "]";
+		sbTmp = JsonFormatTool.formatJson(sbTmp);
+		return sbTmp;
 	}
 }

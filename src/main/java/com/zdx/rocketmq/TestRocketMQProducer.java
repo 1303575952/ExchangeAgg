@@ -25,7 +25,7 @@ import io.parallec.core.ResponseOnSingleTask;
 public class TestRocketMQProducer {
 	private static Logger logger = Logger.getLogger(TestRocketMQProducer.class);
 	public static String serverUrl = "182.92.150.57:9876";
-	public final static HashMap<String, Object> responseContext = new HashMap<String, Object>();
+	public final static HashMap<String, Object> RESPONSE_CONTEXT = new HashMap<String, Object>();
 	
 	public static void main(String[] args) throws MQClientException, InterruptedException{
 		String path = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\ticker.json";
@@ -40,9 +40,9 @@ public class TestRocketMQProducer {
 		DefaultMQProducer producer = new DefaultMQProducer("WufengTest1");
 		producer.setNamesrvAddr(serverUrl);		
 		producer.start();
-		responseContext.put("producer", producer);
+		RESPONSE_CONTEXT.put("producer", producer);
 
-		logger.info("responseContext"+responseContext);
+		logger.info("responseContext"+RESPONSE_CONTEXT);
 		/*
 		 .setReplaceVarMapToSingleTargetSingleVar("JOB_ID", Arrays.asList("api/v1/ticker.do?symbol=btc_usd", 
 			"api/v1/ticker.do?symbol=eth_usd",
@@ -58,11 +58,12 @@ public class TestRocketMQProducer {
 				.setTcpIdleTimeoutSec(10000)
 				.setUdpIdleTimeoutSec(10000)
 				.setReplaceVarMapToMultipleTarget("JOB_ID", replaceLists, targetHosts)
-				.setResponseContext(responseContext);
+				.setResponseContext(RESPONSE_CONTEXT);
 		logger.info("%%%%%%%%%%%%%%%%%%%"+ptb);
 		boolean f1 = true;
 		while (f1){
 			ptb.execute(new ParallecResponseHandler(){
+				@Override
 				public void onCompleted(ResponseOnSingleTask res, Map<String, Object> responseContext) {
 					logger.info("whilewhilewhilewhilewhile");
 					Message msg = new Message();

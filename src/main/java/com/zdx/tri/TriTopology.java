@@ -13,6 +13,7 @@ import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 
 import com.alibaba.jstorm.utils.JStormUtils;
+import com.zdx.common.CommonConst;
 import com.zdx.common.LoadConfig;
 
 
@@ -27,7 +28,7 @@ public class TriTopology {
 			logger.error("Please input configuration file");
 			System.exit(-1);
 		}
-		conf = LoadConfig.LoadConf(args[0]);
+		conf = LoadConfig.loadConf(args[0]);
 		
 		TopologyBuilder builder = setupBuilder();
 
@@ -53,7 +54,7 @@ public class TriTopology {
 
 	private static void submitTopology(TopologyBuilder builder) {
 		try {
-			if (local_mode(conf)) {
+			if (localMode(conf)) {
 
 				LocalCluster cluster = new LocalCluster();
 
@@ -79,10 +80,10 @@ public class TriTopology {
 
 	
 
-	public static boolean local_mode(Map<Object, Object> conf) {
+	public static boolean localMode(Map<Object, Object> conf) {
 		String mode = (String) conf.get(Config.STORM_CLUSTER_MODE);
 		if (mode != null) {
-			if (mode.equals("local")) {
+			if (CommonConst.JSTORM_LOCAL_MODE.equals(mode)) {
 				return true;
 			}
 		}

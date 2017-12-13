@@ -22,6 +22,7 @@ import io.parallec.core.ResponseOnSingleTask;
 public class TickerProducerHandler implements ParallecResponseHandler {
 	private static Logger logger = Logger.getLogger(TickerProducerHandler.class);
 	@SuppressWarnings("unchecked")
+	@Override
 	public void onCompleted(ResponseOnSingleTask res, Map<String, Object> responseContext) {
 
 		HashMap<String, String> failedTickerMap = (HashMap<String, String>) responseContext.get("failedTickerMap");

@@ -22,7 +22,7 @@ public class TriArbitrageInfo {
 
 	public void updateProfitByGroupId(){
 		if(bid1*bid2*bid3*ask1*ask2*ask3 > 0){
-			if (groupId.equals("abbcca")){
+			if ("abbcca".equals(groupId)){
 				if(((bid1 * bid2 * bid3) > (1.0 / (ask1 * ask2 * ask3)))&&((bid1 * bid2 * bid3)  > lowerLimit)){
 					profitVal = bid1 * bid2 * bid3;
 					path1 = "abc";
@@ -35,7 +35,7 @@ public class TriArbitrageInfo {
 					path3 = "bac";
 				}
 
-			} else if (groupId.equals("abcbca")){
+			} else if ("abcbca".equals(groupId)){
 				if(((bid1 * bid3 / ask2) > (bid2 / (ask1 * ask3)))&&((bid1 * bid3 / ask2) > lowerLimit)){
 					profitVal = bid1 * bid3 / ask2;
 					path1 = "abc";
@@ -47,7 +47,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if (groupId.equals("abbcac")) {
+			}else if ("abbcac".equals(groupId)) {
 				if(((bid1 * bid2 / ask3) > (bid3 / (ask1 * ask2)))&&((bid1 * bid2 / ask3) > lowerLimit)){
 					profitVal = bid1 * bid2 / ask3;
 					path1 = "abc";
@@ -59,7 +59,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if(groupId.equals("abcbac")){
+			}else if("abcbac".equals(groupId)){
 				if(((bid1 / (ask2 * ask3)) > (bid2 * bid3 / ask1))&&(bid1 / (ask2 * ask3) > lowerLimit)){
 					profitVal = bid1 / (ask2 * ask3);
 					path1 = "abc";
@@ -71,7 +71,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if(groupId.equals("abcabc")){
+			}else if("abcabc".equals(groupId)){
 				if(((bid1 * bid2 * bid3) > (1.0 / (ask1 * ask2 * ask3)))&&((bid1 * bid2 * bid3) > lowerLimit)){
 					profitVal = bid1 * bid2 * bid3;
 					path1 = "abc";
@@ -83,7 +83,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if(groupId.equals("abacbc")){
+			}else if("abacbc".equals(groupId)){
 				if(((bid1 * bid3 / ask2) > (bid2 / (ask1 * ask3)))&&((bid1 * bid3 / ask2) > lowerLimit)){
 					profitVal = bid1 * bid3 / ask2;
 					path1 = "abc";
@@ -103,7 +103,8 @@ public class TriArbitrageInfo {
 		}
 
 	}
-
+	
+	@Override
 	public String toString(){
 		return "{\"groupId\":\"" + groupId + 
 				"\",\"bid1\":\"" + bid1 +

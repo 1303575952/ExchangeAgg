@@ -14,27 +14,53 @@ import java.util.Map.Entry;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zdx.common.TickerStandardFormat;
+import com.zdx.common.CommonConst;
 
 public class PariConfig {
 
 	public HashMap<String, ArrayList<String>> exchangePairListMap = new HashMap<String, ArrayList<String>> ();
-	
+
 	//compute delta2
+	//KEY: exchangeName + "_" + coinA + "_" + coinB
+	//Value :<exchangeName + "_" + coinA + "_" + coinB + "_" + coinY; exchangeName + "_" + coinA + "_" + coinB + "_" + coinY;>
 	public HashMap<String, ArrayList<String>> pairPathMap = new HashMap<String, ArrayList<String>> ();
+	//KEY:exchangeName + "_" + coinA + "_" + coinB + "_" + coinY;
+	//Value: PathPrice
 	public HashMap<String, PathPrice> pathPriceMap = new HashMap<String, PathPrice> ();
-	
+
 	//compute delta 1
+	//KEY: exchangeNameA + "_" + coinA + "_" + coinB
+	//Value: <exchangeNameA + "_" + coinA + "_" + coinB + "@@" + exchangeNameB + "_" + coinX + "_" + coinY;
+	//	exchangeNameA + "_" + coinA + "_" + coinB + "@@" + exchangeNameB + "_" + coinX + "_" + coinY;
 	public HashMap<String, ArrayList<String>> pairFourthMap = new HashMap<String, ArrayList<String>>();
+	//KEY: exchangeNameA + "_" + coinA + "_" + coinB + "@@" + exchangeNameB + "_" + coinX + "_" + coinY
+	//Value: EnterPrice
 	public HashMap<String, EnterPrice> fourthPriceMap = new HashMap<String, EnterPrice>();
-	
+
 	public void initPairConfig(String filePath1, String filePath2){
 		loadExchangePair(filePath1);
 		buildExchangePath();
 		loadFourthTuple(filePath2);
 	}
-	
+
 	public void loadExchangePair(String filePath){
+		/* Output Format
+		 * {
+			  "exchangeName":"huobi",
+			   "tickerPair":
+			      [
+			         "ETH/USDT",
+			         "BTC/USDT",
+			         "LTC/BTC",
+			         "ETH/BTC",
+			         "BCC/BTC",
+			         "ETC/BTC",
+			         "BCC/USDT",
+			         "LTC/USDT",
+			         "ETC/USDT"
+			      ]
+
+			   },*/
 		ExchangeTopPairs etp = new ExchangeTopPairs();
 		HashMap<String, HashSet<String>> topVol100MMap = etp.loadTopVol100MSetFromFile(filePath);
 		for(Entry<String, HashSet<String>> x : topVol100MMap.entrySet()){
@@ -75,13 +101,13 @@ public class PariConfig {
 		}
 		String s1 = sb.toString();
 		s1 = s1.toLowerCase();
-		
+
 		if (!s1.isEmpty()){
 			JSONArray fourthList = JSON.parseArray(s1);
-			
+
 			for (Object jsonObject : fourthList) {				
 				JSONObject js = JSONObject.parseObject(jsonObject.toString());
-				String pair = (String)js.get("pair");
+				//String pair = (String)js.get("pair");
 				String s11 = (String)js.get("exchangea");				
 				String exchangeNameA = "";
 				String coinA = "";
@@ -93,7 +119,7 @@ public class PariConfig {
 					coinA = t2[0];
 					coinB = t2[1];
 				}
-			
+
 				String s22 = (String)js.get("exchangeb");				
 				String exchangeNameB = "";
 				String coinX = "";
@@ -105,24 +131,24 @@ public class PariConfig {
 					coinX = t2[0];
 					coinY = t2[1];
 				}
-				
+
 				EnterPrice ep = new EnterPrice();
-				ep.exchangeName1 = exchangeNameA;
-				ep.path1 = coinA + "_" + coinB;
-				ep.exchangeName2 = exchangeNameB;
-				ep.path2 = coinX + "_" + coinY;
+				ep.sellExchangeName = exchangeNameA;
+				ep.sellPath = coinA + "_" + coinB;
+				ep.buyExchangeName = exchangeNameB;
+				ep.buyPath = coinX + "_" + coinY;
 				String info1 = exchangeNameA + "_" + coinA + "_" + coinB;
 				String info2 = exchangeNameB + "_" + coinX + "_" + coinY;
 
 				String info = info1 + "@@" + info2;
-				
+
 				ArrayList<String> s31 = new ArrayList<String>();
 				if (pairFourthMap.containsKey(info1)){
 					s31 = pairFourthMap.get(info1);
 				}		
 				s31.add(info);				
 				pairFourthMap.put(info1, s31);
-				
+
 				ArrayList<String> s32 = new ArrayList<String>();
 				if (pairFourthMap.containsKey(info2)){
 					s32 = pairFourthMap.get(info2);
@@ -133,17 +159,8 @@ public class PariConfig {
 				fourthPriceMap.put(info, ep);
 			}
 		}
-		
-/*		for (Entry<String, ArrayList<String>> x: pairFourthMap.entrySet()){
-			System.out.println(x.getKey());
-			ArrayList<String> y = x.getValue();
-			for (String z:y){
-				System.out.println("    " + z);	
-			}
-			
-		}*/
 	}
-	
+
 	public void buildExchangePath(){
 		//pathPriceMap
 		//ticker -> path
@@ -209,42 +226,136 @@ public class PariConfig {
 
 class LowestPrice{
 	String lowestPath = "";
-	double lowestPrice = 0.0;
+	double lowestPrice = CommonConst.MAXPRICE;
 }
 
 class LowestPricePair{
 	String lowestPath1 = "";
-	double lowestPrice1 = 0.0;
+	double lowestPrice1 = CommonConst.MAXPRICE;
 	String lowestPath2 = "";
-	double lowestPrice2 = 0.0;
+	double lowestPrice2 = CommonConst.MAXPRICE;
 	double resetFee = 0.0;
 }
 
 class PathPrice{
 	String exchangeName = "";
-	String path1 = "";//A-B
-	String path2 = "";//B-C
-	String pair = "";//A-C
-	double ask1 = 0.0;
-	double ask2 = 0.0;
-	double bid1 = 0.0;
-	double bid2 = 0.0;
-	double fee1 = 0.0;
-	double fee2 = 0.0;
+	//A-B
+	String path1 = "";
+	//B-C
+	String path2 = "";
+	//A-C
+	String pair = "";
+	double ask1 = CommonConst.MAXPRICE;
+	double ask2 = CommonConst.MAXPRICE;
+	double bid1 = CommonConst.MAXPRICE;
+	double bid2 = CommonConst.MAXPRICE;
+	double fee1 = 0.002;
+	double fee2 = 0.002;
 	double price = 0.0;
+
+
+	public String toJsonString(){
+		return "{\"exchangeName\":\"" + exchangeName + 
+				"\",\"path1\":\"" + path1 +
+				"\",\"path2\":\"" + path2 + 
+				"\",\"pair\":\"" + pair +
+				"\",\"ask1\":\"" + ask1 +
+				"\",\"bid1\":\"" + bid1 +
+				"\",\"ask2\":\"" + ask2 +
+				"\",\"bid2\":\"" + bid2 +
+				"\",\"fee1\":\"" + fee1 +
+				"\",\"fee2\":\"" + fee2 +
+				"\",\"price\":\"" + price +
+				"\"}";
+	}
 }
 
 class EnterPrice{
-	String exchangeName1 = "";
-	String exchangeName2 = "";
-	String path1 = "";
-	String path2 = "";
+	String sellExchangeName = "";
+	String buyExchangeName = "";
+	String sellPath = "";
+	String buyPath = "";
 	double ask1 = 0.0;
 	double ask2 = 0.0;
 	double bid1 = 0.0;
 	double bid2 = 0.0;	
-	double fee1 = 0.0;
-	double fee2 = 0.0;
+	double fee1 = 0.002;
+	double fee2 = 0.002;
 	double price = 0.0;
-	double profit = 0.0;
+	double priceDiff = 0.0;
+	double maxPriceDiff = 0.0;
+	long timeStamp = 0; 
+	boolean isSend = false;
+	//boolean isSend2 = false;
+
+	public EnterPrice(){
+
+	}
+	public EnterPrice(String jsonString){
+		JSONObject jsonObject = JSON.parseObject(jsonString);
+		if (jsonObject.containsKey("sellExchangeName")){
+			sellExchangeName = jsonObject.getString("sellExchangeName");
+		}
+		if (jsonObject.containsKey("buyExchangeName")){
+			buyExchangeName = jsonObject.getString("buyExchangeName");
+		}
+		if (jsonObject.containsKey("sellPath")){
+			sellPath = jsonObject.getString("sellPath");
+		}
+		if (jsonObject.containsKey("buyPath")){
+			buyPath = jsonObject.getString("buyPath");
+		}
+		if (jsonObject.containsKey("bid1")){
+			bid1 = jsonObject.getDouble("bid1");
+		}
+		if (jsonObject.containsKey("ask1")){
+			ask1 = jsonObject.getDouble("ask1");
+		}
+		if (jsonObject.containsKey("bid2")){
+			bid2 = jsonObject.getDouble("bid2");
+		}
+		if (jsonObject.containsKey("ask2")){
+			ask2 = jsonObject.getDouble("ask2");
+		}
+		if (jsonObject.containsKey("fee1")){
+			fee1 = jsonObject.getDouble("fee1");
+		}
+		if (jsonObject.containsKey("fee2")){
+			fee2 = jsonObject.getDouble("fee2");
+		}
+		if (jsonObject.containsKey("priceDiff")){
+			priceDiff = jsonObject.getDouble("priceDiff");
+		}
+		if (jsonObject.containsKey("maxPriceDiff")){
+			maxPriceDiff = jsonObject.getDouble("maxPriceDiff");
+		}
+		if (jsonObject.containsKey("isSend")){
+			isSend = jsonObject.getBooleanValue("isSend");
+		}
+		//if (jsonObject.containsKey("isSend2")){
+		//	isSend2 = jsonObject.getBooleanValue("isSend2");
+		//}
+		if (jsonObject.containsKey("timestamp")){
+			timeStamp = jsonObject.getLong("timestamp");
+		}
+	}
+
+	public String toJsonString(){
+		return "{\"sellExchangeName\":\"" + sellExchangeName + 
+				"\",\"sellPath\":\"" + sellPath +
+				"\",\"buyExchangeName\":\"" + buyExchangeName + 
+				"\",\"buyPath\":\"" + buyPath +
+				"\",\"ask1\":\"" + ask1 +
+				"\",\"bid1\":\"" + bid1 +
+				"\",\"ask2\":\"" + ask2 +
+				"\",\"bid2\":\"" + bid2 +
+				"\",\"fee1\":\"" + fee1 +
+				"\",\"fee2\":\"" + fee2 +
+				"\",\"price\":\"" + price +
+				"\",\"priceDiff\":\"" + priceDiff +
+				"\",\"timeStamp\":\"" + timeStamp +
+				"\",\"isSend\":\"" + isSend +
+				//"\",\"isSend2\":\"" + isSend2 +
+				"\"}";
+	}
 }

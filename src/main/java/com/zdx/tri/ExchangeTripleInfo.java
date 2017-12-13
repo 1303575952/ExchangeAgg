@@ -12,6 +12,7 @@ public class ExchangeTripleInfo {
 	String exchangeName = "";
 	ArrayList<ArrayList<JSONObject>> triList = new ArrayList<ArrayList<JSONObject>>();
 
+	@Override
 	public String toString(){
 		StringBuffer sb = new StringBuffer();
 		for (ArrayList<JSONObject> e: triList){									

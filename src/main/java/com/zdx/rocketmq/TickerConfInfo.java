@@ -20,6 +20,7 @@ public class TickerConfInfo {
 
 	public List<List<String>> replaceLists = new ArrayList<List<String>>();
 	
+	@Override
 	public String toString(){
 		String s1 = exchangeTickerListMap.toString();
 		

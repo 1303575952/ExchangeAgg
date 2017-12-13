@@ -20,9 +20,10 @@ public class TriListBuilder {
 		
 		ArrayList<ArrayList<JSONObject>> allTriSearch = new ArrayList<ArrayList<JSONObject>>();
 
-
-		for(int i=0;i<al.size();i++){//遍历寻找与这俩coin匹配的coin
-			for(int j=i+1;j<al.size();j++){//查找第i个是否与第j个的俩coin其中一个匹配
+		//遍历寻找与这俩coin匹配的coin
+		for(int i=0;i<al.size();i++){
+			//查找第i个是否与第j个的俩coin其中一个匹配
+			for(int j=i+1;j<al.size();j++){
 				if(al.get(i).getString("coinA").equals(al.get(j).getString("coinA"))){
 					for(int k=j+1;k<al.size();k++){
 						if((al.get(i).getString("coinB").equals(al.get(k).getString("coinA"))&&al.get(j).getString("coinB").equals(al.get(k).getString("coinB")))||
@@ -124,7 +125,7 @@ public class TriListBuilder {
 
 	public static ArrayList<ExchangePairsInfo> loadExchangePairs(String path){
 		ArrayList<ExchangePairsInfo> epList = new ArrayList<ExchangePairsInfo>();
-		String text = FileIO.ReadFile(path);
+		String text = FileIO.readFile(path);
 		if (text.isEmpty()){
 			return epList ;
 		}

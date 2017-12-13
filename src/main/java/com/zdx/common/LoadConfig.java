@@ -30,7 +30,7 @@ public class LoadConfig {
 
 		List<List<String>> replaceLists = new ArrayList<List<String>>();
 
-		String text = FileIO.ReadFile(path);
+		String text = FileIO.readFile(path);
 		if (text.isEmpty()){
 			return tconf ;
 		}
@@ -77,7 +77,7 @@ public class LoadConfig {
 		return tconf;
 	}
 	
-	private static HashMap<Object, Object> LoadProperty(String prop) {
+	private static HashMap<Object, Object> loadProperty(String prop) {
 		HashMap<Object, Object> ret = null;
 		Properties properties = new Properties();
 
@@ -95,7 +95,7 @@ public class LoadConfig {
 	}
 
 	@SuppressWarnings("unchecked")
-	private static HashMap<Object, Object> LoadYaml(String confPath) {
+	private static HashMap<Object, Object> loadYaml(String confPath) {
 		HashMap<Object, Object> ret = null;
 		Yaml yaml = new Yaml();
 		try {
@@ -117,13 +117,13 @@ public class LoadConfig {
 		return ret;
 	}
 
-	public static HashMap<Object, Object> LoadConf(String arg) {
+	public static HashMap<Object, Object> loadConf(String arg) {
 		HashMap<Object, Object> ret = null;
 
-		if (arg.endsWith("yaml")) {
-			ret = LoadYaml(arg);
+		if (arg.endsWith(CommonConst.YAML)) {
+			ret = loadYaml(arg);
 		} else {
-			ret = LoadProperty(arg);
+			ret = loadProperty(arg);
 		}
 		return ret;
 	}

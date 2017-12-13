@@ -67,13 +67,13 @@ public class Test {
 	
 	public static void testExchangeTopPairs(){
 		ExchangeTopPairs etp = new ExchangeTopPairs();
-		etp.buildTopVol100MPairFile("C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\topVol100M.json");
+		etp.buildTopVol100MPairFile("C:\\ZDX\\code\\ExchangeAgg\\conf\\topVol100M.json");
 	}
 	
 	public static void run1(){
 		//String pairPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t1.json";
-		String triPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t2.json";
-		String tickerIndexPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\t3.json";
+		String triPath = "C:\\ZDX\\code\\ExchangeAgg\\conf\\t2.json";
+		String tickerIndexPath = "C:\\ZDX\\code\\ExchangeAgg\\conf\\t3.json";
 		//TriListBuilder.buildTriListFromPairFile(pairPath, triPath);
 		TickerIndexBuilder tib = new TickerIndexBuilder();
 		tib.buildIndexFromFile(triPath);
@@ -81,7 +81,7 @@ public class Test {
 	}
 	
 	public static void runProducer(){
-		String confPath = "C:\\Users\\zdx\\git\\ExchangeAgg\\conf\\TickerProducer.conf";
+		String confPath = "C:\\ZDX\\code\\ExchangeAgg\\conf\\TickerProducer.conf";
 		try {
 			TickerProducer.execute(confPath);
 		} catch (InterruptedException e) {

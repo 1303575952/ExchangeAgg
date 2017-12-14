@@ -1,6 +1,5 @@
 package com.zdx.producer;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,7 +12,6 @@ import org.apache.rocketmq.client.producer.DefaultMQProducer;
 
 import com.zdx.common.JsonFormatTool;
 import com.zdx.common.LoadConfig;
-import com.zdx.demo.ToyConsumer;
 import com.zdx.rocketmq.TickerConfInfo;
 
 import io.parallec.core.ParallelClient;
@@ -36,12 +34,22 @@ public class TickerProducer {
 	static String tickerInfoPath = "";
 	static String producerGroup = "";
 
+	public static void main(String[] args) throws InterruptedException {
+		if (args.length == 0) {
+			System.err.println("Please input configuration file");
+			System.exit(-1);
+		}
+		String confPath = args[0];
+		loadConf(confPath);
+		execute();
+	}
+
 	public static void loadConf(String tickerConfPath){
 		tickerConf = LoadConfig.loadConf(tickerConfPath);
 		serverUrl = String.valueOf(tickerConf.get("GatewayURL"));
 		tickerInfoPath = String.valueOf(tickerConf.get("TickerInfoPath"));
 		producerGroup = String.valueOf(tickerConf.get("producerGroup"));
-		
+
 		TickerConfInfo tcConf = LoadConfig.loadTickerConf(tickerInfoPath );
 		targetHosts = tcConf.targetHosts;
 		replaceLists = tcConf.replaceLists;
@@ -59,9 +67,7 @@ public class TickerProducer {
 		logger.info("-------------2---------------");
 	}
 
-	public static void execute(String tickerConfPath) throws InterruptedException{
-		loadConf(tickerConfPath);
-
+	public static void execute() throws InterruptedException{
 		DefaultMQProducer producer = new DefaultMQProducer(producerGroup);		
 		producer.setNamesrvAddr(serverUrl);		
 		try {
@@ -84,16 +90,11 @@ public class TickerProducer {
 				e.printStackTrace();
 			}
 		}
-
-
-
 	}
 	public static void oneFullBathWithoutRetry(){
-		
 		oneBatch(targetHosts, replaceLists);
-		
 	}
-	
+
 	public static void oneFullBathWithRetry(){
 		int minError = Integer.MAX_VALUE;
 		boolean done = false;

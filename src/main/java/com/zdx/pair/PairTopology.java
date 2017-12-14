@@ -33,12 +33,7 @@ public class PairTopology {
 			System.exit(-1);
 		}
 		conf = LoadConfig.loadConf(args[0]);
-		/*
-		URL url = TestStormTopology.class.getClassLoader().getResource("stormtest.yaml");
-		logger.info(url.getFile());
-		LoadConf(url.getFile());
-		 */
-		
+
 		TopologyBuilder builder = setupBuilder();
 
 		submitTopology(builder);
@@ -48,9 +43,6 @@ public class PairTopology {
 	private static TopologyBuilder setupBuilder() throws Exception {
 		TopologyBuilder builder = new TopologyBuilder();
 
-		logger.debug("---------1------------");
-		ConfigExtension.setUserDefinedLog4jConf(conf, "C:/ZDX/code/ExchangeAgg/conf/log4j.properties");
-		logger.debug("---------2------------");
 		int spoutParallel = JStormUtils.parseInt(
 				conf.get("topology.spout.parallel"), 1);
 		int boltParallel = JStormUtils.parseInt(

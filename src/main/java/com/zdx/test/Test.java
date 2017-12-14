@@ -20,7 +20,6 @@ import com.zdx.tri.TickerIndexBuilder;
 public class Test {
 	private static Logger logger = Logger.getLogger(Test.class);
 	public static void main(String[] args) throws InterruptedException {
-		runProducer();
 		//testWebSocket();
 		
 		//PariConfig prb = new PariConfig();
@@ -80,15 +79,7 @@ public class Test {
 		tib.saveToFile(tickerIndexPath);
 	}
 	
-	public static void runProducer(){
-		String confPath = "C:\\ZDX\\code\\ExchangeAgg\\conf\\TickerProducer.conf";
-		try {
-			TickerProducer.execute(confPath);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
+
 	
 	/*public static void testWebSocket(){
 		WebSocketLocalClient wsClient = null;

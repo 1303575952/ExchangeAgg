@@ -14,6 +14,7 @@ import backtype.storm.topology.IRichSpout;
 import backtype.storm.topology.TopologyBuilder;
 import backtype.storm.tuple.Fields;
 
+import com.alibaba.jstorm.client.ConfigExtension;
 import com.alibaba.jstorm.utils.JStormUtils;
 import com.zdx.common.CommonConst;
 import com.zdx.common.LoadConfig;
@@ -37,6 +38,7 @@ public class PairTopology {
 		logger.info(url.getFile());
 		LoadConf(url.getFile());
 		 */
+		
 		TopologyBuilder builder = setupBuilder();
 
 		submitTopology(builder);
@@ -46,7 +48,9 @@ public class PairTopology {
 	private static TopologyBuilder setupBuilder() throws Exception {
 		TopologyBuilder builder = new TopologyBuilder();
 
-
+		logger.debug("---------1------------");
+		ConfigExtension.setUserDefinedLog4jConf(conf, "C:/ZDX/code/ExchangeAgg/conf/log4j.properties");
+		logger.debug("---------2------------");
 		int spoutParallel = JStormUtils.parseInt(
 				conf.get("topology.spout.parallel"), 1);
 		int boltParallel = JStormUtils.parseInt(
@@ -54,11 +58,8 @@ public class PairTopology {
 
 		IRichSpout spout = new PairSpout();
 		builder.setSpout("PairSpout", spout, spoutParallel);
-
-		builder.setBolt("PairBolt1", new PairBolt1(), 
-				boltParallel).fieldsGrouping("PairSpout", 
-						new Fields("pairArbitrage"));
-		//builder.setBolt("PairBolt2", new PairBolt2(), boltParallel).allGrouping("PairBolt1");
+		builder.setBolt("PairBolt1", new PairBolt1(), boltParallel).fieldsGrouping("PairSpout", new Fields("pairArbitrage"));
+		builder.setBolt("PairBolt2", new PairBolt2(), boltParallel).allGrouping("PairBolt1");
 		return builder;
 	}
 

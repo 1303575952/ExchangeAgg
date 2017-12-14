@@ -1,195 +1,29 @@
 [
-    {
-        "exchangeURL": "gate.io",
-        "exchangeName": "gate-io",
+	{
+        "exchangeURL": "www.bitstamp.net",
+        "exchangeName": "bitstamp",
         "endpoints": [
             {
-                "pairName": "eth_usdt",
-                "pairPath": "api2/1/ticker/eth_usdt"
+                "pairName": "BTC_USD",
+                "pairPath": "api/v2/ticker/btcusd"
             },
             {
-                "pairName": "omg_eth",
-                "pairPath": "api2/1/ticker/omg_eth"
+                "pairName": "ETH_BTC",
+                "pairPath": "api/v2/ticker/ethbtc"
+            }
+        ]
+    },
+    {
+        "exchangeURL": "api.livecoin.net",
+        "exchangeName": "livecoin",
+        "endpoints": [
+            {
+                "pairName": "BTC_USD",
+                "pairPath": "exchange/ticker?currencyPair=BTC/USD"
             },
             {
-                "pairName": "dpy_usdt",
-                "pairPath": "api2/1/ticker/dpy_usdt"
-            },
-            {
-                "pairName": "btm_eth",
-                "pairPath": "api2/1/ticker/btm_eth"
-            },
-            {
-                "pairName": "btc_usdt",
-                "pairPath": "api2/1/ticker/btc_usdt"
-            },
-            {
-                "pairName": "dash_usdt",
-                "pairPath": "api2/1/ticker/dash_usdt"
-            },
-            {
-                "pairName": "lrc_eth",
-                "pairPath": "api2/1/ticker/lrc_eth"
-            },
-            {
-                "pairName": "storj_btc",
-                "pairPath": "api2/1/ticker/storj_btc"
-            },
-            {
-                "pairName": "zrx_eth",
-                "pairPath": "api2/1/ticker/zrx_eth"
-            },
-            {
-                "pairName": "snt_eth",
-                "pairPath": "api2/1/ticker/snt_eth"
-            },
-            {
-                "pairName": "pay_usdt",
-                "pairPath": "api2/1/ticker/pay_usdt"
-            },
-            {
-                "pairName": "req_eth",
-                "pairPath": "api2/1/ticker/req_eth"
-            },
-            {
-                "pairName": "eos_eth",
-                "pairPath": "api2/1/ticker/eos_eth"
-            },
-            {
-                "pairName": "btm_usdt",
-                "pairPath": "api2/1/ticker/btm_usdt"
-            },
-            {
-                "pairName": "zrx_btc",
-                "pairPath": "api2/1/ticker/zrx_btc"
-            },
-            {
-                "pairName": "pay_eth",
-                "pairPath": "api2/1/ticker/pay_eth"
-            },
-            {
-                "pairName": "snt_btc",
-                "pairPath": "api2/1/ticker/snt_btc"
-            },
-            {
-                "pairName": "cvc_eth",
-                "pairPath": "api2/1/ticker/cvc_eth"
-            },
-            {
-                "pairName": "etc_btc",
-                "pairPath": "api2/1/ticker/etc_btc"
-            },
-            {
-                "pairName": "etc_eth",
-                "pairPath": "api2/1/ticker/etc_eth"
-            },
-            {
-                "pairName": "omg_usdt",
-                "pairPath": "api2/1/ticker/omg_usdt"
-            },
-            {
-                "pairName": "xmr_btc",
-                "pairPath": "api2/1/ticker/xmr_btc"
-            },
-            {
-                "pairName": "dpy_eth",
-                "pairPath": "api2/1/ticker/dpy_eth"
-            },
-            {
-                "pairName": "dash_btc",
-                "pairPath": "api2/1/ticker/dash_btc"
-            },
-            {
-                "pairName": "storj_eth",
-                "pairPath": "api2/1/ticker/storj_eth"
-            },
-            {
-                "pairName": "etc_usdt",
-                "pairPath": "api2/1/ticker/etc_usdt"
-            },
-            {
-                "pairName": "llt_eth",
-                "pairPath": "api2/1/ticker/llt_eth"
-            },
-            {
-                "pairName": "snt_usdt",
-                "pairPath": "api2/1/ticker/snt_usdt"
-            },
-            {
-                "pairName": "eos_usdt",
-                "pairPath": "api2/1/ticker/eos_usdt"
-            },
-            {
-                "pairName": "req_usdt",
-                "pairPath": "api2/1/ticker/req_usdt"
-            },
-            {
-                "pairName": "lrc_btc",
-                "pairPath": "api2/1/ticker/lrc_btc"
-            },
-            {
-                "pairName": "zec_btc",
-                "pairPath": "api2/1/ticker/zec_btc"
-            },
-            {
-                "pairName": "pay_btc",
-                "pairPath": "api2/1/ticker/pay_btc"
-            },
-            {
-                "pairName": "qtum_usdt",
-                "pairPath": "api2/1/ticker/qtum_usdt"
-            },
-            {
-                "pairName": "pst_eth",
-                "pairPath": "api2/1/ticker/pst_eth"
-            },
-            {
-                "pairName": "eos_btc",
-                "pairPath": "api2/1/ticker/eos_btc"
-            },
-            {
-                "pairName": "qtum_eth",
-                "pairPath": "api2/1/ticker/qtum_eth"
-            },
-            {
-                "pairName": "llt_usdt",
-                "pairPath": "api2/1/ticker/llt_usdt"
-            },
-            {
-                "pairName": "eth_btc",
-                "pairPath": "api2/1/ticker/eth_btc"
-            },
-            {
-                "pairName": "omg_btc",
-                "pairPath": "api2/1/ticker/omg_btc"
-            },
-            {
-                "pairName": "ltc_usdt",
-                "pairPath": "api2/1/ticker/ltc_usdt"
-            },
-            {
-                "pairName": "ltc_btc",
-                "pairPath": "api2/1/ticker/ltc_btc"
-            },
-            {
-                "pairName": "btg_btc",
-                "pairPath": "api2/1/ticker/btg_btc"
-            },
-            {
-                "pairName": "qtum_btc",
-                "pairPath": "api2/1/ticker/qtum_btc"
-            },
-            {
-                "pairName": "zec_usdt",
-                "pairPath": "api2/1/ticker/zec_usdt"
-            },
-            {
-                "pairName": "btg_usdt",
-                "pairPath": "api2/1/ticker/btg_usdt"
-            },
-            {
-                "pairName": "tnt_eth",
-                "pairPath": "api2/1/ticker/tnt_eth"
+                "pairName": "ETH_BTC",
+                "pairPath": "exchange/ticker?currencyPair=ETH/BTC"
             }
         ]
     }

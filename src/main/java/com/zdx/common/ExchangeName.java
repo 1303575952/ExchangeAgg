@@ -10,4 +10,5 @@ public class ExchangeName {
 	public static String COINROOM = "coinroom";
 	public static String TIDEX = "tidex";
 	public static String BITSO = "bitso";
+	public static String LIVECOIN = "livecoin";
 }

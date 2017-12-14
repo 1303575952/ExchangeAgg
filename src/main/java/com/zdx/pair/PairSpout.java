@@ -29,17 +29,19 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 	private transient DefaultMQPushConsumer consumer; 
 	private static final Logger logger = LoggerFactory.getLogger(PairSpout.class);
 
-	public double threshold = 0.05;
+	public double threshold = 0.0;
 	public double thresholdNeglect = 0.01;
 	public PariConfig pc;
 	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
-
+	public String consumerTopic = "";
+	
 	@SuppressWarnings("rawtypes") 
 	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
 		threshold = Double.parseDouble((String) conf.get("PairArbitrageThreshold"));
 		String filePath1 = (String) conf.get("TopVol100MPath");
 		String filePath2 = (String) conf.get("TopVol100MPairPath");
+		consumerTopic = (String) conf.get("consumerTopic");
 		pc = new PariConfig();
 		pc.initPairConfig(filePath1, filePath2);
 
@@ -52,7 +54,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		//consumer.setMessageModel(MessageModel.BROADCASTING);
 		try {
-			consumer.subscribe("toyTickerTest", "*");
+			consumer.subscribe(consumerTopic, "*");
 		} catch (MQClientException e) {  
 			e.printStackTrace();  
 		}  
@@ -83,9 +85,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 			ConsumeOrderlyContext context) {  
 		logger.debug("===========================PairSpout Begin=======================================");
 		for (MessageExt msg : msgs) {
-			
-			String body = new String(msg.getBody());
-			System.out.println("message body = " + body);			
+			String body = new String(msg.getBody());		
 			TickerStandardFormat tsf = new TickerStandardFormat();
 			tsf.formatJsonString(body);
 			logger.debug("message tsk format = " + tsf.toJsonString());
@@ -130,7 +130,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 					}
 					if (ep.isSend){	
 						if (ep.priceDiff < thresholdNeglect ){
-							ep.isSend = false;
+							//ep.isSend = false;
 						}
 						String[] t1 = x.split("@@");
 						logger.debug("-----Sell at = " + t1[0]);

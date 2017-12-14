@@ -34,12 +34,14 @@ public class TickerProducer {
 	static ArrayList<String> tickerNamesLeft = new ArrayList<String>();
 	static String serverUrl = "";
 	static String tickerInfoPath = "";
+	static String producerGroup = "";
 
 	public static void loadConf(String tickerConfPath){
 		tickerConf = LoadConfig.loadConf(tickerConfPath);
 		serverUrl = String.valueOf(tickerConf.get("GatewayURL"));
 		tickerInfoPath = String.valueOf(tickerConf.get("TickerInfoPath"));
-
+		producerGroup = String.valueOf(tickerConf.get("producerGroup"));
+		
 		TickerConfInfo tcConf = LoadConfig.loadTickerConf(tickerInfoPath );
 		targetHosts = tcConf.targetHosts;
 		replaceLists = tcConf.replaceLists;
@@ -60,7 +62,7 @@ public class TickerProducer {
 	public static void execute(String tickerConfPath) throws InterruptedException{
 		loadConf(tickerConfPath);
 
-		DefaultMQProducer producer = new DefaultMQProducer("WufengTest1");		
+		DefaultMQProducer producer = new DefaultMQProducer(producerGroup);		
 		producer.setNamesrvAddr(serverUrl);		
 		try {
 			producer.start();
@@ -76,7 +78,7 @@ public class TickerProducer {
 		while (true){
 			oneFullBathWithoutRetry();
 			try {
-				Thread.sleep(20000);
+				Thread.sleep(2000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -71,7 +71,7 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 				failedTickerMap.put(url,"code=" + hashCode);
 				try {
 					Message msg = new Message();
-					msg.setTopic("tickerTest");
+					msg.setTopic("tickerInfo");
 					msg.setTags("TagA");
 					msg.setBody(tsf.toJsonString().getBytes());
 					DefaultMQProducer producer = (DefaultMQProducer)responseContext.get("producer");

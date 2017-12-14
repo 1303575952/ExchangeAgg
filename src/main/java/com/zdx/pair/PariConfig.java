@@ -286,7 +286,7 @@ class EnterPrice{
 	double maxPriceDiff = 0.0;
 	long timeStamp = 0; 
 	boolean isSend = false;
-	//boolean isSend2 = false;
+	String tradeFlag = "";
 
 	public EnterPrice(){
 
@@ -332,9 +332,9 @@ class EnterPrice{
 		if (jsonObject.containsKey("isSend")){
 			isSend = jsonObject.getBooleanValue("isSend");
 		}
-		//if (jsonObject.containsKey("isSend2")){
-		//	isSend2 = jsonObject.getBooleanValue("isSend2");
-		//}
+		if (jsonObject.containsKey("tradeFlag")){
+			tradeFlag = jsonObject.getString("tradeFlag");
+		}
 		if (jsonObject.containsKey("timestamp")){
 			timeStamp = jsonObject.getLong("timestamp");
 		}
@@ -355,7 +355,7 @@ class EnterPrice{
 				"\",\"priceDiff\":\"" + priceDiff +
 				"\",\"timeStamp\":\"" + timeStamp +
 				"\",\"isSend\":\"" + isSend +
-				//"\",\"isSend2\":\"" + isSend2 +
+				"\",\"tradeFlag\":\"" + tradeFlag +
 				"\"}";
 	}
 }

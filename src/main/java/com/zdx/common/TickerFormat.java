@@ -30,8 +30,8 @@ public class TickerFormat {
 			bitsoFormat(jsonObject, x);
 		}else if(ExchangeName.COINROOM.equals(exchangeName)){
 			coinroomFormat(jsonObject, x);
-		}else if("coinroom".equals(exchangeName)){
-			cryptopiaFormat(jsonObject, x);
+		}else if(ExchangeName.LIVECOIN.equals(exchangeName)){
+			livecoinFormat(jsonObject, x);
 		}
 	}
 
@@ -168,6 +168,19 @@ public class TickerFormat {
 		x.high = tickerJsonObject.getDouble("High");
 		x.volume = tickerJsonObject.getDouble("Volume");
 		x.lastPrice = tickerJsonObject.getDouble("LastPrice");
+		x.setExchangeType();
+		x.setMidUSD();
+	}
+	
+	public static void livecoinFormat(JSONObject jsonObject, TickerStandardFormat x){
+		x.timestamp = System.currentTimeMillis();
+		x.bid = jsonObject.getDouble("best_bid");
+		x.ask = jsonObject.getDouble("best_ask");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x.setMidUSD();
 	}

@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
@@ -11,9 +12,15 @@ import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
+import com.zdx.common.DataFormat;
 import com.zdx.common.TickerStandardFormat;
 
 import backtype.storm.spout.SpoutOutputCollector;
@@ -21,7 +28,6 @@ import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Values;
 
 public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{  
 	private static final long serialVersionUID = -3085994102089532269L;   
@@ -34,21 +40,38 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 	public PariConfig pc;
 	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
 	public String consumerTopic = "";
-	
+
+	public static InfluxDB influxDB = null;
+	public static String influxURL = "";
+	public static String influxDbName = "";
+	public static String influxRpName = "";
+
+
 	@SuppressWarnings("rawtypes") 
 	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
+
+		logger.debug("===========================PairSpout prepare Begin=======================================");
 		threshold = Double.parseDouble((String) conf.get("PairArbitrageThreshold"));
 		String filePath1 = (String) conf.get("TopVol100MPath");
 		String filePath2 = (String) conf.get("TopVol100MPairPath");
-		consumerTopic = (String) conf.get("consumerTopic");
+		influxURL = (String) conf.get("InfluxDBURL");
+		influxDbName = (String) conf.get("InfluxDbName");
+		influxRpName = (String) conf.get("InfluxRpName");
+
+
 		pc = new PariConfig();
 		pc.initPairConfig(filePath1, filePath2);
 
+		influxDB = InfluxDBFactory.connect(influxURL);
+		if (!influxDB.databaseExists(influxDbName)){
+			logger.debug("==================================================================" + influxDbName + " not Exist");
+			influxDB.createDatabase(influxDbName);
+		}
+		influxDB.setDatabase(influxDbName);
+		influxDB.createRetentionPolicy(influxRpName, influxDbName, "30d", "30m", 2, true);
 
-		logger.info("init DefaultMQPushConsumer");
-		logger.info("###"+(String) conf.get("ConsumerGroup"));
-
+		consumerTopic = (String) conf.get("consumerTopic");
 		consumer = new DefaultMQPushConsumer((String) conf.get("ConsumerGroup")); 
 		consumer.setNamesrvAddr((String) conf.get("RocketMQNameServerAddress"));
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
@@ -67,17 +90,19 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 		} 
 		logger.info("Consumer Started.");
 
-		this.collector = collector;  
+		this.collector = collector; 
+		logger.debug("===========================PairSpout prepare End=======================================");
 	}  
 
 	@Override  
 	public void nextTuple() {  
 		//do nothing  
-	}  
+	}
+
 
 	@Override  
 	public void declareOutputFields(OutputFieldsDeclarer declarer) {  
-		declarer.declare(new Fields("pairArbitrage"));
+		//declarer.declare(new Fields("pairArbitrage"));
 	}
 
 	@Override
@@ -91,6 +116,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 			logger.debug("message tsk format = " + tsf.toJsonString());
 			updatePrice(tsf);
 			updateForwardPairPrice(tsf);
+
 		}
 		logger.debug("===========================PairSpout End=======================================");
 		return ConsumeOrderlyStatus.SUCCESS;  
@@ -130,14 +156,14 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 					}
 					if (ep.isSend){	
 						if (ep.priceDiff < thresholdNeglect ){
-							//ep.isSend = false;
+							ep.isSend = false;
 						}
 						String[] t1 = x.split("@@");
 						logger.debug("-----Sell at = " + t1[0]);
 						logger.debug("-----Buy at = " + t1[1]);
 						logger.debug("-----Price Diff = " + ep.priceDiff);
 						ep.timeStamp = System.currentTimeMillis();
-						collector.emit(new Values(x, ep.toJsonString()));
+						logPriceDiff(ep);
 					}
 					logger.debug("updateForwardPairPrice: Candidate Fourth profit after update = "+ ep.toJsonString());
 					pc.fourthPriceMap.put(x, ep);
@@ -146,6 +172,43 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 			}
 		}
 	}
+
+	public void logPriceDiff(EnterPrice ep){
+		int status = 0;
+		if (ep.priceDiff > 0.2){
+			//介入交易
+			status = 1;
+			ep.tradeFlag = "open";
+		}  else	if (ep.priceDiff < 0.1){
+			//退出交易
+			status = -1;
+			ep.tradeFlag = "close";
+		}
+
+		String tableName = DataFormat.removeShortTerm(ep.sellExchangeName) + "_" + DataFormat.removeShortTerm(ep.buyExchangeName);
+		Point point1 = Point.measurement(tableName)
+				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+				.addField("sellExchangeName", ep.sellExchangeName)	
+				.tag("sellPath", ep.sellPath)
+				.addField("sellPrice", ep.bid1)
+				.addField("buyExchangeName", ep.buyExchangeName)
+				.tag("buyPath", ep.buyPath)
+				.addField("buyPrice", ep.ask2)
+				.addField("priceDiff", ep.priceDiff)
+				.addField("status", status)
+				.build();
+		influxDB.write(influxDbName, influxRpName, point1);
+		Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", influxDbName);
+		QueryResult result = influxDB.query(query);
+		if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true){
+			logger.debug("===========================InfluxDB Insert Failed=======================================");
+			influxDB.close();
+			influxDB = InfluxDBFactory.connect(influxURL);
+		} else {
+			logger.debug("===========================InfluxDB Insert Sucess=======================================");
+		}
+	}
+
 
 	public void updatePrice(TickerStandardFormat tsf){
 		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();

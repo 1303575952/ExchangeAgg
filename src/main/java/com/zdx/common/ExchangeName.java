@@ -11,4 +11,5 @@ public class ExchangeName {
 	public static String TIDEX = "tidex";
 	public static String BITSO = "bitso";
 	public static String LIVECOIN = "livecoin";
+	public static String CEXIO = "cex-io";
 }

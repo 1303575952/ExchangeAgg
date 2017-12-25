@@ -1,1 +1,1 @@
-java -cp ExchangeAgg-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.zdx.producer.TickerProducer C:\ZDX\code\ExchangeAgg\conf\TickerProducer.conf
+java -cp ExchangeAgg-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.zdx.producer.TickerProducer ./conf/TickerProducerWin.conf >logs/pair_producer.log

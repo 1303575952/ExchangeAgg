@@ -1,1 +1,1 @@
-java -cp ExchangeAgg-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.zdx.pair.PairTopology C:\ZDX\code\ExchangeAgg\conf\PairTopology.conf
+java -cp ExchangeAgg-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.zdx.pair.PairTopology C:\ZDX\code\ExchangeAgg\conf\PairTopologyWin.conf >./logs/pari_consumer.log

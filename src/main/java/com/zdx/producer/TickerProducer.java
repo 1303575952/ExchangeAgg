@@ -40,6 +40,7 @@ public class TickerProducer {
 			System.exit(-1);
 		}
 		String confPath = args[0];
+		logger.info("confPath:"+confPath);
 		loadConf(confPath);
 		execute();
 	}

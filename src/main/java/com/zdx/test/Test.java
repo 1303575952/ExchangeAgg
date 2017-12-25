@@ -11,7 +11,7 @@ import org.java_websocket.drafts.Draft_6455;
 
 import com.zdx.common.TickerStandardFormat;
 import com.zdx.demo.ToyConsumer;
-import com.zdx.pair.ExchangeTopPairs;
+import com.zdx.pair.BuildTopPairs;
 import com.zdx.pair.PariConfig;
 import com.zdx.producer.TickerProducer;
 import com.zdx.rocketmq.WebSocketLocalClient;
@@ -65,7 +65,7 @@ public class Test {
 	}
 	
 	public static void testExchangeTopPairs(){
-		ExchangeTopPairs etp = new ExchangeTopPairs();
+		BuildTopPairs etp = new BuildTopPairs();
 		etp.buildTopVol100MPairFile("C:\\ZDX\\code\\ExchangeAgg\\conf\\topVol100M.json");
 	}
 	

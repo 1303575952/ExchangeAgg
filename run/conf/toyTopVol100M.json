@@ -1,0 +1,34 @@
+[
+   {
+      "exchangeName":"livecoin",
+      "tickerPair":
+      [
+         "BTC/USD",         
+         "ETH/BTC",
+      ]
+   }, 
+  {
+      "exchangeName":"bitfinex",
+      "tickerPair":
+      [
+         "BTC/USD",         
+         "ETH/BTC",
+      ]
+   },
+   {
+      "exchangeName":"cex-io",
+      "tickerPair":
+      [
+         "BTC/USD",         
+         "ETH/BTC",
+      ]
+   },
+   {
+      "exchangeName":"bitstamp",
+      "tickerPair":
+      [
+         "BTC/USD",
+         "ETH/BTC",
+      ]
+   }
+]

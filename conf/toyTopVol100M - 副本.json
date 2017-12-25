@@ -1,0 +1,20 @@
+[
+   {
+      "exchangeName":"livecoin",
+      "tickerPair":
+      [
+         "BTC/USD",         
+         "ETH/BTC",
+      ]
+
+   },   
+   {
+      "exchangeName":"bitstamp",
+      "tickerPair":
+      [
+         "BTC/USD",
+         "ETH/BTC",
+      ]
+
+   }
+]

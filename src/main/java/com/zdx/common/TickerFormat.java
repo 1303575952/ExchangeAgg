@@ -32,6 +32,8 @@ public class TickerFormat {
 			coinroomFormat(jsonObject, x);
 		}else if(ExchangeName.LIVECOIN.equals(exchangeName)){
 			livecoinFormat(jsonObject, x);
+		}else if(ExchangeName.CEXIO.equals(exchangeName)){
+			cexFormat(jsonObject, x);
 		}
 	}
 
@@ -176,6 +178,19 @@ public class TickerFormat {
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("best_bid");
 		x.ask = jsonObject.getDouble("best_ask");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x.setMidUSD();
+	}
+	
+	public static void cexFormat(JSONObject jsonObject, TickerStandardFormat x){
+		x.timestamp = jsonObject.getLong("timestamp");
+		x.bid = jsonObject.getDouble("bid");
+		x.ask = jsonObject.getDouble("ask");
 		x.mid = (x.bid + x.ask) / 2;
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");

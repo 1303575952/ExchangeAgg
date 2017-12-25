@@ -11,13 +11,16 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map.Entry;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.zdx.common.CommonConst;
 
 public class PariConfig {
-
+	private static final Logger logger = LoggerFactory.getLogger(PariConfig.class);
 	public HashMap<String, ArrayList<String>> exchangePairListMap = new HashMap<String, ArrayList<String>> ();
 
 	//compute delta2
@@ -61,7 +64,7 @@ public class PariConfig {
 			      ]
 
 			   },*/
-		ExchangeTopPairs etp = new ExchangeTopPairs();
+		BuildTopPairs etp = new BuildTopPairs();
 		HashMap<String, HashSet<String>> topVol100MMap = etp.loadTopVol100MSetFromFile(filePath);
 		for(Entry<String, HashSet<String>> x : topVol100MMap.entrySet()){
 			String exchangeName = x.getKey();
@@ -112,13 +115,18 @@ public class PariConfig {
 				String exchangeNameA = "";
 				String coinA = "";
 				String coinB = "";
+				String s3 = "";
 				if (s11.contains("_")){
 					String[] t1 = s11.split("_");
 					exchangeNameA = t1[0];					
-					String[] t2 = t1[1].split("/");
-					coinA = t2[0];
-					coinB = t2[1];
+					s3 = t1[1];
+				} else {
+					s3 = (String)js.get("pair");
+					exchangeNameA = s11;
 				}
+				String[] t21 = s3.split("/");
+				coinA = t21[0];
+				coinB = t21[1];
 
 				String s22 = (String)js.get("exchangeb");				
 				String exchangeNameB = "";
@@ -127,11 +135,14 @@ public class PariConfig {
 				if (s22.contains("_")){
 					String[] t1 = s22.split("_");
 					exchangeNameB = t1[0];					
-					String[] t2 = t1[1].split("/");
-					coinX = t2[0];
-					coinY = t2[1];
+					s3 = t1[1];
+				} else {
+					s3 = (String)js.get("pair");
+					exchangeNameB = s22;
 				}
-
+				String[] t22 = s3.split("/");
+				coinX = t22[0];
+				coinY = t22[1];
 				EnterPrice ep = new EnterPrice();
 				ep.sellExchangeName = exchangeNameA;
 				ep.sellPath = coinA + "_" + coinB;
@@ -155,7 +166,7 @@ public class PariConfig {
 				}
 				s32.add(info);
 				pairFourthMap.put(info2, s32);	
-
+				
 				fourthPriceMap.put(info, ep);
 			}
 		}

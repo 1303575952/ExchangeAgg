@@ -1,5 +1,0 @@
-topology.bolt.parallel: 1
-topology.name: PairArbitrageTopology
-topology.spout.parallel: 1
-storm.cluster.mode: local
-wordsFile: "C:\\ZDX\\code\\ExchangeAgg\\web\\Events.php"

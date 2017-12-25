@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 
-
 import backtype.storm.Config;
 import backtype.storm.LocalCluster;
 import backtype.storm.StormSubmitter;
@@ -21,7 +20,7 @@ import com.zdx.common.LoadConfig;
 
 
 public class PairTopology {
-
+	
 	private static Map<Object, Object> conf = new HashMap<Object, Object>();
 
 	private static Logger logger = Logger.getLogger(PairTopology.class);
@@ -45,13 +44,12 @@ public class PairTopology {
 
 		int spoutParallel = JStormUtils.parseInt(
 				conf.get("topology.spout.parallel"), 1);
-		int boltParallel = JStormUtils.parseInt(
-				conf.get("topology.bolt.parallel"), 1);
+		//int boltParallel = JStormUtils.parseInt(conf.get("topology.bolt.parallel"), 1);
 
 		IRichSpout spout = new PairSpout();
 		builder.setSpout("PairSpout", spout, spoutParallel);
-		builder.setBolt("PairBolt1", new PairBolt1(), boltParallel).fieldsGrouping("PairSpout", new Fields("pairArbitrage"));
-		builder.setBolt("PairBolt2", new PairBolt2(), boltParallel).allGrouping("PairBolt1");
+		//builder.setBolt("PairBolt1", new PairBolt1(), boltParallel).fieldsGrouping("PairSpout", new Fields("pairArbitrage"));
+		//builder.setBolt("PairBolt2", new PairBolt2(), boltParallel).allGrouping("PairBolt1");
 		return builder;
 	}
 

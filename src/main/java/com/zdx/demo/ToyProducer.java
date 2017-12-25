@@ -43,7 +43,7 @@ public class ToyProducer {
 		for (int i = 0; i < td.size(); i++) {
 			logger.info("Send ---- " + i + "-----begin" );
 			Message msg = new Message();
-			msg.setTopic("toyTickerTest");
+			msg.setTopic("tickerInfo");
 			msg.setTags("TagA");
 			JSONObject jsonObject = JSON.parseObject(td.get(i));			
 			String tmp = (String) jsonObject.get("coinA") + "-" + jsonObject.get("coinB");
@@ -202,7 +202,7 @@ public class ToyProducer {
 				td2.add(td.get(i));
 				testCases(td2);
 				try {
-					Thread.sleep(10000);
+					Thread.sleep(1000);
 				} catch (InterruptedException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

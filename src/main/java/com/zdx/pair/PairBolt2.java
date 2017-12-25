@@ -13,6 +13,7 @@ import com.zdx.demo.ToyConsumer;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;
+import backtype.storm.topology.FailedException;
 import backtype.storm.topology.IRichBolt;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.tuple.Tuple;
@@ -34,20 +35,25 @@ public class PairBolt2 implements IRichBolt{
 
 	@Override
 	public void execute(Tuple tuple) {
-		logger.info("===========================PairBolt2 Begin=======================================");
-		logger.info(tuple.getValue(0));
-		logger.info(tuple.getValue(1));
-		String pairOpport = tuple.getValue(0).toString();
-		EnterPrice ep = new EnterPrice(tuple.getValue(1).toString());
-		if ("open".equals(ep.tradeFlag)){
-			logger.info("PairBolt2 Opportunity Window Open: " + ep.toJsonString());
-		} else if ("close".equals(ep.tradeFlag)){
-			logger.info("PairBolt2 Opportunity Window Colse: " + ep.toJsonString());
+		try{
+			logger.info("===========================PairBolt2 Begin=======================================");
+			logger.info(tuple.getValue(0));
+			logger.info(tuple.getValue(1));
+			String pairOpport = tuple.getValue(0).toString();
+			EnterPrice ep = new EnterPrice(tuple.getValue(1).toString());
+			if ("open".equals(ep.tradeFlag)){
+				logger.info("PairBolt2 Opportunity Window Open: " + ep.toJsonString());
+			} else if ("close".equals(ep.tradeFlag)){
+				logger.info("PairBolt2 Opportunity Window Colse: " + ep.toJsonString());
+			}
+			logger.info("===========================PairBolt2 End=======================================");
+
+
+			collector.ack(tuple);
+		}catch(FailedException e){
+			logger.debug("===========================PairBolt1 failed=======================================");
+			collector.fail(tuple);
 		}
-		logger.info("===========================PairBolt2 End=======================================");
-
-
-		collector.ack(tuple);
 	}
 
 	@Override

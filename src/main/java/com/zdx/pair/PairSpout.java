@@ -4,14 +4,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicLong;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
+import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
+import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
+import org.apache.rocketmq.common.protocol.heartbeat.MessageModel;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.dto.Point;
@@ -29,7 +34,7 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 
-public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{  
+public class PairSpout extends BaseRichSpout implements MessageListenerConcurrently{  
 	private static final long serialVersionUID = -3085994102089532269L;   
 	private SpoutOutputCollector collector;  
 	private transient DefaultMQPushConsumer consumer; 
@@ -40,7 +45,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 	public PariConfig pc;
 	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
 	public String consumerTopic = "";
-
+	public String topicList = "";
 	public static InfluxDB influxDB = null;
 	public static String influxURL = "";
 	public static String influxDbName = "";
@@ -65,30 +70,40 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 
 		influxDB = InfluxDBFactory.connect(influxURL);
 		if (!influxDB.databaseExists(influxDbName)){
-			logger.debug("==================================================================" + influxDbName + " not Exist");
+			logger.debug("==================================================================Database" + influxDbName + " not Exist");
 			influxDB.createDatabase(influxDbName);
 		}
 		influxDB.setDatabase(influxDbName);
 		influxDB.createRetentionPolicy(influxRpName, influxDbName, "30d", "30m", 2, true);
 
 		consumerTopic = (String) conf.get("consumerTopic");
+		topicList = (String) conf.get("topicList");
+		String[] topics = topicList.split(";");
+
+
 		consumer = new DefaultMQPushConsumer((String) conf.get("ConsumerGroup")); 
 		consumer.setNamesrvAddr((String) conf.get("RocketMQNameServerAddress"));
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-		//consumer.setMessageModel(MessageModel.BROADCASTING);
-		try {
-			consumer.subscribe(consumerTopic, "*");
-		} catch (MQClientException e) {  
-			e.printStackTrace();  
-		}  
+		consumer.setMessageModel(MessageModel.BROADCASTING);
+		consumer.setConsumeThreadMin(1);
+		consumer.setConsumeThreadMax(1);
 		consumer.registerMessageListener(this);
 
+		for (int i = 0; i < topics.length; i++){
+			String topic = topics[i];
+			try {
+				consumer.subscribe("ticker_" + topic.toLowerCase(), "*");
+			} catch (MQClientException e) {  
+				e.printStackTrace();  
+			}  
+		}
+		
 		try {  
 			consumer.start();  
 		} catch (MQClientException e) {  
 			e.printStackTrace();  
 		} 
-		logger.info("Consumer Started.");
+		logger.debug("Consumer Started.");
 
 		this.collector = collector; 
 		logger.debug("===========================PairSpout prepare End=======================================");
@@ -106,20 +121,19 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 	}
 
 	@Override
-	public ConsumeOrderlyStatus consumeMessage(List<MessageExt> msgs,
-			ConsumeOrderlyContext context) {  
+	public ConsumeConcurrentlyStatus  consumeMessage(List<MessageExt> msgs,
+			ConsumeConcurrentlyContext context) {  
 		logger.debug("===========================PairSpout Begin=======================================");
 		for (MessageExt msg : msgs) {
 			String body = new String(msg.getBody());		
 			TickerStandardFormat tsf = new TickerStandardFormat();
 			tsf.formatJsonString(body);
-			logger.debug("message tsk format = " + tsf.toJsonString());
+			logger.debug("message tsf format = " + tsf.toJsonString());
 			updatePrice(tsf);
 			updateForwardPairPrice(tsf);
-
 		}
 		logger.debug("===========================PairSpout End=======================================");
-		return ConsumeOrderlyStatus.SUCCESS;  
+		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;  
 	}
 
 	public void updateForwardPairPrice(TickerStandardFormat tsf){
@@ -128,6 +142,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;
 		logger.debug("updateForwardPairPrice: exchangePairName = " + exchangePairName);
 		logger.debug("updateForwardPairPrice: keyset of pc.pairFourthMap = " + pc.pairFourthMap.keySet().toString());
+		//logger.debug("updateForwardPairPrice: Ticker Data = "+ tsf.toJsonString());
 		if (pc.pairFourthMap.containsKey(exchangePairName)){			
 			ArrayList<String> tmp1 = pc.pairFourthMap.get(exchangePairName);
 			logger.debug("updateForwardPairPrice: Candidate FourthList = "+ tmp1.toString());
@@ -135,7 +150,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 				logger.debug("updateForwardPairPrice: Candidate Fourth =  "+ x);
 				if (pc.fourthPriceMap.containsKey(x)){
 					EnterPrice ep = pc.fourthPriceMap.get(x);
-					logger.debug("updateForwardPairPrice: Ticker Data = "+ tsf.toJsonString());
+
 					logger.debug("updateForwardPairPrice: Candidate Fourth profit before update = "+ ep.toJsonString());					
 					if (ep.sellExchangeName.equals(tsf.exchangeName.toLowerCase())){
 						ep.bid1 = tsf.bid;
@@ -144,16 +159,17 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 						ep.bid2 = tsf.bid;
 						ep.ask2 = tsf.ask;
 					}
-					if (ep.ask2 > 0.0){
+					if (ep.ask2 > 0.0 && ep.ask1 > 0.0){
 						ep.priceDiff = ep.bid1 / ep.ask2 - 1.0;
 					}
 					if (ep.priceDiff > ep.maxPriceDiff){
 						ep.maxPriceDiff = ep.priceDiff;
 					}
 
-					if (ep.priceDiff > threshold ){
-						ep.isSend = true;
-					}
+					//if (ep.priceDiff > threshold ){
+					//	ep.isSend = true;
+					//}
+					ep.isSend = true;
 					if (ep.isSend){	
 						if (ep.priceDiff < thresholdNeglect ){
 							ep.isSend = false;
@@ -273,5 +289,9 @@ public class PairSpout extends BaseRichSpout implements MessageListenerOrderly{
 			pairPriceMap.put(tickerName, lp);			
 		}
 	}
+
+
+
+
 
 }  

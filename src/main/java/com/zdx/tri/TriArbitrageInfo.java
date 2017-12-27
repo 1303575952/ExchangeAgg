@@ -6,6 +6,7 @@ import com.zdx.demo.ToyConsumer;
 
 public class TriArbitrageInfo {
 	private static Logger logger = Logger.getLogger(TriArbitrageInfo.class);
+	public String exchangeName = "";
 	public double bid1 = 0.0;
 	public double bid2 = 0.0;
 	public double bid3 = 0.0;
@@ -16,6 +17,7 @@ public class TriArbitrageInfo {
 	String path1 = "";
 	String path2 = "";
 	String path3 = "";
+	public String fullPath = "";
 	public double profitVal = 0.0;
 	double lowerLimit = 0.00;
 
@@ -107,6 +109,8 @@ public class TriArbitrageInfo {
 	@Override
 	public String toString(){
 		return "{\"groupId\":\"" + groupId + 
+				"\",\"exchangeName\":\"" + exchangeName +
+				"\",\"fullPath\":\"" + fullPath +
 				"\",\"bid1\":\"" + bid1 +
 				"\",\"bid2\":\"" + bid2 +
 				"\",\"bid3\":\"" + bid3 +

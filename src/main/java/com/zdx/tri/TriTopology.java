@@ -46,9 +46,7 @@ public class TriTopology {
 				conf.get("topology.spout.parallel"), 1);
 		IRichSpout spout = new TriSpout();
 		builder.setSpout("TriSpout", spout, spoutParallel);
-		builder.setBolt("TriBolt", new TriBolt(), 
-				boltParallel).fieldsGrouping("TriSpout", 
-						new Fields("triName"));
+		//builder.setBolt("TriBolt", new TriBolt(), 				boltParallel).fieldsGrouping("TriSpout",						new Fields("triName"));
 		return builder;
 	}
 

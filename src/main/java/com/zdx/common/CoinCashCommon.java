@@ -22,6 +22,19 @@ public class CoinCashCommon {
 		coinSet.add("mona");
 		coinSet.add("xem");
 		coinSet.add("orme");
+		
+		coinSet.add("btc".toUpperCase());
+		coinSet.add("bch".toUpperCase());
+		coinSet.add("eth".toUpperCase());
+		coinSet.add("zec".toUpperCase());
+		coinSet.add("ltc".toUpperCase());
+		coinSet.add("etc".toUpperCase());
+		coinSet.add("zec".toUpperCase());
+		coinSet.add("qtum".toUpperCase());
+		coinSet.add("waves".toUpperCase());
+		coinSet.add("mona".toUpperCase());
+		coinSet.add("xem".toUpperCase());
+		coinSet.add("orme".toUpperCase());
 		return coinSet;
 	}
 	public static HashSet<String> getCashSet(){
@@ -33,6 +46,13 @@ public class CoinCashCommon {
 		cashSet.add("pln");
 		cashSet.add("cad");
 		
+		cashSet.add("usd".toUpperCase());
+		cashSet.add("cny".toUpperCase());
+		cashSet.add("jpy".toUpperCase());
+		cashSet.add("usdt".toUpperCase());
+		cashSet.add("mxn".toUpperCase());
+		cashSet.add("pln".toUpperCase());
+		cashSet.add("cad".toUpperCase());
 		return cashSet;
 	}
 }

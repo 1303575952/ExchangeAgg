@@ -14,7 +14,7 @@ import com.zdx.demo.ToyConsumer;
 public class TriListBuilder {
 	private static Logger logger = Logger.getLogger(TriListBuilder.class);
 	/*
-	 * 通过单个交易所的所有pair获取单个交易所得所有三元组，传入参数是单个交易所所有pair
+	 * 通过单个交易所的所有pair获取单个交易所的所有三元组，传入参数是单个交易所所有pair
 	 */
 	public static ArrayList<ArrayList<JSONObject>> triSearch(ArrayList<JSONObject> al) {
 		

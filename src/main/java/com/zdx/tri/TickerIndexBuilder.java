@@ -65,6 +65,8 @@ public class TickerIndexBuilder {
 					tickerPairSet.add(tt);
 				}
 			}
+			logger.debug("key1 = "+e.getKey());
+			logger.debug("val1 = "+tickerPairSet.toString());
 			tickerPairMap.put(e.getKey(), tickerPairSet);
 		}
 		for (java.util.Map.Entry<String, HashSet<String>> e1 : tickerPairMap.entrySet()){
@@ -81,6 +83,8 @@ public class TickerIndexBuilder {
 						res.add(exchangeName + "@@" + s2 +"@@" +flag);
 					}
 				}
+				logger.debug("key2 = "+newKey);
+				logger.debug("val2 = "+res.toString());
 				tickerIndex.put(newKey, res);				
 			}			
 		}

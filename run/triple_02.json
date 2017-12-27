@@ -1,0 +1,1136 @@
+[
+   {
+      "tickerPair":"livecoin@@POSW/DASH",
+      "triList":
+      [
+         "livecoin@@POSW/USD-DASH/USD-POSW/DASH@@abcbac",
+         "livecoin@@POSW/BTC-DASH/BTC-POSW/DASH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@THS/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-THS/USD-THS/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@YOC/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-YOC/USD-YOC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@QTUM/BTC",
+      "triList":
+      [
+         "livecoin@@QTUM/BTC-ETH/BTC-QTUM/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@FRST/ETH",
+      "triList":
+      [
+         "livecoin@@FRST/ETH-FRST/USD-ETH/USD@@abacbc",
+         "livecoin@@FRST/ETH-ETH/BTC-FRST/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VIB/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-VIB/USD-VIB/BTC@@abcbca",
+         "livecoin@@VIB/ETH-VIB/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@LTC/BTC",
+      "triList":
+      [
+         "livecoin@@LTC/BTC-POSW/BTC-POSW/LTC@@abcbca",
+         "livecoin@@LTC/BTC-UNY/BTC-UNY/LTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BCC/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-BCC/USD-BCC/BTC@@abcbca",
+         "livecoin@@BCC/USD-ETH/USD-BCC/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VRS/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-VRS/USD-VRS/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@WIC/ETH",
+      "triList":
+      [
+         "livecoin@@WIC/ETH-ETH/BTC-WIC/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PIPL/BTC",
+      "triList":
+      [
+         "livecoin@@PIPL/ETH-PIPL/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@POSW/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-POSW/USD-POSW/BTC@@abcbca",
+         "livecoin@@LTC/USD-POSW/USD-POSW/LTC@@abcbca",
+         "livecoin@@POSW/USD-ETH/USD-POSW/ETH@@abcbac",
+         "livecoin@@POSW/USD-DASH/USD-POSW/DASH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@SUMO/BTC",
+      "triList":
+      [
+         "livecoin@@SUMO/ETH-ETH/BTC-SUMO/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@FRST/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-FRST/USD-FRST/BTC@@abcbca",
+         "livecoin@@FRST/ETH-FRST/USD-ETH/USD@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@LEO/ETH",
+      "triList":
+      [
+         "livecoin@@CRBIT/LEO-CRBIT/ETH-LEO/ETH@@abacbc",
+         "livecoin@@LEO/ETH-ETH/BTC-LEO/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@POSW/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-POSW/USD-POSW/BTC@@abcbca",
+         "livecoin@@LTC/BTC-POSW/BTC-POSW/LTC@@abcbca",
+         "livecoin@@POSW/BTC-DASH/BTC-POSW/DASH@@abcbac",
+         "livecoin@@POSW/BTC-ETH/BTC-POSW/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BCC/ETH",
+      "triList":
+      [
+         "livecoin@@BCC/USD-ETH/USD-BCC/ETH@@abcbac",
+         "livecoin@@BCC/ETH-ETH/BTC-BCC/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@MCO/BTC",
+      "triList":
+      [
+         "livecoin@@MCO/BTC-ETH/BTC-MCO/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@EMC/BTC",
+      "triList":
+      [
+         "livecoin@@EMC/DASH-EMC/BTC-DASH/BTC@@abacbc",
+         "livecoin@@EMC/BTC-ETH/BTC-EMC/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@UNY/LTC",
+      "triList":
+      [
+         "livecoin@@UNY/USD-LTC/USD-UNY/LTC@@abcbac",
+         "livecoin@@LTC/BTC-UNY/BTC-UNY/LTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@CRBIT/LEO",
+      "triList":
+      [
+         "livecoin@@CRBIT/LEO-CRBIT/ETH-LEO/ETH@@abacbc",
+         "livecoin@@CRBIT/LEO-LEO/BTC-CRBIT/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BQX/BTC",
+      "triList":
+      [
+         "livecoin@@BQX/ETH-BQX/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PUT/ETH",
+      "triList":
+      [
+         "livecoin@@PUT/ETH-PUT/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PRO/BTC",
+      "triList":
+      [
+         "livecoin@@PRO/ETH-PRO/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@LTC/USD",
+      "triList":
+      [
+         "livecoin@@UNY/USD-LTC/USD-UNY/LTC@@abcbac",
+         "livecoin@@LTC/USD-POSW/USD-POSW/LTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PIVX/BTC",
+      "triList":
+      [
+         "livecoin@@PIVX/BTC-BTC/USD-PIVX/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DMC/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-DMC/USD-DMC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BCH/BTC",
+      "triList":
+      [
+         "livecoin@@BCH/BTC-BTC/USD-BCH/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VIB/ETH",
+      "triList":
+      [
+         "livecoin@@VIB/ETH-VIB/USD-ETH/USD@@abacbc",
+         "livecoin@@VIB/ETH-VIB/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@CTR/ETH",
+      "triList":
+      [
+         "livecoin@@CTR/BTC-ETH/BTC-CTR/ETH@@abcbac",
+         "livecoin@@ETH/USD-CTR/USD-CTR/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ARC/BTC",
+      "triList":
+      [
+         "livecoin@@ARC/BTC-BTC/USD-ARC/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@EDR/USD",
+      "triList":
+      [
+         "livecoin@@EDR/BTC-BTC/USD-EDR/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@THS/ETH",
+      "triList":
+      [
+         "livecoin@@THS/USD-ETH/USD-THS/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@FRST/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-FRST/USD-FRST/BTC@@abcbca",
+         "livecoin@@FRST/ETH-ETH/BTC-FRST/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VIB/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-VIB/USD-VIB/BTC@@abcbca",
+         "livecoin@@VIB/ETH-VIB/USD-ETH/USD@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@YOC/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-YOC/USD-YOC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DASH/BTC",
+      "triList":
+      [
+         "livecoin@@EMC/DASH-EMC/BTC-DASH/BTC@@abacbc",
+         "livecoin@@POSW/BTC-DASH/BTC-POSW/DASH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@LSK/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-LSK/USD-LSK/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PIPL/ETH",
+      "triList":
+      [
+         "livecoin@@PIPL/ETH-PIPL/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@TRUMP/BTC",
+      "triList":
+      [
+         "livecoin@@TRUMP/ETH-ETH/BTC-TRUMP/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@MSCN/RUR",
+      "triList":
+      [
+         "livecoin@@BTC/RUR-MSCN/RUR-MSCN/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@POSW/ETH",
+      "triList":
+      [
+         "livecoin@@POSW/USD-ETH/USD-POSW/ETH@@abcbac",
+         "livecoin@@POSW/BTC-ETH/BTC-POSW/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@MSCN/USD",
+      "triList":
+      [
+         "livecoin@@MSCN/USD-BTC/USD-MSCN/BTC@@abcbac",
+         "livecoin@@MSCN/USD-ETH/USD-MSCN/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BQX/ETH",
+      "triList":
+      [
+         "livecoin@@BQX/ETH-BQX/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@MSCN/ETH",
+      "triList":
+      [
+         "livecoin@@MSCN/USD-ETH/USD-MSCN/ETH@@abcbac",
+         "livecoin@@MSCN/BTC-ETH/BTC-MSCN/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@HVN/ETH",
+      "triList":
+      [
+         "livecoin@@HVN/USD-ETH/USD-HVN/ETH@@abcbac",
+         "livecoin@@HVN/BTC-ETH/BTC-HVN/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@HNC/BTC",
+      "triList":
+      [
+         "livecoin@@HNC/BTC-HNC/EUR-BTC/EUR@@abacbc",
+         "livecoin@@HNC/BTC-ETH/BTC-HNC/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DIBC/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-DIBC/USD-DIBC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DIME/ETH",
+      "triList":
+      [
+         "livecoin@@DIME/ETH-ETH/RUR-DIME/RUR@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@SNGLS/BTC",
+      "triList":
+      [
+         "livecoin@@SNGLS/ETH-ETH/BTC-SNGLS/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DMC/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-DMC/USD-DMC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PUT/BTC",
+      "triList":
+      [
+         "livecoin@@PUT/ETH-PUT/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@THS/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-THS/USD-THS/BTC@@abcbca",
+         "livecoin@@THS/USD-ETH/USD-THS/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ARC/ETH",
+      "triList":
+      [
+         "livecoin@@ARC/ETH-ETH/USD-ARC/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DASH/USD",
+      "triList":
+      [
+         "livecoin@@EMC/DASH-EMC/USD-DASH/USD@@abacbc",
+         "livecoin@@POSW/USD-DASH/USD-POSW/DASH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@NVC/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-NVC/USD-NVC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@HVN/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-HVN/USD-HVN/BTC@@abcbca",
+         "livecoin@@HVN/USD-ETH/USD-HVN/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@HNC/EUR",
+      "triList":
+      [
+         "livecoin@@HNC/BTC-HNC/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DIME/RUR",
+      "triList":
+      [
+         "livecoin@@DIME/ETH-ETH/RUR-DIME/RUR@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DIBC/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-DIBC/USD-DIBC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@CTR/BTC",
+      "triList":
+      [
+         "livecoin@@CTR/BTC-ETH/BTC-CTR/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@SNGLS/ETH",
+      "triList":
+      [
+         "livecoin@@SNGLS/ETH-ETH/BTC-SNGLS/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ARC/USD",
+      "triList":
+      [
+         "livecoin@@ARC/BTC-BTC/USD-ARC/USD@@abbcac",
+         "livecoin@@ARC/ETH-ETH/USD-ARC/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@QAU/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-QAU/USD-QAU/BTC@@abcbca",
+         "livecoin@@QAU/ETH-ETH/BTC-QAU/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@NEO/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-NEO/USD-NEO/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VOISE/ETH",
+      "triList":
+      [
+         "livecoin@@VOISE/ETH-ETH/USD-VOISE/USD@@abbcac",
+         "livecoin@@VOISE/ETH-ETH/BTC-VOISE/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@MCO/ETH",
+      "triList":
+      [
+         "livecoin@@MCO/BTC-ETH/BTC-MCO/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@STRAT/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-STRAT/USD-STRAT/BTC@@abcbca",
+         "livecoin@@ETH/USD-STRAT/USD-STRAT/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@EDR/BTC",
+      "triList":
+      [
+         "livecoin@@EDR/BTC-BTC/USD-EDR/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DMD/ETH",
+      "triList":
+      [
+         "livecoin@@DMD/ETH-DMD/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@LSK/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-LSK/USD-LSK/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@QAU/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-QAU/USD-QAU/BTC@@abcbca",
+         "livecoin@@QAU/USD-ETH/USD-QAU/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@TAAS/BTC",
+      "triList":
+      [
+         "livecoin@@TAAS/BTC-BTC/USD-TAAS/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@RLT/BTC",
+      "triList":
+      [
+         "livecoin@@RLT/BTC-ETH/BTC-RLT/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BTC/USD",
+      "triList":
+      [
+         "livecoin@@PIVX/BTC-BTC/USD-PIVX/USD@@abbcac",
+         "livecoin@@EDR/BTC-BTC/USD-EDR/USD@@abbcac",
+         "livecoin@@ARC/BTC-BTC/USD-ARC/USD@@abbcac",
+         "livecoin@@TAAS/BTC-BTC/USD-TAAS/USD@@abbcac",
+         "livecoin@@MSCN/USD-BTC/USD-MSCN/BTC@@abcbac",
+         "livecoin@@BCH/BTC-BTC/USD-BCH/USD@@abbcac",
+         "livecoin@@BTC/USD-GNO/USD-GNO/BTC@@abcbca",
+         "livecoin@@BTC/USD-XMR/USD-XMR/BTC@@abcbca",
+         "livecoin@@BTC/USD-UNY/USD-UNY/BTC@@abcbca",
+         "livecoin@@BTC/USD-NEO/USD-NEO/BTC@@abcbca",
+         "livecoin@@BTC/USD-HVN/USD-HVN/BTC@@abcbca",
+         "livecoin@@BTC/USD-VIB/USD-VIB/BTC@@abcbca",
+         "livecoin@@BTC/USD-NVC/USD-NVC/BTC@@abcbca",
+         "livecoin@@BTC/USD-BCC/USD-BCC/BTC@@abcbca",
+         "livecoin@@BTC/USD-QAU/USD-QAU/BTC@@abcbca",
+         "livecoin@@BTC/USD-FRST/USD-FRST/BTC@@abcbca",
+         "livecoin@@BTC/USD-VRS/USD-VRS/BTC@@abcbca",
+         "livecoin@@BTC/USD-THS/USD-THS/BTC@@abcbca",
+         "livecoin@@BTC/USD-DIBC/USD-DIBC/BTC@@abcbca",
+         "livecoin@@BTC/USD-POSW/USD-POSW/BTC@@abcbca",
+         "livecoin@@BTC/USD-ETH/USD-ETH/BTC@@abcbca",
+         "livecoin@@BTC/USD-VOISE/USD-VOISE/BTC@@abcbca",
+         "livecoin@@BTC/USD-DMC/USD-DMC/BTC@@abcbca",
+         "livecoin@@BTC/USD-LSK/USD-LSK/BTC@@abcbca",
+         "livecoin@@BTC/USD-FUNC/USD-FUNC/BTC@@abcbca",
+         "livecoin@@BTC/USD-STRAT/USD-STRAT/BTC@@abcbca",
+         "livecoin@@BTC/USD-YOC/USD-YOC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@LEO/BTC",
+      "triList":
+      [
+         "livecoin@@CRBIT/LEO-LEO/BTC-CRBIT/BTC@@abbcac",
+         "livecoin@@LEO/ETH-ETH/BTC-LEO/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ENJ/ETH",
+      "triList":
+      [
+         "livecoin@@ENJ/ETH-ENJ/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@STRAT/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-STRAT/USD-STRAT/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@POSW/LTC",
+      "triList":
+      [
+         "livecoin@@LTC/BTC-POSW/BTC-POSW/LTC@@abcbca",
+         "livecoin@@LTC/USD-POSW/USD-POSW/LTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@GNO/ETH",
+      "triList":
+      [
+         "livecoin@@GNO/ETH-ETH/BTC-GNO/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@CTR/USD",
+      "triList":
+      [
+         "livecoin@@ETH/USD-CTR/USD-CTR/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@FUNC/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-FUNC/USD-FUNC/BTC@@abcbca",
+         "livecoin@@FUNC/ETH-FUNC/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@NVC/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-NVC/USD-NVC/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ETH/BTC",
+      "triList":
+      [
+         "livecoin@@SUMO/ETH-ETH/BTC-SUMO/BTC@@abbcac",
+         "livecoin@@HNC/BTC-ETH/BTC-HNC/ETH@@abcbac",
+         "livecoin@@BQX/ETH-BQX/BTC-ETH/BTC@@abacbc",
+         "livecoin@@BTC/USD-ETH/USD-ETH/BTC@@abcbca",
+         "livecoin@@VOISE/ETH-ETH/BTC-VOISE/BTC@@abbcac",
+         "livecoin@@WIC/ETH-ETH/BTC-WIC/BTC@@abbcac",
+         "livecoin@@CTR/BTC-ETH/BTC-CTR/ETH@@abcbac",
+         "livecoin@@RLT/BTC-ETH/BTC-RLT/ETH@@abcbac",
+         "livecoin@@VIB/ETH-VIB/BTC-ETH/BTC@@abacbc",
+         "livecoin@@CRBIT/ETH-ETH/BTC-CRBIT/BTC@@abbcac",
+         "livecoin@@GNO/ETH-ETH/BTC-GNO/BTC@@abbcac",
+         "livecoin@@EMC/BTC-ETH/BTC-EMC/ETH@@abcbac",
+         "livecoin@@FRST/ETH-ETH/BTC-FRST/BTC@@abbcac",
+         "livecoin@@QTUM/BTC-ETH/BTC-QTUM/ETH@@abcbac",
+         "livecoin@@DMD/ETH-DMD/BTC-ETH/BTC@@abacbc",
+         "livecoin@@PIPL/ETH-PIPL/BTC-ETH/BTC@@abacbc",
+         "livecoin@@MCO/BTC-ETH/BTC-MCO/ETH@@abcbac",
+         "livecoin@@FUNC/ETH-FUNC/BTC-ETH/BTC@@abacbc",
+         "livecoin@@ENJ/ETH-ENJ/BTC-ETH/BTC@@abacbc",
+         "livecoin@@SNGLS/ETH-ETH/BTC-SNGLS/BTC@@abbcac",
+         "livecoin@@POSW/BTC-ETH/BTC-POSW/ETH@@abcbac",
+         "livecoin@@PUT/ETH-PUT/BTC-ETH/BTC@@abacbc",
+         "livecoin@@PRO/ETH-PRO/BTC-ETH/BTC@@abacbc",
+         "livecoin@@HVN/BTC-ETH/BTC-HVN/ETH@@abcbac",
+         "livecoin@@QAU/ETH-ETH/BTC-QAU/BTC@@abbcac",
+         "livecoin@@BCC/ETH-ETH/BTC-BCC/BTC@@abbcac",
+         "livecoin@@LEO/ETH-ETH/BTC-LEO/BTC@@abbcac",
+         "livecoin@@TRUMP/ETH-ETH/BTC-TRUMP/BTC@@abbcac",
+         "livecoin@@MSCN/BTC-ETH/BTC-MSCN/ETH@@abcbac",
+         "livecoin@@ETH/BTC-UNY/BTC-UNY/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@CRBIT/ETH",
+      "triList":
+      [
+         "livecoin@@CRBIT/LEO-CRBIT/ETH-LEO/ETH@@abacbc",
+         "livecoin@@CRBIT/ETH-ETH/BTC-CRBIT/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@GNO/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-GNO/USD-GNO/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@MSCN/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/RUR-MSCN/RUR-MSCN/BTC@@abcbca",
+         "livecoin@@MSCN/USD-BTC/USD-MSCN/BTC@@abcbac",
+         "livecoin@@MSCN/BTC-ETH/BTC-MSCN/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@UNY/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-UNY/USD-UNY/BTC@@abcbca",
+         "livecoin@@LTC/BTC-UNY/BTC-UNY/LTC@@abcbca",
+         "livecoin@@ETH/BTC-UNY/BTC-UNY/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BTC/RUR",
+      "triList":
+      [
+         "livecoin@@BTC/RUR-MSCN/RUR-MSCN/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@HVN/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-HVN/USD-HVN/BTC@@abcbca",
+         "livecoin@@HVN/BTC-ETH/BTC-HVN/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@HNC/ETH",
+      "triList":
+      [
+         "livecoin@@HNC/BTC-ETH/BTC-HNC/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@UNY/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-UNY/USD-UNY/BTC@@abcbca",
+         "livecoin@@UNY/USD-LTC/USD-UNY/LTC@@abcbac",
+         "livecoin@@UNY/USD-ETH/USD-UNY/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@EMC/USD",
+      "triList":
+      [
+         "livecoin@@EMC/DASH-EMC/USD-DASH/USD@@abacbc",
+         "livecoin@@ETH/USD-EMC/USD-EMC/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@QAU/ETH",
+      "triList":
+      [
+         "livecoin@@QAU/USD-ETH/USD-QAU/ETH@@abcbac",
+         "livecoin@@QAU/ETH-ETH/BTC-QAU/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@XMR/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-XMR/USD-XMR/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@FUNC/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-FUNC/USD-FUNC/BTC@@abcbca",
+         "livecoin@@FUNC/ETH-ETH/USD-FUNC/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@SUMO/ETH",
+      "triList":
+      [
+         "livecoin@@SUMO/ETH-ETH/BTC-SUMO/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VOISE/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-VOISE/USD-VOISE/BTC@@abcbca",
+         "livecoin@@VOISE/ETH-ETH/BTC-VOISE/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@NEO/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-NEO/USD-NEO/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@DMD/BTC",
+      "triList":
+      [
+         "livecoin@@DMD/ETH-DMD/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@WIC/BTC",
+      "triList":
+      [
+         "livecoin@@WIC/ETH-ETH/BTC-WIC/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@RLT/ETH",
+      "triList":
+      [
+         "livecoin@@RLT/BTC-ETH/BTC-RLT/ETH@@abcbac",
+         "livecoin@@RLT/USD-ETH/USD-RLT/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@TRUMP/ETH",
+      "triList":
+      [
+         "livecoin@@TRUMP/ETH-ETH/BTC-TRUMP/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VRS/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-VRS/USD-VRS/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ENJ/BTC",
+      "triList":
+      [
+         "livecoin@@ENJ/ETH-ENJ/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BCH/ETH",
+      "triList":
+      [
+         "livecoin@@BCH/USD-ETH/USD-BCH/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@EMC/ETH",
+      "triList":
+      [
+         "livecoin@@EMC/BTC-ETH/BTC-EMC/ETH@@abcbac",
+         "livecoin@@ETH/USD-EMC/USD-EMC/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PIVX/USD",
+      "triList":
+      [
+         "livecoin@@PIVX/BTC-BTC/USD-PIVX/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BTC/EUR",
+      "triList":
+      [
+         "livecoin@@HNC/BTC-HNC/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@VOISE/USD",
+      "triList":
+      [
+         "livecoin@@BTC/USD-VOISE/USD-VOISE/BTC@@abcbca",
+         "livecoin@@VOISE/ETH-ETH/USD-VOISE/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BCC/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-BCC/USD-BCC/BTC@@abcbca",
+         "livecoin@@BCC/ETH-ETH/BTC-BCC/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@TAAS/USD",
+      "triList":
+      [
+         "livecoin@@TAAS/BTC-BTC/USD-TAAS/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@EMC/DASH",
+      "triList":
+      [
+         "livecoin@@EMC/DASH-EMC/BTC-DASH/BTC@@abacbc",
+         "livecoin@@EMC/DASH-EMC/USD-DASH/USD@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@RLT/USD",
+      "triList":
+      [
+         "livecoin@@RLT/USD-ETH/USD-RLT/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@BCH/USD",
+      "triList":
+      [
+         "livecoin@@BCH/BTC-BTC/USD-BCH/USD@@abbcac",
+         "livecoin@@BCH/USD-ETH/USD-BCH/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@UNY/ETH",
+      "triList":
+      [
+         "livecoin@@UNY/USD-ETH/USD-UNY/ETH@@abcbac",
+         "livecoin@@ETH/BTC-UNY/BTC-UNY/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@STRAT/ETH",
+      "triList":
+      [
+         "livecoin@@ETH/USD-STRAT/USD-STRAT/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ETH/RUR",
+      "triList":
+      [
+         "livecoin@@DIME/ETH-ETH/RUR-DIME/RUR@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@GNO/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-GNO/USD-GNO/BTC@@abcbca",
+         "livecoin@@GNO/ETH-ETH/BTC-GNO/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@XMR/BTC",
+      "triList":
+      [
+         "livecoin@@BTC/USD-XMR/USD-XMR/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@ETH/USD",
+      "triList":
+      [
+         "livecoin@@MSCN/USD-ETH/USD-MSCN/ETH@@abcbac",
+         "livecoin@@BTC/USD-ETH/USD-ETH/BTC@@abcbca",
+         "livecoin@@VOISE/ETH-ETH/USD-VOISE/USD@@abbcac",
+         "livecoin@@VIB/ETH-VIB/USD-ETH/USD@@abacbc",
+         "livecoin@@UNY/USD-ETH/USD-UNY/ETH@@abcbac",
+         "livecoin@@ARC/ETH-ETH/USD-ARC/USD@@abbcac",
+         "livecoin@@BCH/USD-ETH/USD-BCH/ETH@@abcbac",
+         "livecoin@@FRST/ETH-FRST/USD-ETH/USD@@abacbc",
+         "livecoin@@HVN/USD-ETH/USD-HVN/ETH@@abcbac",
+         "livecoin@@RLT/USD-ETH/USD-RLT/ETH@@abcbac",
+         "livecoin@@BCC/USD-ETH/USD-BCC/ETH@@abcbac",
+         "livecoin@@QAU/USD-ETH/USD-QAU/ETH@@abcbac",
+         "livecoin@@FUNC/ETH-ETH/USD-FUNC/USD@@abbcac",
+         "livecoin@@THS/USD-ETH/USD-THS/ETH@@abcbac",
+         "livecoin@@POSW/USD-ETH/USD-POSW/ETH@@abcbac",
+         "livecoin@@ETH/USD-EMC/USD-EMC/ETH@@abcbca",
+         "livecoin@@ETH/USD-STRAT/USD-STRAT/ETH@@abcbca",
+         "livecoin@@ETH/USD-CTR/USD-CTR/ETH@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@FUNC/ETH",
+      "triList":
+      [
+         "livecoin@@FUNC/ETH-ETH/USD-FUNC/USD@@abbcac",
+         "livecoin@@FUNC/ETH-FUNC/BTC-ETH/BTC@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@QTUM/ETH",
+      "triList":
+      [
+         "livecoin@@QTUM/BTC-ETH/BTC-QTUM/ETH@@abcbac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@CRBIT/BTC",
+      "triList":
+      [
+         "livecoin@@CRBIT/LEO-LEO/BTC-CRBIT/BTC@@abbcac",
+         "livecoin@@CRBIT/ETH-ETH/BTC-CRBIT/BTC@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"livecoin@@PRO/ETH",
+      "triList":
+      [
+         "livecoin@@PRO/ETH-PRO/BTC-ETH/BTC@@abacbc"
+      ]
+
+   }
+
+]

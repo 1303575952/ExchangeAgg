@@ -60,6 +60,66 @@
       "exchangeB":"livecoin_BTC/USD"
    },
    {
+      "pair":"ETH/CASH",
+      "exchangeA":"bitfinex_ETH/USD",
+      "exchangeB":"bitstamp_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"bitfinex_ETH/USD",
+      "exchangeB":"livecoin_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"bitfinex_ETH/USD",
+      "exchangeB":"cex-io_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"bitstamp_ETH/USD",
+      "exchangeB":"bitfinex_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"bitstamp_ETH/USD",
+      "exchangeB":"livecoin_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"bitstamp_ETH/USD",
+      "exchangeB":"cex-io_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"livecoin_ETH/USD",
+      "exchangeB":"bitfinex_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"livecoin_ETH/USD",
+      "exchangeB":"bitstamp_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"livecoin_ETH/USD",
+      "exchangeB":"cex-io_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"cex-io_ETH/USD",
+      "exchangeB":"bitfinex_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"cex-io_ETH/USD",
+      "exchangeB":"bitstamp_ETH/USD"
+   },
+   {
+      "pair":"ETH/CASH",
+      "exchangeA":"cex-io_ETH/USD",
+      "exchangeB":"livecoin_ETH/USD"
+   },
+   {
       "pair":"ETH/BTC",
       "exchangeA":"bitfinex",
       "exchangeB":"bitstamp"

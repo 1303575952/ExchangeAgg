@@ -128,10 +128,7 @@ public class TickerStandardFormat {
 				"\",\"mid\":\"" + mid +
 				"\",\"bid\":\"" + bid +
 				"\",\"ask\":\"" + ask +
-				"\",\"last_price\":\"" + lastPrice +
-				"\",\"low\":\"" + low +
-				"\",\"high\":\"" + high +
-				"\",\"volume\":\"" + volume +				
+				"\",\"last_price\":\"" + lastPrice +			
 				"\"}";
 		return s1.hashCode();
 	}

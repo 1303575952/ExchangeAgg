@@ -5,6 +5,7 @@
       [
          "BTC/USD",         
          "ETH/BTC",
+		 "ETH/USD",
       ]
    }, 
   {
@@ -13,6 +14,7 @@
       [
          "BTC/USD",         
          "ETH/BTC",
+		 "ETH/USD",
       ]
    },
    {
@@ -21,6 +23,7 @@
       [
          "BTC/USD",         
          "ETH/BTC",
+		 "ETH/USD",
       ]
    },
    {
@@ -29,6 +32,7 @@
       [
          "BTC/USD",
          "ETH/BTC",
+		 "ETH/USD",
       ]
    }
 ]

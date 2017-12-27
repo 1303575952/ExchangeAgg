@@ -10,6 +10,10 @@
             {
                 "pairName": "ETH_BTC",
                 "pairPath": "api/v2/ticker/ethbtc"
+            },
+            {
+                "pairName": "ETH_USD",
+                "pairPath": "api/v2/ticker/ethusd"
             }
         ]
     },
@@ -24,6 +28,10 @@
             {
                 "pairName": "ETH_BTC",
                 "pairPath": "exchange/ticker?currencyPair=ETH/BTC"
+            },
+            {
+                "pairName": "ETH_USD",
+                "pairPath": "exchange/ticker?currencyPair=ETH/USD"
             }
         ]
     },
@@ -39,6 +47,26 @@
          {
 		 "pairName": "ETH_BTC",
 		 "pairPath": "api/ticker/ETH/BTC"
+		 },
+         {
+		 "pairName": "ETH_USD",
+		 "pairPath": "api/ticker/ETH/USD"
+		 },
+         {
+		 "pairName": "BCH_BTC",
+		 "pairPath": "api/ticker/BCH/BTC"
+		 },
+         {
+		 "pairName": "BCH_USD",
+		 "pairPath": "api/ticker/BCH/USD"
+		 },
+         {
+		 "pairName": "DASH_USD",
+		 "pairPath": "api/ticker/DASH/USD"
+		 },
+         {
+		 "pairName": "DASH_BTC",
+		 "pairPath": "api/ticker/DASH/BTC"
 		 }
 	  ]
    },
@@ -54,6 +82,10 @@
          {
 		 "pairName": "ETH_BTC",
 		 "pairPath": "v1/pubticker/ETHBTC"
+		 },
+         {
+		 "pairName": "ETH_USD",
+		 "pairPath": "v1/pubticker/ETHUSD"
 		 }
 	  ]
    }

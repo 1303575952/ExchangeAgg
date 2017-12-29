@@ -11,13 +11,15 @@ public class CashExchange {
 	private static Logger logger = Logger.getLogger(CashExchange.class);
 	public Map<String, Double> priceToUSD = new HashMap<String, Double>();
 	public CashExchange(){
+		priceToUSD.put("cad", 0.7813);
 		priceToUSD.put("cny", 0.1512);
-		priceToUSD.put("usd", 1.0);
+		priceToUSD.put("eur", 1.1941);
 		priceToUSD.put("jpy", 0.008892);
-		priceToUSD.put("usdt", 1.0);
 		priceToUSD.put("mxn", 0.05259);
 		priceToUSD.put("pln", 0.2776);
-		priceToUSD.put("cad", 0.7813);
+		priceToUSD.put("usd", 1.0);
+		priceToUSD.put("usdt", 1.0);
+		priceToUSD.put("krw", 0.000939);
 	}
 	public Double toUSD(String cashType, Double amount){
 		logger.info(cashType);

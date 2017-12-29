@@ -10,7 +10,7 @@ public class CoinCashCommon {
 	public static HashSet<String> cashSet = new HashSet<String>();
 
 	public static HashSet<String> getCoinSet(){
-		
+		coinSet.add("IOTA");
 		coinSet.add("AHT");
 		coinSet.add("ARN");
 		coinSet.add("BCC");
@@ -77,7 +77,8 @@ public class CoinCashCommon {
 		coinSet.add("XRP");
 		coinSet.add("ZEC");
 		coinSet.add("ZRC");
-		
+		coinSet.add("NXT");
+		coinSet.add("BTG");
 		return coinSet;
 	}
 	public static HashSet<String> getCashSet(){
@@ -90,6 +91,8 @@ public class CoinCashCommon {
 		cashSet.add("PLN");
 		cashSet.add("USD");
 		cashSet.add("USDT");
+		cashSet.add("KRW");
 		return cashSet;
 	}
 }
+

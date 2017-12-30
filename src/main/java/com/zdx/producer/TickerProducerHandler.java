@@ -3,6 +3,7 @@ package com.zdx.producer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
@@ -11,7 +12,13 @@ import org.apache.rocketmq.client.producer.MessageQueueSelector;
 import org.apache.rocketmq.common.message.Message;
 import org.apache.rocketmq.common.message.MessageQueue;
 import org.apache.rocketmq.remoting.exception.RemotingException;
+import org.influxdb.InfluxDB;
+import org.influxdb.InfluxDBFactory;
+import org.influxdb.dto.Point;
+import org.influxdb.dto.Query;
+import org.influxdb.dto.QueryResult;
 
+import com.zdx.common.DataFormat;
 import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerStandardFormat;
 import com.zdx.demo.ToyConsumer;
@@ -40,8 +47,22 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 		} else if (res.getStatusCodeInt() != 200){
 			failedTickerMap.put(url,"StatusNot200");
 			return;
-		} else if (res.getStatusCodeInt() == 200){			
+		} else if (res.getStatusCodeInt() == 200){
+
 			logger.debug("====================Begin Handle Message====================");
+			String influxURL = (String)responseContext.get("influxURL");
+			String influxDbName = (String)responseContext.get("influxDbName");
+			String influxRpName = (String)responseContext.get("influxRpName");
+			InfluxDB influxDB = InfluxDBFactory.connect(influxURL);
+			if (!influxDB.databaseExists(influxDbName)){
+				logger.debug("==================================================================Database" + influxDbName + " not Exist");
+				influxDB.createDatabase(influxDbName);
+			}
+			influxDB.setDatabase(influxDbName);
+			influxDB.createRetentionPolicy(influxRpName, influxDbName, "30d", "30m", 2, true);
+
+
+
 			TickerStandardFormat tsf = new TickerStandardFormat();
 			String host = res.getRequest().getHostUniform();
 			String exchangeName = hostMap.get(host);
@@ -68,6 +89,30 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			logger.debug((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode)));
 			if ((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode))){
 				failedTickerMap.put(url, "code=" + hashCode);
+
+				String tableName = DataFormat.removeShortTerm(tsf.exchangeName);
+				Point point1 = Point.measurement(tableName)
+						.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+						.addField("exchangeName", tsf.exchangeName)	
+						.tag("coinA", tsf.coinA)
+						.tag("coinB", tsf.coinB)
+						.addField("bid", tsf.bid)
+						.addField("ask", tsf.ask)
+						.addField("low", tsf.low)
+						.addField("high", tsf.high)
+						.addField("midUSD", tsf.midUSD)
+						.build();
+				influxDB.write(influxDbName, influxRpName, point1);
+				Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", influxDbName);
+				QueryResult result = influxDB.query(query);
+				if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true){
+					logger.debug("===========================InfluxDB Insert Failed=======================================");
+					influxDB.close();
+					influxDB = InfluxDBFactory.connect(influxURL);
+				} else {
+					logger.debug("===========================InfluxDB Insert Sucess=======================================");
+				}
+
 				try {
 					Message msg = new Message();
 					msg.setTopic("ticker_" + tsf.exchangeName.toLowerCase());
@@ -86,6 +131,8 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 							return mqs.get(index);
 						}
 					}, id);
+
+
 				} catch (MQClientException e) {
 					logger.info("Exception1 ==================================================================");
 					e.printStackTrace();

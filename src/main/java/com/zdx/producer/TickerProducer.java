@@ -9,9 +9,11 @@ import java.util.Map.Entry;
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
+import org.influxdb.InfluxDB;
 
 import com.zdx.common.JsonFormatTool;
 import com.zdx.common.LoadConfig;
+import com.zdx.db.InfluxDBHandler;
 import com.zdx.rocketmq.TickerConfInfo;
 
 import io.parallec.core.ParallelClient;
@@ -34,6 +36,11 @@ public class TickerProducer {
 	static String tickerInfoPath = "";
 	static String producerGroup = "";
 
+	public static String influxURL = "";
+	public static String influxDbName = "";
+	public static String influxRpName = "";
+
+
 	public static void main(String[] args) throws InterruptedException {
 		if (args.length == 0) {
 			System.err.println("Please input configuration file");
@@ -50,7 +57,14 @@ public class TickerProducer {
 		serverUrl = String.valueOf(tickerConf.get("GatewayURL"));
 		tickerInfoPath = String.valueOf(tickerConf.get("TickerInfoPath"));
 		producerGroup = String.valueOf(tickerConf.get("producerGroup"));
-
+		
+		
+		logger.info("-------------InfluxDB Connection---------------");
+		influxURL = String.valueOf(tickerConf.get("InfluxDBURL"));
+		influxDbName = String.valueOf(tickerConf.get("InfluxDbName"));
+		influxRpName = String.valueOf(tickerConf.get("InfluxRpName"));
+		logger.info("-------------InfluxDB Connection---------------");
+		
 		TickerConfInfo tcConf = LoadConfig.loadTickerConf(tickerInfoPath );
 		targetHosts = tcConf.targetHosts;
 		replaceLists = tcConf.replaceLists;
@@ -82,6 +96,9 @@ public class TickerProducer {
 		RESPONSE_CONTEXT.put("producer", producer);
 		RESPONSE_CONTEXT.put("hostMap", hostMap);
 		RESPONSE_CONTEXT.put("pathMap", pathMap);
+		RESPONSE_CONTEXT.put("influxURL", influxURL);
+		RESPONSE_CONTEXT.put("influxDbName", influxDbName);
+		RESPONSE_CONTEXT.put("influxRpName", influxRpName);
 		while (true){
 			oneFullBathWithoutRetry();
 			try {

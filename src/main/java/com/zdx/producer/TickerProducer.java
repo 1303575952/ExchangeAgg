@@ -13,7 +13,7 @@ import org.influxdb.InfluxDB;
 
 import com.zdx.common.JsonFormatTool;
 import com.zdx.common.LoadConfig;
-import com.zdx.db.InfluxDBHandler;
+
 import com.zdx.rocketmq.TickerConfInfo;
 
 import io.parallec.core.ParallelClient;

@@ -155,9 +155,11 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 					if (ep.sellExchangeName.equals(tsf.exchangeName.toLowerCase())){
 						ep.bid1 = tsf.bid;
 						ep.ask1 = tsf.ask;
+						ep.sellPath = pair;
 					} else if (ep.buyExchangeName.equals(tsf.exchangeName.toLowerCase())){
 						ep.bid2 = tsf.bid;
 						ep.ask2 = tsf.ask;
+						ep.buyPath = pair;
 					}
 					if (ep.ask2 > 0.0 && ep.ask1 > 0.0){
 						ep.priceDiff = ep.bid1 / ep.ask2 - 1.0;

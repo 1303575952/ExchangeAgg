@@ -118,6 +118,8 @@ public class TickerStandardFormat {
 		}
 		return this;
 	}
+	
+
 
 	public int hashCodeWithoutTimeStamp(){
 		String s1 = "{\"exchangeName\":\"" + exchangeName + 

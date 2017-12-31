@@ -1,4 +1,4 @@
-package com.zdx.rocketmq;
+package com.zdx.test;
 import java.net.URI;
 import java.net.URISyntaxException;
 

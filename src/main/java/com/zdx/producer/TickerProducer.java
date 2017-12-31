@@ -14,8 +14,6 @@ import org.influxdb.InfluxDB;
 import com.zdx.common.JsonFormatTool;
 import com.zdx.common.LoadConfig;
 
-import com.zdx.rocketmq.TickerConfInfo;
-
 import io.parallec.core.ParallelClient;
 import io.parallec.core.ParallelTaskBuilder;
 import io.parallec.core.RequestProtocol;
@@ -24,22 +22,11 @@ public class TickerProducer {
 	private static Logger logger = Logger.getLogger(TickerProducer.class);
 	final static HashMap<String, String> FAILED_TICKER_MAP = new HashMap<String, String>();
 	final static HashMap<String, Object> RESPONSE_CONTEXT = new HashMap<String, Object>();
-	final static long START_TIME = System.currentTimeMillis();	
-	private static Map<Object, Object> tickerConf = new HashMap<Object, Object>();
-	static List<String> targetHosts = new ArrayList<String>();
-	static List<List<String>> replaceLists = new ArrayList<List<String>>();
-	static Map<String, String> hostMap = new HashMap<String, String>();
-	static Map<String, String> pathMap = new HashMap<String, String>();
-	static ArrayList<String> tickerNames = new ArrayList<String>();
+	final static long START_TIME = System.currentTimeMillis();
+
 	static ArrayList<String> tickerNamesLeft = new ArrayList<String>();
-	static String serverUrl = "";
-	static String tickerInfoPath = "";
-	static String producerGroup = "";
 
-	public static String influxURL = "";
-	public static String influxDbName = "";
-	public static String influxRpName = "";
-
+	public static TickerProducerConf tpConf = new TickerProducerConf();
 
 	public static void main(String[] args) throws InterruptedException {
 		if (args.length == 0) {
@@ -47,58 +34,26 @@ public class TickerProducer {
 			System.exit(-1);
 		}
 		String confPath = args[0];
-		logger.info("confPath:"+confPath);
-		loadConf(confPath);
+		TickerProducerConf.loadConfigFromFile(confPath);
 		execute();
 	}
 
-	public static void loadConf(String tickerConfPath){
-		tickerConf = LoadConfig.loadConf(tickerConfPath);
-		serverUrl = String.valueOf(tickerConf.get("GatewayURL"));
-		tickerInfoPath = String.valueOf(tickerConf.get("TickerInfoPath"));
-		producerGroup = String.valueOf(tickerConf.get("producerGroup"));
-		
-		
-		logger.info("-------------InfluxDB Connection---------------");
-		influxURL = String.valueOf(tickerConf.get("InfluxDBURL"));
-		influxDbName = String.valueOf(tickerConf.get("InfluxDbName"));
-		influxRpName = String.valueOf(tickerConf.get("InfluxRpName"));
-		logger.info("-------------InfluxDB Connection---------------");
-		
-		TickerConfInfo tcConf = LoadConfig.loadTickerConf(tickerInfoPath );
-		targetHosts = tcConf.targetHosts;
-		replaceLists = tcConf.replaceLists;
-		hostMap = tcConf.exchangeSymbolMap;
-		pathMap = tcConf.pathSymbolMap;
-		for (int i = 0; i < targetHosts.size(); i ++){
-			String host = targetHosts.get(i);
-			List<String> urls = replaceLists.get(i);
-			for (String url : urls){
-				tickerNames.add(host + "/" + url);
-			}
-		}
-		logger.info("-------------1---------------");
-		logger.info(tickerNames.toString());
-		logger.info("-------------2---------------");
-	}
-
 	public static void execute() throws InterruptedException{
-		DefaultMQProducer producer = new DefaultMQProducer(producerGroup);		
-		producer.setNamesrvAddr(serverUrl);		
+		DefaultMQProducer producer = new DefaultMQProducer(TickerProducerConf.producerGroup);		
+		producer.setNamesrvAddr(TickerProducerConf.serverUrl);		
 		try {
 			producer.start();
-
 			//FileHandler.writeFile(destDir + File.separator + "failed.json", failedToString());
 			//producer.shutdown();
 		} catch (MQClientException e) {
 			e.printStackTrace();
 		}
 		RESPONSE_CONTEXT.put("producer", producer);
-		RESPONSE_CONTEXT.put("hostMap", hostMap);
-		RESPONSE_CONTEXT.put("pathMap", pathMap);
-		RESPONSE_CONTEXT.put("influxURL", influxURL);
-		RESPONSE_CONTEXT.put("influxDbName", influxDbName);
-		RESPONSE_CONTEXT.put("influxRpName", influxRpName);
+		RESPONSE_CONTEXT.put("hostMap", TickerProducerConf.exchangeSymbolMap);
+		RESPONSE_CONTEXT.put("pathMap", TickerProducerConf.pathSymbolMap);
+		RESPONSE_CONTEXT.put("influxURL", TickerProducerConf.influxURL);
+		RESPONSE_CONTEXT.put("influxDbName", TickerProducerConf.influxDbName);
+		RESPONSE_CONTEXT.put("influxRpName", TickerProducerConf.influxRpName);
 		while (true){
 			oneFullBathWithoutRetry();
 			try {
@@ -110,7 +65,7 @@ public class TickerProducer {
 		}
 	}
 	public static void oneFullBathWithoutRetry(){
-		oneBatch(targetHosts, replaceLists);
+		oneBatch(TickerProducerConf.targetHosts, TickerProducerConf.replaceLists);
 	}
 
 	public static void oneFullBathWithRetry(){
@@ -119,12 +74,12 @@ public class TickerProducer {
 		while (!done){
 			List<String> targetHostsLeft = new ArrayList<String>();
 			List<List<String>> replaceListsLeft = new ArrayList<List<String>>();
-			for (int i = 0; i < targetHosts.size(); i ++){
-				String host = targetHosts.get(i);
-				List<String> urls = replaceLists.get(i);
+			for (int i = 0; i < TickerProducerConf.targetHosts.size(); i ++){
+				String host = TickerProducerConf.targetHosts.get(i);
+				List<String> urls = TickerProducerConf.replaceLists.get(i);
 				List<String> replaceListsLeft2 = new ArrayList<String>();
 				for (String url : urls){
-					tickerNames.add(host + "/" + url);
+					TickerProducerConf.tickerNames.add(host + "/" + url);
 					String key = host + "/" + url;
 					String status = FAILED_TICKER_MAP.get(key);
 					if (!FAILED_TICKER_MAP.containsKey(key) || !(status.contains("code") || "OtherError".equals(status)) ){

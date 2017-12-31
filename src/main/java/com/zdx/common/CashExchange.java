@@ -23,7 +23,7 @@ public class CashExchange {
 	}
 	public Double toUSD(String cashType, Double amount){
 		cashType = cashType.toUpperCase();
-		logger.info(cashType);
+		//logger.info(cashType);
 		if (priceToUSD.containsKey(cashType)){
 			return priceToUSD.get(cashType) * amount;
 		} else {

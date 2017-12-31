@@ -20,7 +20,7 @@ import com.zdx.common.LoadConfig;
 
 
 public class PairTopology {
-	
+
 	private static Map<Object, Object> conf = new HashMap<Object, Object>();
 
 	private static Logger logger = Logger.getLogger(PairTopology.class);
@@ -31,8 +31,8 @@ public class PairTopology {
 			System.err.println("Please input configuration file");
 			System.exit(-1);
 		}
-		conf = LoadConfig.loadConf(args[0]);
-
+		PairStormConf pcConf = new PairStormConf();
+		conf = pcConf.loadConfigFromFile(args[0]);
 		TopologyBuilder builder = setupBuilder();
 
 		submitTopology(builder);

@@ -21,7 +21,6 @@ import org.influxdb.dto.QueryResult;
 import com.zdx.common.DataFormat;
 import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerStandardFormat;
-import com.zdx.demo.ToyConsumer;
 
 import io.parallec.core.ParallecResponseHandler;
 import io.parallec.core.ResponseOnSingleTask;
@@ -40,15 +39,16 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 		String hostName = res.getRequest().getHostUniform();
 		String pathName = res.getRequest().getResourcePath();
 		String url = hostName + pathName;
-		logger.info("url == " + url);
+		logger.info("Fetch URL= " + url);
 		if (res.getError()){
+			logger.warn("Parallec Fetch error. API Response = "+res);
 			failedTickerMap.put(url,"ParallecError");
 			return;
 		} else if (res.getStatusCodeInt() != 200){
+			logger.warn("Parallec Fetch StatusNot200. API Response = "+res);
 			failedTickerMap.put(url,"StatusNot200");
 			return;
 		} else if (res.getStatusCodeInt() == 200){
-
 			logger.debug("====================Begin Handle Message====================");
 			String influxURL = (String)responseContext.get("influxURL");
 			String influxDbName = (String)responseContext.get("influxDbName");
@@ -73,20 +73,17 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			tsf.coinB = coinAB[1];
 			TickerFormat.format(res.getResponseContent(), exchangeName, tsf);
 
-			logger.debug("======API host="+host);
-			logger.debug("======API path="+path);
 
 			int hashCode = tsf.hashCodeWithoutTimeStamp();
 
+			logger.debug("======API host="+host);
+			logger.debug("======API path="+path);
 			logger.debug("======API Response="+res);			
-			logger.debug("======TickerInfo="+tsf.toJsonString());
+			logger.info("TickerInfo="+tsf.toJsonString());
 			String hashCodeOld = "";
 			if (failedTickerMap.containsKey(url)){
 				hashCodeOld = failedTickerMap.get(url);
 			}
-			logger.debug("======hashCodeOld=:"+hashCodeOld);
-			logger.debug("======hashCode= " + hashCode);
-			logger.debug((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode)));
 			if ((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode))){
 				failedTickerMap.put(url, "code=" + hashCode);
 
@@ -133,19 +130,17 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 					}, id);
 
 
-				} catch (MQClientException e) {
-					logger.info("Exception1 ==================================================================");
-					e.printStackTrace();
-				} catch (RemotingException e) {
-					logger.info("Exception2 ==================================================================");
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					logger.info("Exception3 ==================================================================");
-					e.printStackTrace();				
+				} catch (MQClientException e1) {
+					logger.info("MQClientException Exception1 ==================================================================" + e1.getMessage());
+				} catch (RemotingException e2) {
+					logger.info("RemotingException Exception2 ==================================================================" + e2.getMessage());
+				} catch (InterruptedException e3) {
+					logger.info("InterruptedException Exception3 ==================================================================" + e3.getMessage());
 				}
 			}
 			logger.debug("====================End Handle Message====================");
 		} else {
+			logger.warn("Parallec Fetch Unkonw error. API Response = "+res);
 			failedTickerMap.put(url,"OtherError");
 			return;
 		}

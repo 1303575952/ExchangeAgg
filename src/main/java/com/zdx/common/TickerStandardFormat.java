@@ -47,12 +47,10 @@ public class TickerStandardFormat {
 	}
 
 	public TickerStandardFormat setExchangeType(){
-		logger.info("setExchangeType");
 		if (this.coinB.isEmpty()){
-			logger.info("coinB is empty");
+			logger.debug("coinB is empty");
 			return this;
 		} else {
-			logger.info("coinB is not empty");
 			if (CoinCashCommon.getCashSet().contains(this.coinB)){
 				this.exchangeType = "coin2cash";
 			} else {

@@ -9,6 +9,7 @@ public class CoinCashCommon {
 	public static HashSet<String> coinSet = new HashSet<String>();
 	public static HashSet<String> cashSet = new HashSet<String>();
 
+
 	public static HashSet<String> getCoinSet(){
 		coinSet.add("IOTA");
 		coinSet.add("AHT");
@@ -78,9 +79,10 @@ public class CoinCashCommon {
 		coinSet.add("ZEC");
 		coinSet.add("ZRC");
 		coinSet.add("NXT");
-		coinSet.add("BTG");
+		coinSet.add("BTG");	
 		return coinSet;
 	}
+	
 	public static HashSet<String> getCashSet(){
 		
 		cashSet.add("CAD");
@@ -92,6 +94,17 @@ public class CoinCashCommon {
 		cashSet.add("USD");
 		cashSet.add("USDT");
 		cashSet.add("KRW");
+		cashSet.add("USD");
+		cashSet.add("USDT");
+		cashSet.add("KRW");
+		cashSet.add("BRL");
+		cashSet.add("GBP");
+		cashSet.add("ZAR");
+		cashSet.add("AUD");
+		cashSet.add("THB");
+		cashSet.add("TRY");
+		cashSet.add("IDR");
+		cashSet.add("RUB");
 		return cashSet;
 	}
 }

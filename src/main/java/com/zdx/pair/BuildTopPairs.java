@@ -15,6 +15,7 @@ import java.util.Map.Entry;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.zdx.common.CoinCashCommon;
 import com.zdx.common.FileHandler;
 import com.zdx.common.JsonFormatTool;
 
@@ -93,34 +94,16 @@ public class BuildTopPairs {
 	}
 
 	public void buildTopVol100MPairFile(String filePath){
-		HashMap<String, HashSet<String>> topVol100MMap = loadTopVol100MSetFromFile(filePath);
-		HashSet<String> cashSet = buildCashSet();
-		HashMap<String, ArrayList<String>> pairExchangeMap = buildpairExchangeMap(topVol100MMap, cashSet);
+		HashMap<String, HashSet<String>> topVol100MMap = loadTopVol100MSetFromFile(filePath);		
+		HashMap<String, ArrayList<String>> pairExchangeMap = buildpairExchangeMap(topVol100MMap);
 		HashMap<String, ArrayList<String>> pairExchangePairMap = buildTopVol100MPair(pairExchangeMap);
 		FileHandler.writeFile(filePath.substring(0, filePath.lastIndexOf(File.separator) + 1)+ "toyTopVol100MPair.json", topVol100MPairToString(pairExchangePairMap));
 	}
 
-	public HashSet<String> buildCashSet(){
-		HashSet<String> cashSet = new HashSet<String>();
-		cashSet.add("USD");
-		cashSet.add("USDT");
-		cashSet.add("JPY");
-		cashSet.add("EUR");
-		cashSet.add("KRW");
-		cashSet.add("BRL");
-		cashSet.add("GBP");
-		cashSet.add("ZAR");
-		cashSet.add("CAD");
-		cashSet.add("PLN");
-		cashSet.add("AUD");
-		cashSet.add("THB");
-		cashSet.add("TRY");
-		cashSet.add("IDR");
-		cashSet.add("RUB");
-		return cashSet;
-	}
+	
 
-	public HashMap<String, ArrayList<String>> buildpairExchangeMap(HashMap<String, HashSet<String>> topVol100MMap, HashSet<String> cashSet){
+	public HashMap<String, ArrayList<String>> buildpairExchangeMap(HashMap<String, HashSet<String>> topVol100MMap){
+		HashSet<String> cashSet = CoinCashCommon.getCashSet();
 		HashMap<String, ArrayList<String>> pairExchangeMap = new HashMap<String, ArrayList<String>> ();
 		for (Entry<String, HashSet<String>> x: topVol100MMap.entrySet()){
 			String exchangeName = x.getKey();

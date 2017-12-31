@@ -1,60 +1,54 @@
 [
-	{
-        "exchangeURL": "www.bitstamp.net",
-        "exchangeName": "bitstamp",
+    {
+        "exchangeURL": "www.okcoin.com",
+        "exchangeName": "okcoin",
         "endpoints": [
             {
-                "pairName": "BTC_USD",
-                "pairPath": "api/v2/ticker/btcusd"
+                "pairName": "ETH_USD",
+                "pairPath": "api/v1/ticker.do?symbol=eth_usd"
             },
             {
-                "pairName": "ETH_BTC",
-                "pairPath": "api/v2/ticker/ethbtc"
+                "pairName": "BTC_USD",
+                "pairPath": "api/v1/ticker.do?symbol=btc_usd"
+            },
+            {
+                "pairName": "LTC_USD",
+                "pairPath": "api/v1/ticker.do?symbol=ltc_usd"
             }
         ]
     },
     {
-        "exchangeURL": "api.livecoin.net",
-        "exchangeName": "livecoin",
+        "exchangeURL": "www.okex.com",
+        "exchangeName": "okex",
         "endpoints": [
             {
-                "pairName": "BTC_USD",
-                "pairPath": "exchange/ticker?currencyPair=BTC/USD"
+                "pairName": "BTC_USDT",
+                "pairPath": "api/v1/ticker.do?symbol=btc_usdt"
+            },
+            {
+                "pairName": "BCC_USDT",
+                "pairPath": "api/v1/ticker.do?symbol=bcc_usdt"
+            },
+            {
+                "pairName": "XRP_USDT",
+                "pairPath": "api/v1/ticker.do?symbol=xrp_usdt"
+            },
+            {
+                "pairName": "ETH_USDT",
+                "pairPath": "api/v1/ticker.do?symbol=eth_usdt"
+            },
+            {
+                "pairName": "XRP_ETH",
+                "pairPath": "api/v1/ticker.do?symbol=xrp_eth"
+            },
+            {
+                "pairName": "XRP_BTC",
+                "pairPath": "api/v1/ticker.do?symbol=xrp_btc"
             },
             {
                 "pairName": "ETH_BTC",
-                "pairPath": "exchange/ticker?currencyPair=ETH/BTC"
+                "pairPath": "api/v1/ticker.do?symbol=eth_btc"
             }
         ]
-    },
-    {
-      "exchangeURL":"cex.io",
-	  "exchangeName":"cex-io",
-      "endpoints":
-      [ 		 	 
-         {
-		 "pairName": "BTC_USD",
-		 "pairPath": "api/ticker/BTC/USD"
-		 },
-         {
-		 "pairName": "ETH_BTC",
-		 "pairPath": "api/ticker/ETH/BTC"
-		 }
-	  ]
-   },
-   {
-      "exchangeURL":"api.bitfinex.com",
-	  "exchangeName":"bitfinex",
-      "endpoints":
-      [ 		 	 
-         {
-		 "pairName": "BTC_USD",
-		 "pairPath": "v1/pubticker/BTCUSD"
-		 },
-         {
-		 "pairName": "ETH_BTC",
-		 "pairPath": "v1/pubticker/ETHBTC"
-		 }
-	  ]
-   }
+    }
 ]

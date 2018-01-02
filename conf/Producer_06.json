@@ -1,0 +1,43 @@
+{
+    "ProducerGroup": "ProducerGroup_06",
+    "GatewayURL": "182.92.150.57:9876",
+    "InfluxDBURL": "http://182.92.150.57:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.therocktrading.com",
+            "exchangeName": "therocktrading",
+            "endpoints": [
+                {
+                    "pairName": "BCH_BTC",
+                    "pairPath": "v1/funds/BCHBTC/ticker"
+                },
+                {
+                    "pairName": "ETH_EUR",
+                    "pairPath": "v1/funds/ETHEUR/ticker"
+                },
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": "v1/funds/BTCUSD/ticker"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "v1/funds/ETHBTC/ticker"
+                },
+                {
+                    "pairName": "XRP_USD",
+                    "pairPath": "v1/funds/XRPUSD/ticker"
+                },
+                {
+                    "pairName": "XRP_EUR",
+                    "pairPath": "v1/funds/XRPEUR/ticker"
+                },
+                {
+                    "pairName": "BTC_EUR",
+                    "pairPath": "v1/funds/BTCEUR/ticker"
+                }
+            ]
+        }
+    ]
+}

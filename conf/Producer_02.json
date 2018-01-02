@@ -1,0 +1,65 @@
+{
+    "ProducerGroup": "ProducerGroup_02",
+    "GatewayURL": "182.92.150.57:9876",
+    "InfluxDBURL": "http://182.92.150.57:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.livecoin.net",
+            "exchangeName": "livecoin",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": "exchange/ticker?currencyPair=BTC/USD"
+                },
+                {
+                    "pairName": "ETH_USD",
+                    "pairPath": "exchange/ticker?currencyPair=ETH/USD"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "exchange/ticker?currencyPair=ETH/BTC"
+                }
+            ]
+        },
+        {
+            "exchangeURL": "cex.io",
+            "exchangeName": "cex-io",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": "api/ticker/BTC/USD"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/ticker/ETH/BTC"
+                },
+                {
+                    "pairName": "ETH_USD",
+                    "pairPath": "api/ticker/ETH/USD"
+                },
+                {
+                    "pairName": "BCH_BTC",
+                    "pairPath": "api/ticker/BCH/BTC"
+                },
+                {
+                    "pairName": "BCH_USD",
+                    "pairPath": "api/ticker/BCH/USD"
+                },
+                {
+                    "pairName": "DASH_USD",
+                    "pairPath": "api/ticker/DASH/USD"
+                },
+                {
+                    "pairName": "DASH_BTC",
+                    "pairPath": "api/ticker/DASH/BTC"
+                },
+                {
+                    "pairName": "XRP_USD",
+                    "pairPath": "api/ticker/XRP/USD"
+                }
+            ]
+        }
+    ]
+}

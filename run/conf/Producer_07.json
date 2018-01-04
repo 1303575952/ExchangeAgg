@@ -1,0 +1,27 @@
+{
+    "ProducerGroup": "ProducerGroup_07",
+    "GatewayURL": "182.92.150.57:9876",
+    "InfluxDBURL": "http://182.92.150.57:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "dsx.uk",
+            "exchangeName": "dsx",
+            "endpoints": [
+                {
+                    "pairName": "ETH_USD",
+                    "pairPath": "mapi/ticker/ethusd"
+                },
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": "mapi/ticker/btcusd"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "mapi/ticker/ethbtc"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+{
+    "ProducerGroup": "ProducerGroup_03",
+	"GatewayURL":"182.92.150.57:9876",
+    "InfluxDBURL": "http://182.92.150.57:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "www.okex.com",
+            "exchangeName": "okex",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=btc_usdt"
+                },
+                {
+                    "pairName": "BCH_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=bch_usdt"
+                },
+                {
+                    "pairName": "XRP_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=xrp_usdt"
+                },
+                {
+                    "pairName": "ETH_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=eth_usdt"
+                },
+                {
+                    "pairName": "XRP_ETH",
+                    "pairPath": "api/v1/ticker.do?symbol=xrp_eth"
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=xrp_btc"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=eth_btc"
+                }
+            ]
+        },
+        {
+            "exchangeURL": "api.huobi.pro",
+            "exchangeName": "huobi",
+            "endpoints": [
+                {
+                    "pairName": "ETH_USDT",
+                    "pairPath": "market/detail/merged?symbol=ethusdt"
+                },
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "market/detail/merged?symbol=btcusdt"
+                },
+                {
+                    "pairName": "XRP_USDT",
+                    "pairPath": "market/detail/merged?symbol=xrpusdt"
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "market/detail/merged?symbol=xrpbtc"
+                },
+                {
+                    "pairName": "BCH_USDT",
+                    "pairPath": "market/detail/merged?symbol=bchusdt"
+                },
+                {
+                    "pairName": "XRP_ETH",
+                    "pairPath": "market/detail/merged?symbol=xrpeth"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "market/detail/merged?symbol=ethbtc"
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,71 @@
+[
+   {
+      "tickerPair":"cex-io@@BTC/EUR",
+      "triList":
+      [
+         "cex-io@@BCH/BTC-BCH/EUR-BTC/EUR@@abacbc",
+         "cex-io@@DASH/BTC-DASH/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@BCH/EUR",
+      "triList":
+      [
+         "cex-io@@BCH/BTC-BCH/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@BCH/BTC",
+      "triList":
+      [
+         "cex-io@@BCH/BTC-BTC/USD-BCH/USD@@abbcac",
+         "cex-io@@BCH/BTC-BCH/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@DASH/EUR",
+      "triList":
+      [
+         "cex-io@@DASH/BTC-DASH/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@BCH/USD",
+      "triList":
+      [
+         "cex-io@@BCH/BTC-BTC/USD-BCH/USD@@abbcac"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@DASH/BTC",
+      "triList":
+      [
+         "cex-io@@BTC/USD-DASH/USD-DASH/BTC@@abcbca",
+         "cex-io@@DASH/BTC-DASH/EUR-BTC/EUR@@abacbc"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@DASH/USD",
+      "triList":
+      [
+         "cex-io@@BTC/USD-DASH/USD-DASH/BTC@@abcbca"
+      ]
+
+   },
+   {
+      "tickerPair":"cex-io@@BTC/USD",
+      "triList":
+      [
+         "cex-io@@BCH/BTC-BTC/USD-BCH/USD@@abbcac",
+         "cex-io@@BTC/USD-DASH/USD-DASH/BTC@@abcbca"
+      ]
+
+   }
+
+]

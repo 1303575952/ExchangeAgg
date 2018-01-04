@@ -1,7 +1,9 @@
 package com.zdx.test;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
@@ -20,6 +22,15 @@ import com.zdx.tri.TickerIndexBuilder;
 public class Test {
 	private static Logger logger = Logger.getLogger(Test.class);
 	public static void main(String[] args) throws InterruptedException {
+		
+		String s1 = "1514847579";
+		long t1 = new Long(s1);
+		Date date = new Date(t1*1000);
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		System.out.println("message timestamp = " + simpleDateFormat.format(date));
+		System.out.println(System.currentTimeMillis());
+		//logger.info("message tsf format = " + tsf.toJsonString());
+
 		//testWebSocket();
 		//PariConfig prb = new PariConfig();
 		/*PairBolt pb = new PairBolt();

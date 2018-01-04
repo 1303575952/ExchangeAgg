@@ -1,5 +1,7 @@
 package com.zdx.pair;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +54,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
 		logger.debug("===========================PairSpout prepare Begin=======================================");
 		logger.debug("========================== Conf=" + conf.get("SpoutData").toString());
-		
+
 		PairSpoutConf.buildSpoutConfig(conf.get("SpoutData").toString());
 
 		influxDB = InfluxDBFactory.connect(PairSpoutConf.influxURL);
@@ -63,17 +65,15 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 		influxDB.setDatabase(PairSpoutConf.influxDbName);
 		influxDB.createRetentionPolicy(PairSpoutConf.influxRpName, PairSpoutConf.influxDbName, "30d", "30m", 2, true);
 
-
-
-
 		consumer = new DefaultMQPushConsumer(PairSpoutConf.consumerGroup); 
 		consumer.setNamesrvAddr(PairSpoutConf.mqAddress);
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		consumer.setMessageModel(MessageModel.BROADCASTING);
 		consumer.setConsumeThreadMin(1);
 		consumer.setConsumeThreadMax(1);
+		consumer.setConsumeMessageBatchMaxSize(1);
 		consumer.registerMessageListener(this);
-
+		
 		for (int i = 0; i < PairSpoutConf.topicList.size(); i++){
 			try {
 				consumer.subscribe("ticker_" + PairSpoutConf.topicList.get(i).toLowerCase(), "*");
@@ -108,13 +108,29 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 	public ConsumeConcurrentlyStatus  consumeMessage(List<MessageExt> msgs,
 			ConsumeConcurrentlyContext context) {  
 		logger.info("===========================PairSpout Begin=======================================");
+		
 		for (MessageExt msg : msgs) {
-			String body = new String(msg.getBody());		
-			TickerStandardFormat tsf = new TickerStandardFormat();
-			tsf.formatJsonString(body);
-			logger.debug("message tsf format = " + tsf.toJsonString());
-			updatePrice(tsf);
-			updateForwardPairPrice(tsf);
+			try {
+				String body = new String(msg.getBody());
+				logger.info("message body = " + body);
+				TickerStandardFormat tsf = new TickerStandardFormat();
+				tsf.formatJsonString(body);
+				Date date = new Date(tsf.timestamp*1000);
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				logger.info("message timestamp = " + simpleDateFormat.format(date));
+
+				// 5 min message discard
+				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
+					logger.warn("intime message handling..." );
+					updatePrice(tsf);
+					updateForwardPairPrice(tsf);
+				} else {
+					logger.warn("obsolete message discard..." );
+					return ConsumeConcurrentlyStatus.RECONSUME_LATER;  
+				}
+			} catch (Exception e1){
+				logger.warn("Unexcepted exception.", e1.getMessage());
+			}
 		}
 		logger.info("===========================PairSpout End=======================================");
 		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;  

@@ -18,6 +18,7 @@ public class CoinCashCommon {
 		coinSet.add("BCH");
 		coinSet.add("BCY");
 		coinSet.add("BTC");
+		coinSet.add("BTG");
 		coinSet.add("BMC");
 		coinSet.add("BNB");
 		coinSet.add("BTS");
@@ -46,6 +47,7 @@ public class CoinCashCommon {
 		coinSet.add("MSD");
 		coinSet.add("MTH");
 		coinSet.add("MTL");
+		coinSet.add("NXT");
 		coinSet.add("OCL");
 		coinSet.add("ORME");
 		coinSet.add("PBT");
@@ -78,33 +80,33 @@ public class CoinCashCommon {
 		coinSet.add("XRP");
 		coinSet.add("ZEC");
 		coinSet.add("ZRC");
-		coinSet.add("NXT");
-		coinSet.add("BTG");	
+		
+		
 		return coinSet;
 	}
 	
 	public static HashSet<String> getCashSet(){
 		
+		cashSet.add("AUD");
+		cashSet.add("BRL");
 		cashSet.add("CAD");
 		cashSet.add("CNY");
 		cashSet.add("EUR");
+		cashSet.add("GBP");
+		cashSet.add("IDR");
 		cashSet.add("JPY");
+		cashSet.add("KRW");
 		cashSet.add("MXN");
 		cashSet.add("PLN");
-		cashSet.add("USD");
-		cashSet.add("USDT");
-		cashSet.add("KRW");
-		cashSet.add("USD");
-		cashSet.add("USDT");
-		cashSet.add("KRW");
-		cashSet.add("BRL");
-		cashSet.add("GBP");
-		cashSet.add("ZAR");
-		cashSet.add("AUD");
+		cashSet.add("RUB");
 		cashSet.add("THB");
 		cashSet.add("TRY");
-		cashSet.add("IDR");
-		cashSet.add("RUB");
+		cashSet.add("USD");
+		cashSet.add("USDT");
+		cashSet.add("USD");
+		cashSet.add("USDT");
+		cashSet.add("ZAR");
+		
 		return cashSet;
 	}
 }

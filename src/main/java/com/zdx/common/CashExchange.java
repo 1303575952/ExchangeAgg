@@ -15,11 +15,12 @@ public class CashExchange {
 		priceToUSD.put("CNY", 0.1512);
 		priceToUSD.put("EUR", 1.1941);
 		priceToUSD.put("JPY", 0.008892);
+		priceToUSD.put("KRW", 0.000939);
 		priceToUSD.put("MXN", 0.05259);
 		priceToUSD.put("PLN", 0.2776);
 		priceToUSD.put("USD", 1.0);
 		priceToUSD.put("USDT", 1.0);
-		priceToUSD.put("KRW", 0.000939);
+		
 	}
 	public Double toUSD(String cashType, Double amount){
 		cashType = cashType.toUpperCase();

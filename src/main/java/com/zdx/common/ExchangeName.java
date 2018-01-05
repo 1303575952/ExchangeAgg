@@ -19,6 +19,7 @@ public class ExchangeName {
 	public static String HITBTC = "hitbtc";
 	public static String HUOBI = "huobi";
 	public static String KRAKEN = "kraken";
+	public static String KORBIT = "korbit";
 	public static String LIVECOIN = "livecoin";
 	public static String OKCOIN = "okcoin";
 	public static String OKEX = "okex";

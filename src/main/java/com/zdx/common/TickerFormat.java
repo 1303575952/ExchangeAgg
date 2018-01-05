@@ -44,6 +44,8 @@ public class TickerFormat {
 			hitbtcFormat(jsonObject, x);
 		} else if (ExchangeName.HUOBI.equals(exchangeName)) {
 			huobiFormat(jsonObject, x);
+		} else if (ExchangeName.KORBIT.equals(exchangeName)) {
+			korbitFormat(jsonObject, x);
 		} else if (ExchangeName.KRAKEN.equals(exchangeName)) {
 			krakenFormat(jsonObject, x);
 		} else if (ExchangeName.LIVECOIN.equals(exchangeName)) {
@@ -330,6 +332,19 @@ public class TickerFormat {
 		x = setToUSD(x);
 	}
 
+	public static void korbitFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		x.timestamp = System.currentTimeMillis();
+		x.bid = jsonObject.getDouble("bid");
+		x.ask = jsonObject.getDouble("ask");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
+	
 	public static void krakenFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		// TODO
 	}

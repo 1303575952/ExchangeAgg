@@ -1,7 +1,7 @@
 {
     "ProducerGroup": "ProducerGroup_03",
-	"GatewayURL":"182.92.150.57:9876",
-    "InfluxDBURL": "http://182.92.150.57:8086",
+	"GatewayURL":"123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
     "InfluxDbName": "ticker",
     "InfluxRpName": "aRetentionPolicy",
     "TickerConf": [

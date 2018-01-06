@@ -11,12 +11,12 @@
     "SpoutData": [
         {
             "ConsumerGroup": "ConsumerGroup_03",
-            "RocketMQNameServerAddress": "182.92.150.57:9876",
+            "RocketMQNameServerAddress": "123.207.232.38:9876",
             "TopicList": [
-                "okex",
-                "okcoin"
+                "bitfinex",
+                "bitstamp"
             ],
-            "InfluxDBURL": "http://182.92.150.57:8086",
+            "InfluxDBURL": "http://123.207.232.38:8086",
             "InfluxDbName": "pair",
             "InfluxRpName": "aRetentionPolicy",
             "TickerData": [

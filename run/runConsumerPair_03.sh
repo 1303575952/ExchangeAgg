@@ -1,0 +1,1 @@
+jstorm jar ExchangeAgg-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.zdx.pair.PairTopology conf/ConsumerPair_03.json

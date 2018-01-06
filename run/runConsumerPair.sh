@@ -1,1 +1,0 @@
-nohup java -cp ExchangeAgg-0.0.1-SNAPSHOT-jar-with-dependencies.jar com.zdx.pair.PairTopology ./conf/PairTopologyLinux.conf >logs/pari_consumer.log &

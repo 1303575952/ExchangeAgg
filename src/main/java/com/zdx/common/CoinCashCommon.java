@@ -62,6 +62,7 @@ public class CoinCashCommon {
 		coinSet.add("SNM");
 		coinSet.add("SNT");
 		coinSet.add("STA");
+		coinSet.add("STR");
 		coinSet.add("STEEM");
 		coinSet.add("STORJ");
 		coinSet.add("SUB");

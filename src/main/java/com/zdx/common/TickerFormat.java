@@ -120,15 +120,18 @@ public class TickerFormat {
 	}
 
 	private static void poloniexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		// TODO
 		x.timestamp = System.currentTimeMillis();
-		x.bid = jsonObject.getDouble("bid");
-		x.ask = jsonObject.getDouble("ask");
-		x.mid = jsonObject.getDouble("mid");
+		String bids_00 = jsonObject.get("bids").toString();
+		String[] bidss = bids_00.split("\"");
+		x.bid = Double.parseDouble(bidss[1]);
+		String asks_00 = jsonObject.get("asks").toString();
+		String[] askss = asks_00.split("\"");
+		x.ask = Double.parseDouble(askss[1]);
+		x.mid = (x.bid + x.ask) / 2;
 		x.low = jsonObject.getDouble("low");
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
-		x.lastPrice = jsonObject.getDouble("last_price");
+		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
 		x = setToUSD(x);
 	}
@@ -349,7 +352,34 @@ public class TickerFormat {
 	}
 	
 	public static void krakenFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		// TODO
+		x.timestamp = System.currentTimeMillis();
+		JSONObject resultJsonObject = JSON.parseObject(jsonObject.getString("result"));
+		String tmp1 = resultJsonObject.toJSONString();
+		String[] tmpArr1 = tmp1.split("\\{");
+		String[] tmpArr2 = tmpArr1[tmpArr1.length - 1].split("\\}");
+		String tmp2 = "{" + tmpArr2[0] + "}";
+		JSONObject tickerJsonObject = JSON.parseObject(tmp2);
+		String asks_00 = tickerJsonObject.get("a").toString();
+		String[] askss = asks_00.split("\"");
+		x.ask = Double.parseDouble(askss[1]);
+		String bids_00 = tickerJsonObject.get("b").toString();
+		String[] bidss = bids_00.split("\"");
+		x.bid = Double.parseDouble(bidss[1]);
+		x.mid = (x.bid + x.ask) / 2;
+		String low_00 = tickerJsonObject.get("l").toString();
+		String[] lows = low_00.split("\"");
+		x.low = Double.parseDouble(lows[1]);
+		String high_00 = tickerJsonObject.get("h").toString();
+		String[] highs = high_00.split("\"");
+		x.high = Double.parseDouble(highs[1]);
+		String volume_00 = tickerJsonObject.get("v").toString();
+		String[] volumes = volume_00.split("\"");
+		x.volume = Double.parseDouble(volumes[1]);
+		String last_00 = tickerJsonObject.get("l").toString();
+		String[] lasts = last_00.split("\"");
+		x.lastPrice = Double.parseDouble(lasts[1]);
+		x.setExchangeType();
+		x = setToUSD(x);
 	}
 
 	public static void livecoinFormat(JSONObject jsonObject, TickerStandardFormat x) {

@@ -1,53 +1,53 @@
 {
     "ProducerGroup": "ProducerGroup_06",
-    "GatewayURL": "182.92.150.57:9876",
-    "InfluxDBURL": "http://182.92.150.57:8086",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
     "InfluxDbName": "ticker",
     "InfluxRpName": "aRetentionPolicy",
     "TickerConf": [
         {
-            "exchangeURL": "",
-            "exchangeName": "Poloniex",
+            "exchangeURL": "poloniex.com",
+            "exchangeName": "poloniex",
             "endpoints": [
                 {
-                    "pairName": "STR_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_STR",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_STR&depth=1"
                 },
                 {
-                    "pairName": "XRP_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_XRP",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_XRP&depth=1"
                 },
                 {
-                    "pairName": "ETH_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_ETH",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_ETH&depth=1"
                 },
                 {
-                    "pairName": "BTC_USDT",
-                    "pairPath": ""
+                    "pairName": "USDT_BTC",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=USDT_BTC&depth=1"
                 },
                 {
-                    "pairName": "XRP_USDT",
-                    "pairPath": ""
+                    "pairName": "USDT_XRP",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=USDT_XRP&depth=1"
                 },
                 {
-                    "pairName": "LTC_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_LTC",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_LTC&depth=1"
                 },
                 {
-                    "pairName": "STR_USDT",
-                    "pairPath": ""
+                    "pairName": "USDT_STR",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=USDT_STR&depth=1"
                 },
                 {
-                    "pairName": "BCH_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_BCH",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_BCH&depth=1"
                 },
                 {
-                    "pairName": "BTS_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_BTS",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_BTS&depth=1"
                 },
                 {
-                    "pairName": "ETC_BTC",
-                    "pairPath": ""
+                    "pairName": "BTC_ETC",
+                    "pairPath": "public?command=returnOrderBook&currencyPair=BTC_ETC&depth=1"
                 }
             ]
         }

@@ -6,48 +6,20 @@
     "InfluxRpName": "aRetentionPolicy",
     "TickerConf": [
         {
-            "exchangeURL": "",
-            "exchangeName": "Kraken",
+            "exchangeURL": "api.kraken.com",
+            "exchangeName": "kraken",
             "endpoints": [
                 {
-                    "pairName": "BTC_EUR",
-                    "pairPath": ""
-                },
-                {
-                    "pairName": "ETH_EUR",
-                    "pairPath": ""
-                },
-                {
-                    "pairName": "BTC_USD",
-                    "pairPath": ""
-                },
-                {
-                    "pairName": "XRP_EUR",
-                    "pairPath": ""
-                },
-                {
-                    "pairName": "ETH_BTC",
-                    "pairPath": ""
-                },
-                {
-                    "pairName": "XLM_BTC",
-                    "pairPath": ""
-                },
-                {
                     "pairName": "XRP_USD",
-                    "pairPath": ""
-                },
-                {
-                    "pairName": "XRP_BTC",
-                    "pairPath": ""
+                    "pairPath": "0/public/Ticker?pair=xrpusd"
                 },
                 {
                     "pairName": "ETH_USD",
-                    "pairPath": ""
+                    "pairPath": "0/public/Ticker?pair=ethusd"
                 },
                 {
                     "pairName": "BCH_EUR",
-                    "pairPath": ""
+                    "pairPath": "0/public/Ticker?pair=bcheur"
                 }
             ]
         }

@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_12",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "",
+            "exchangeName": "Kraken",
+            "endpoints": [
+                {
+                    "pairName": "BTC_EUR",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "ETH_EUR",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "XRP_EUR",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "XLM_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "XRP_USD",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "ETH_USD",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "BCH_EUR",
+                    "pairPath": ""
+                }
+            ]
+        }
+    ]
+}

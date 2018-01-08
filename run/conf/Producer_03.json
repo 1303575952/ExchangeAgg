@@ -6,46 +6,48 @@
     "InfluxRpName": "aRetentionPolicy",
     "TickerConf": [
         {
-            "exchangeURL": "www.bitstamp.net",
-            "exchangeName": "bitstamp",
+            "exchangeURL": "api.bithumb.com",
+            "exchangeName": "bithumb",
             "endpoints": [
                 {
-                    "pairName": "BTC_USD",
-                    "pairPath": "api/v2/ticker/btcusd"
+                    "pairName": "XRP_KRW",
+                    "pairPath": "public/ticker/xrp"
                 },
                 {
-                    "pairName": "ETH_BTC",
-                    "pairPath": "api/v2/ticker/ethbtc"
+                    "pairName": "BTC_KRW",
+                    "pairPath": "public/ticker/btc"
                 },
                 {
-                    "pairName": "ETH_USD",
-                    "pairPath": "api/v2/ticker/ethusd"
+                    "pairName": "BCH_KRW",
+                    "pairPath": "public/ticker/bch"
                 },
                 {
-                    "pairName": "XRP_USD",
-                    "pairPath": "api/v2/ticker/xrpusd"
-                }
-            ]
-        },
-        {
-            "exchangeURL": "api.bitfinex.com",
-            "exchangeName": "bitfinex",
-            "endpoints": [
-                {
-                    "pairName": "BTC_USD",
-                    "pairPath": "v1/pubticker/BTCUSD"
+                    "pairName": "QTUM_KRW",
+                    "pairPath": "public/ticker/qtum"
                 },
                 {
-                    "pairName": "ETH_BTC",
-                    "pairPath": "v1/pubticker/ETHBTC"
+                    "pairName": "ETH_KRW",
+                    "pairPath": "public/ticker/eth"
                 },
                 {
-                    "pairName": "ETH_USD",
-                    "pairPath": "v1/pubticker/ETHUSD"
+                    "pairName": "EOS_KRW",
+                    "pairPath": "public/ticker/eos"
                 },
                 {
-                    "pairName": "XRP_USD",
-                    "pairPath": "v1/pubticker/XRPUSD"
+                    "pairName": "ETC_KRW",
+                    "pairPath": "public/ticker/etc"
+                },
+                {
+                    "pairName": "BTG_KRW",
+                    "pairPath": "public/ticker/btg"
+                },
+                {
+                    "pairName": "LTC_KRW",
+                    "pairPath": "public/ticker/ltc"
+                },
+                {
+                    "pairName": "ZEC_KRW",
+                    "pairPath": "public/ticker/zec"
                 }
             ]
         }

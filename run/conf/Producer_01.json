@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_01",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.binance.com",
+            "exchangeName": "binance",
+            "endpoints": [
+                {
+                    "pairName": "TRX_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=TRXBTC"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=ETHBTC"
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=XRPBTC"
+                },
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=BTCUSDT"
+                },
+                {
+                    "pairName": "XVG_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=XVGBTC"
+                },
+                {
+                    "pairName": "TRX_ETH",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=TRXETH"
+                },
+                {
+                    "pairName": "XLM_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=XLMBTC"
+                },
+                {
+                    "pairName": "ADA_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=ADABTC"
+                },
+                {
+                    "pairName": "BCC_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=BCCBTC"
+                },
+                {
+                    "pairName": "NEO_BTC",
+                    "pairPath": "api/v3/ticker/bookTicker?symbol=NEOBTC"
+                }
+            ]
+        }
+    ]
+}

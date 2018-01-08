@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_06",
+    "GatewayURL": "182.92.150.57:9876",
+    "InfluxDBURL": "http://182.92.150.57:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "",
+            "exchangeName": "Poloniex",
+            "endpoints": [
+                {
+                    "pairName": "STR_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "XRP_USDT",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "LTC_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "STR_USDT",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "BCH_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "BTS_BTC",
+                    "pairPath": ""
+                },
+                {
+                    "pairName": "ETC_BTC",
+                    "pairPath": ""
+                }
+            ]
+        }
+    ]
+}

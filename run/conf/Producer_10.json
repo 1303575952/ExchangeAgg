@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_10",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "www.bitstamp.net",
+            "exchangeName": "bitstamp",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": "api/v2/ticker/btcusd"
+                },
+                {
+                    "pairName": "XRP_USD",
+                    "pairPath": "api/v2/ticker/xrpusd"
+                },
+                {
+                    "pairName": "BTC_EUR",
+                    "pairPath": "api/v2/ticker/btceur"
+                },
+                {
+                    "pairName": "ETH_USD",
+                    "pairPath": "api/v2/ticker/ethusd"
+                },
+                {
+                    "pairName": "XRP_EUR",
+                    "pairPath": "api/v2/ticker/xrpeur"
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "api/v2/ticker/xrpbtc"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/v2/ticker/ethbtc"
+                },
+                {
+                    "pairName": "ETH_EUR",
+                    "pairPath": "api/v2/ticker/etheur"
+                },
+                {
+                    "pairName": "LTC_USD",
+                    "pairPath": "api/v2/ticker/ltcusd"
+                },
+                {
+                    "pairName": "BCH_USD",
+                    "pairPath": "api/v2/ticker/bchusd"
+                }
+            ]
+        }
+    ]
+}

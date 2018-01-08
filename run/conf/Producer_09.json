@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_09",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.hitbtc.com",
+            "exchangeName": "hitbtc",
+            "endpoints": [
+                {
+                    "pairName": "BCH_BTC",
+                    "pairPath": "api/2/public/ticker/BCHBTC"
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "api/2/public/ticker/XRPBTC"
+                },
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "api/2/public/ticker/BTCUSD"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/2/public/ticker/ETHBTC"
+                },
+                {
+                    "pairName": "XMR_BTC",
+                    "pairPath": "api/2/public/ticker/XMRBTC"
+                },
+                {
+                    "pairName": "DASH_BTC",
+                    "pairPath": "api/2/public/ticker/DASHBTC"
+                },
+                {
+                    "pairName": "ZEC_BTC",
+                    "pairPath": "api/2/public/ticker/ZECBTC"
+                },
+                {
+                    "pairName": "BCH_USDT",
+                    "pairPath": "api/2/public/ticker/BCHUSD"
+                },
+                {
+                    "pairName": "ETH_USDT",
+                    "pairPath": "api/2/public/ticker/ETHUSD"
+                },
+                {
+                    "pairName": "XDN_BTC",
+                    "pairPath": "api/2/public/ticker/XDNBTC"
+                }
+            ]
+        }
+    ]
+}

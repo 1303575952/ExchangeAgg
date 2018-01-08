@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_08",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.gdax.com",
+            "exchangeName": "gdax",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USD",
+                    "pairPath": "products/BTC-USD/ticker"
+                },
+                {
+                    "pairName": "ETH_USD",
+                    "pairPath": "products/ETH-USD/ticker"
+                },
+                {
+                    "pairName": "LTC_USD",
+                    "pairPath": "products/LTC-USD/ticker"
+                },
+                {
+                    "pairName": "BTC_EUR",
+                    "pairPath": "products/BTC-EUR/ticker"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "products/ETH-BTC/ticker"
+                },
+                {
+                    "pairName": "BCH_USD",
+                    "pairPath": "products/BCH-USD/ticker"
+                },
+                {
+                    "pairName": "LTC_BTC",
+                    "pairPath": "products/LTC-BTC/ticker"
+                },
+                {
+                    "pairName": "ETH_EUR",
+                    "pairPath": "products/ETH-EUR/ticker"
+                },
+                {
+                    "pairName": "LTC_EUR",
+                    "pairPath": "products/LTC-EUR/ticker"
+                },
+                {
+                    "pairName": "BTC_GBP",
+                    "pairPath": "products/BTC-GBP/ticker"
+                }
+            ]
+        }
+    ]
+}

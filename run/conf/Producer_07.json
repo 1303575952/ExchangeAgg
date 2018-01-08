@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_07",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.huobi.pro",
+            "exchangeName": "huobi",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "market/detail/merged?symbol=btcusdt"
+                },
+                {
+                    "pairName": "BCH_USDT",
+                    "pairPath": "market/detail/merged?symbol=bchusdt"
+                },
+                {
+                    "pairName": "QTUM_BTC",
+                    "pairPath": "market/detail/merged?symbol=qtumbtc"
+                },
+                {
+                    "pairName": "ETH_USDT",
+                    "pairPath": "market/detail/merged?symbol=ethusdt"
+                },
+                {
+                    "pairName": "XRP_USDT",
+                    "pairPath": "market/detail/merged?symbol=xrpusdt"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "market/detail/merged?symbol=ethbtc"
+                },
+                {
+                    "pairName": "ETC_USDT",
+                    "pairPath": "market/detail/merged?symbol=etcusdt"
+                },
+                {
+                    "pairName": "BCH_BTC",
+                    "pairPath": "market/detail/merged?symbol=bchbtc"
+                },
+                {
+                    "pairName": "LTC_USDT",
+                    "pairPath": "market/detail/merged?symbol=ltcusdt"
+                },
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "market/detail/merged?symbol=xrpbtc"
+                }
+            ]
+        }
+    ]
+}

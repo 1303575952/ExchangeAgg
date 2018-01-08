@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_05",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "www.okex.com",
+            "exchangeName": "okex",
+            "endpoints": [
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=btc_usdt"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=eth_btc"
+                },
+                {
+                    "pairName": "BCC_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=bcc_btc"
+                },
+                {
+                    "pairName": "ETH_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=eth_usdt"
+                },
+                {
+                    "pairName": "LTC_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=ltc_btc"
+                },
+                {
+                    "pairName": "ETC_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=etc_btc"
+                },
+                {
+                    "pairName": "LTC_USDT",
+                    "pairPath": "api/v1/ticker.do?symbol=ltc_usdt"
+                },
+                {
+                    "pairName": "EOS_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=eos_btc"
+                },
+                {
+                    "pairName": "ICX_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=icx_btc"
+                },
+                {
+                    "pairName": "QTUM_BTC",
+                    "pairPath": "api/v1/ticker.do?symbol=qtum_btc"
+                }
+            ]
+        }
+    ]
+}

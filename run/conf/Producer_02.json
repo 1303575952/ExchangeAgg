@@ -1,0 +1,55 @@
+{
+    "ProducerGroup": "ProducerGroup_02",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "bittrex.com",
+            "exchangeName": "bittrex",
+            "endpoints": [
+                {
+                    "pairName": "XRP_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-xrp"
+                },
+                {
+                    "pairName": "XLM_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-xlm"
+                },
+                {
+                    "pairName": "ETH_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-eth"
+                },
+                {
+                    "pairName": "XVG_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-xvg"
+                },
+                {
+                    "pairName": "ADA_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-ada"
+                },
+                {
+                    "pairName": "BTC_USDT",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=usdt-btc"
+                },
+                {
+                    "pairName": "STEEM_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-steem"
+                },
+                {
+                    "pairName": "BCC_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-bcc"
+                },
+                {
+                    "pairName": "NEO_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-neo"
+                },
+                {
+                    "pairName": "LTC_BTC",
+                    "pairPath": "api/v1.1/public/getmarketsummary?market=btc-ltc"
+                }
+            ]
+        }
+    ]
+}

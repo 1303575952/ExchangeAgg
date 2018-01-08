@@ -2,6 +2,7 @@ package com.zdx.test;
 
 import java.util.concurrent.TimeUnit;
 
+import org.apache.log4j.Logger;
 import org.influxdb.InfluxDB;
 import org.influxdb.InfluxDBFactory;
 import org.influxdb.InfluxDB.ConsistencyLevel;
@@ -10,13 +11,16 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 
 public class TestInfluxDB {
+	private static Logger logger = Logger.getLogger(TestInfluxDB.class);
 	public static void main(String[] args) {
 		testCase1();
 	}
 
 	public static void testCase1(){
-		InfluxDB influxDB = InfluxDBFactory.connect("http://182.92.150.57:8086");
+		logger.debug("-------------1-------------");
+		InfluxDB influxDB = InfluxDBFactory.connect("http://49.51.37.51:8086");
 		String dbName = "test1";
+		logger.debug("-------------2-------------");
 		influxDB.createDatabase(dbName);
 		String rpName = "aRetentionPolicy";
 		influxDB.createRetentionPolicy(rpName, dbName, "30d", "30m", 2, true);

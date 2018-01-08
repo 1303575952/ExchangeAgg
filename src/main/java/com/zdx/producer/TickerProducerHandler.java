@@ -39,7 +39,9 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 		String hostName = res.getRequest().getHostUniform();
 		String pathName = res.getRequest().getResourcePath();
 		String url = hostName + pathName;
+		logger.debug("response = " + res.getResponseContent());
 		logger.info("Fetch URL= " + url);
+		logger.debug("response = " + res.getResponseContent());
 		if (res.getError()){
 			logger.warn("Parallec Fetch error. API Response = "+res);
 			failedTickerMap.put(url,"ParallecError");

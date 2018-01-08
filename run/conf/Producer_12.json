@@ -1,0 +1,47 @@
+{
+    "ProducerGroup": "ProducerGroup_11",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
+    "InfluxDbName": "ticker",
+    "InfluxRpName": "aRetentionPolicy",
+    "TickerConf": [
+        {
+            "exchangeURL": "api.coinone.co.kr",
+            "exchangeName": "coinone",
+            "endpoints": [
+                {
+                    "pairName": "XRP_KRW",
+                    "pairPath": "ticker/?currency=xrp&amp;format=json"
+                },
+                {
+                    "pairName": "BTC_KRW",
+                    "pairPath": "ticker/?currency=btc&amp;format=json"
+                },
+                {
+                    "pairName": "BCH_KRW",
+                    "pairPath": "ticker/?currency=bch&amp;format=json"
+                },
+                {
+                    "pairName": "ETH_KRW",
+                    "pairPath": "ticker/?currency=eth&amp;format=json"
+                },
+                {
+                    "pairName": "QTUM_KRW",
+                    "pairPath": "ticker/?currency=qtum&amp;format=json"
+                },
+                {
+                    "pairName": "ETC_KRW",
+                    "pairPath": "ticker/?currency=etc&amp;format=json"
+                },
+                {
+                    "pairName": "LTC_KRW",
+                    "pairPath": "ticker/?currency=ltc&amp;format=json"
+                },
+                {
+                    "pairName": "BTG_KRW",
+                    "pairPath": "ticker/?currency=btg&amp;format=json"
+                }
+            ]
+        }
+    ]
+}

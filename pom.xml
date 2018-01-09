@@ -205,8 +205,8 @@
 			<groupId>io.parallec</groupId>
 			<artifactId>parallec-core</artifactId>
 			<version>0.10.6.1</version>
-			<!-- scope>system</scope -->
-			<!-- systemPath>${project.basedir}/lib/parallec-core-0.10.6.1.jar</systemPath -->
+			<!--scope>system</scope-->
+			<!--systemPath>${project.basedir}/lib/parallec-core-0.10.6.1.jar</systemPath-->
 		</dependency>
 
 		<dependency>

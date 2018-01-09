@@ -1,0 +1,33 @@
+{
+    "StormData": [
+        {
+            "topology.name": "TriArbitrageTopology_03",
+            "storm.cluster.mode": "distributed",
+            "topology.bolt.parallel": "1",
+            "topology.spout.parallel": "1",
+            "topology.optimize": "true"
+        }
+    ],
+    "SpoutData": [
+        {
+            "ConsumerGroup": "Tri_03",
+            "RocketMQNameServerAddress": "49.51.37.51:9876",
+            "TopicList": [
+                "okex"
+            ],
+            "InfluxDBURL": "http://49.51.37.51:8086",
+            "InfluxDbName": "tri",
+            "InfluxRpName": "aRetentionPolicy",
+            "TickerData": [
+                {
+                    "exchangeName": "okex",
+                    "tickerPair": [                        
+                        "BTC/USDT",
+						"ETH/USDT",
+						"ETH/BTC",
+                    ]
+                }
+            ]
+        }
+    ]
+}

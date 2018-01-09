@@ -32,6 +32,7 @@ import com.alibaba.fastjson.TypeReference;
 import com.zdx.common.DataFormat;
 import com.zdx.common.FileIO;
 import com.zdx.common.TickerStandardFormat;
+import com.zdx.pair.PairSpoutConf;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -45,55 +46,36 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 	private SpoutOutputCollector collector;  
 	private transient DefaultMQPushConsumer consumer; 
 	private static final Logger logger = LoggerFactory.getLogger(TriSpout.class);
-	private static final HashMap<String, ArrayList<String>> TICKER_TRIPLE_MAP = new HashMap<String, ArrayList<String>>();
-	private static final HashMap<String, TriArbitrageInfo> TRIPLE_INFO_MAP = new HashMap<String, TriArbitrageInfo>();
-	public String topicList = "";
 
 	public static InfluxDB influxDB = null;
-	public static String influxURL = "";
-	public static String influxDbName = "";
-	public static String influxRpName = "";
-
-	private static double threshold = 0.01;
 
 	@SuppressWarnings("rawtypes")  
 	@Override
 	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		logger.debug("===========================TriSpout prepare Begin=======================================");
-		String filePath = (String) conf.get("TripleInfoPath");
+		logger.debug("========================== Conf=" + conf.get("SpoutData").toString());
 
-		threshold = Double.parseDouble((String) conf.get("TriArbitrageThreshold"));
+		TriSpoutConf.buildSpoutConfig(conf.get("SpoutData").toString());
 
-		loadTickerTripleMapFromFile(filePath);
-		buildTripleInfoMap();
-
-		influxURL = (String) conf.get("InfluxDBURL");
-		influxDbName = (String) conf.get("InfluxDbName");
-		influxRpName = (String) conf.get("InfluxRpName");
-		influxDB = InfluxDBFactory.connect(influxURL);
-		if (!influxDB.databaseExists(influxDbName)){
-			logger.debug("==================================================================Database" + influxDbName + " not Exist");
-			influxDB.createDatabase(influxDbName);
+		influxDB = InfluxDBFactory.connect(TriSpoutConf.influxURL);
+		if (!influxDB.databaseExists(TriSpoutConf.influxDbName)){
+			logger.debug("==================================================================Database" + TriSpoutConf.influxDbName + " not Exist");
+			influxDB.createDatabase(TriSpoutConf.influxDbName);
 		}
-		influxDB.setDatabase(influxDbName);
-		influxDB.createRetentionPolicy(influxRpName, influxDbName, "30d", "30m", 2, true);
+		influxDB.setDatabase(TriSpoutConf.influxDbName);
+		influxDB.createRetentionPolicy(TriSpoutConf.influxRpName, TriSpoutConf.influxDbName, "30d", "30m", 2, true);
 
-
-
-		consumer = new DefaultMQPushConsumer((String) conf.get("ConsumerGroup")); 
-		consumer.setNamesrvAddr((String) conf.get("RocketMQNameServerAddress"));
+		consumer = new DefaultMQPushConsumer(TriSpoutConf.consumerGroup); 
+		consumer.setNamesrvAddr(TriSpoutConf.mqAddress);
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
-		//set to broadcast mode
 		consumer.setMessageModel(MessageModel.BROADCASTING);
 		consumer.registerMessageListener(this);
 		consumer.setConsumeThreadMin(1);
 		consumer.setConsumeThreadMax(1);
-		topicList = (String) conf.get("topicList");
-		String[] topics = topicList.split(";");
-		for (int i = 0; i < topics.length; i++){
-			String topic = topics[i];
+		
+		for (int i = 0; i < TriSpoutConf.topicList.size(); i++){
 			try {
-				consumer.subscribe("ticker_" + topic.toLowerCase(), "*");
+				consumer.subscribe("ticker_" + TriSpoutConf.topicList.get(i).toLowerCase(), "*");
 			} catch (MQClientException e) {  
 				e.printStackTrace();  
 			}  
@@ -133,9 +115,8 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			pair = pair.toLowerCase();
 			key1 = key1.toLowerCase();
 			ArrayList<String> triList = new ArrayList<String>();
-			if (TICKER_TRIPLE_MAP.containsKey(key1)){
-				triList = TICKER_TRIPLE_MAP.get(key1);
-
+			if (TriSpoutConf.TICKER_TRIPLE_MAP.containsKey(key1)){
+				triList = TriSpoutConf.TICKER_TRIPLE_MAP.get(key1);
 			} else {
 				//logger.debug("10 = " + "error");				
 				//logger.debug("11 = " + tickerTripleMap.keySet().toString());
@@ -147,7 +128,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			String path3 = "";
 
 			for (String tri : triList){
-				TriArbitrageInfo triInfo = TRIPLE_INFO_MAP.get(tri);
+				TriArbitrageInfo triInfo = TriSpoutConf.TRIPLE_INFO_MAP.get(tri);
 				logger.debug("======Triple=" + tri);
 				boolean isValid = false;
 				String[] tmp = tri.split("@@");
@@ -194,7 +175,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 					if (triInfo.profitVal > 0){
 						logPriceDiff(triInfo);
 					}
-					TRIPLE_INFO_MAP.put(tri, triInfo);
+					TriSpoutConf.TRIPLE_INFO_MAP.put(tri, triInfo);
 				}
 
 			}
@@ -217,63 +198,16 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 				.addField("ask3", triInfo.ask3)
 				.addField("priceDiff", triInfo.profitVal)
 				.build();
-		influxDB.write(influxDbName, influxRpName, point1);
-		Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", influxDbName);
+		influxDB.write(TriSpoutConf.influxDbName, TriSpoutConf.influxRpName, point1);
+		Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", TriSpoutConf.influxDbName);
 		QueryResult result = influxDB.query(query);
 		if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true){
 			logger.debug("===========================InfluxDB Insert Failed=======================================");
 			influxDB.close();
-			influxDB = InfluxDBFactory.connect(influxURL);
+			influxDB = InfluxDBFactory.connect(TriSpoutConf.influxURL);
 		} else {
 			logger.debug("===========================InfluxDB Insert Sucess=======================================");
 		}
-	}
-	public static void loadTickerTripleMapFromFile(String path){
-		String text = FileIO.readFile(path);
-		ArrayList<String> ttStringList = JSON.parseObject(text, new TypeReference<ArrayList<String>>(){});
-
-		for (String e : ttStringList){
-			logger.debug("=======Input tri data = " + e);
-			e = e.toLowerCase();
-			//logger.debug("-----------3----------- " + e);
-			JSONObject jsonObj = JSON.parseObject(e);
-
-			String tickerName = String.valueOf(jsonObj.get("tickerpair"));
-			//logger.debug("-----------4----------- " + tickerName);
-			String tmp = String.valueOf(jsonObj.get("trilist"));
-			//logger.debug("-----------5----------- " + tmp);
-			if (tmp.contains("[")){
-				tmp = tmp.replaceAll("\\[", "");
-			}
-			if (tmp.contains("]")){
-				tmp = tmp.replaceAll("\\]", "");
-			}
-			if (tmp.contains("\"")){
-				tmp = tmp.replaceAll("\"", "");
-			}
-			String[] tmp2 = tmp.split(",");
-			ArrayList<String> trList = new ArrayList<String>();
-			for(String tmp3 : tmp2){
-				//logger.debug("-----------6----------- " + tmp3);
-				trList.add(tmp3);
-			}
-			logger.debug("=======TripleData key = " + tickerName);
-			logger.debug("=======TripleData val = " + trList.toString());
-			TICKER_TRIPLE_MAP.put(tickerName, trList);
-		}
-		//logger.debug("-----------1----------- " + tickerTripleMap.keySet().toString());
-	}
-
-	public void buildTripleInfoMap(){
-		for ( Entry<String, ArrayList<String>> e : TICKER_TRIPLE_MAP.entrySet()){
-			ArrayList<String> val1 = e.getValue();
-			for (String s : val1){							
-				TriArbitrageInfo m = new TriArbitrageInfo();
-				TRIPLE_INFO_MAP.put(s, m);
-			}
-
-		}
-		//logger.debug("-----------1----------- " + tickerTripleMap.keySet().toString());
 	}
 
 

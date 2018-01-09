@@ -1,7 +1,7 @@
 {
     "ProducerGroup": "ProducerGroup_03",
-	"GatewayURL":"123.207.232.38:9876",
-    "InfluxDBURL": "http://123.207.232.38:8086",
+	"GatewayURL":"49.51.37.51:9876",
+    "InfluxDBURL": "http://49.51.37.51:8086",
     "InfluxDbName": "ticker",
     "InfluxRpName": "aRetentionPolicy",
     "TickerConf": [
@@ -14,24 +14,8 @@
                     "pairPath": "api/v1/ticker.do?symbol=btc_usdt"
                 },
                 {
-                    "pairName": "BCH_USDT",
-                    "pairPath": "api/v1/ticker.do?symbol=bch_usdt"
-                },
-                {
-                    "pairName": "XRP_USDT",
-                    "pairPath": "api/v1/ticker.do?symbol=xrp_usdt"
-                },
-                {
                     "pairName": "ETH_USDT",
                     "pairPath": "api/v1/ticker.do?symbol=eth_usdt"
-                },
-                {
-                    "pairName": "XRP_ETH",
-                    "pairPath": "api/v1/ticker.do?symbol=xrp_eth"
-                },
-                {
-                    "pairName": "XRP_BTC",
-                    "pairPath": "api/v1/ticker.do?symbol=xrp_btc"
                 },
                 {
                     "pairName": "ETH_BTC",

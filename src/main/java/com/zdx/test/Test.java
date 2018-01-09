@@ -17,7 +17,7 @@ import com.zdx.pair.BuildTopPairs;
 import com.zdx.pair.PairStormConf;
 import com.zdx.producer.TickerProducer;
 import com.zdx.producer.TickerProducerConf;
-import com.zdx.tri.TickerIndexBuilder;
+//import com.zdx.tri.TickerIndexBuilder;
 
 public class Test {
 	private static Logger logger = Logger.getLogger(Test.class);
@@ -90,10 +90,10 @@ public class Test {
 		String triPath = "C:\\ZDX\\code\\ExchangeAgg\\conf\\t2.json";
 		String tickerIndexPath = "C:\\ZDX\\code\\ExchangeAgg\\conf\\t3.json";
 		//TriListBuilder.buildTriListFromPairFile(pairPath, triPath);
-		TickerIndexBuilder tib = new TickerIndexBuilder();
+/*		TickerIndexBuilder tib = new TickerIndexBuilder();
 		tib.buildIndexFromFile(triPath);
 		tib.saveToFile(tickerIndexPath);
-	}
+*/	}
 	
 
 	

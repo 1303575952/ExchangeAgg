@@ -120,8 +120,8 @@ public class TickerFormat {
 
 	private static void poloniexFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		x.timestamp = System.currentTimeMillis();
-		String bids_00 = jsonObject.get("bids").toString();
-		String[] bidss = bids_00.split("\"");
+		String jsonA = jsonObject.get("bids").toString();
+		String[] bidss = jsonA.split("\"");
 		x.bid = Double.parseDouble(bidss[1]);
 		String asks_00 = jsonObject.get("asks").toString();
 		String[] askss = asks_00.split("\"");

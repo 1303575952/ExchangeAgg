@@ -18,6 +18,7 @@ import org.influxdb.dto.Point;
 import org.influxdb.dto.Query;
 import org.influxdb.dto.QueryResult;
 
+import com.zdx.common.CommonConst;
 import com.zdx.common.DataFormat;
 import com.zdx.common.TickerFormat;
 import com.zdx.common.TickerStandardFormat;
@@ -46,11 +47,11 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			logger.warn("Parallec Fetch error. API Response = "+res);
 			failedTickerMap.put(url,"ParallecError");
 			return;
-		} else if (res.getStatusCodeInt() != 200){
+		} else if (res.getStatusCodeInt() != CommonConst.HTTP_OK){
 			logger.warn("Parallec Fetch StatusNot200. API Response = "+res);
 			failedTickerMap.put(url,"StatusNot200");
 			return;
-		} else if (res.getStatusCodeInt() == 200){
+		} else if (res.getStatusCodeInt() == CommonConst.HTTP_OK){
 			logger.debug("====================Begin Handle Message====================");
 			String influxURL = (String)responseContext.get("influxURL");
 			String influxDbName = (String)responseContext.get("influxDbName");
@@ -86,8 +87,8 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			if (failedTickerMap.containsKey(url)){
 				hashCodeOld = failedTickerMap.get(url);
 			}
-			if ((hashCodeOld == null)||(!hashCodeOld.equals("code="+hashCode))){
-				failedTickerMap.put(url, "code=" + hashCode);
+			if ((hashCodeOld == null)||(!hashCodeOld.equals(CommonConst.HASHCODE_PREFIX + hashCode))){
+				failedTickerMap.put(url, CommonConst.HASHCODE_PREFIX + hashCode);
 
 				String tableName = DataFormat.removeShortTerm(tsf.exchangeName);
 				Point point1 = Point.measurement(tableName)

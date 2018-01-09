@@ -101,11 +101,10 @@ public class TickerFormat {
 	private static void bittrexFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		logger.debug("=======bittrexFormat begin========");
 		logger.debug("jsonObject = " + jsonObject.toJSONString());
-		String str_00 = jsonObject.toJSONString();
-		String[] str1 = str_00.split("\\{");
+		String jsonA = jsonObject.toJSONString();
+		String[] str1 = jsonA.split("\\{");
 		String[] str2 = str1[2].split("\\}");
-		String str_11 = "{" + str2[0] + "}";
-		JSONObject tickerJsonObject = JSON.parseObject(str_11);
+		JSONObject tickerJsonObject = JSON.parseObject("{" + str2[0] + "}");
 		logger.debug("tickerJsonObject = " + tickerJsonObject.toJSONString());
 		x.timestamp = System.currentTimeMillis();
 		x.bid = tickerJsonObject.getDouble("Bid");

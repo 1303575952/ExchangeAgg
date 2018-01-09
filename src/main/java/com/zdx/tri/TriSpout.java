@@ -1,19 +1,16 @@
 package com.zdx.tri;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -26,20 +23,15 @@ import org.influxdb.dto.QueryResult;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.alibaba.fastjson.TypeReference;
 import com.zdx.common.DataFormat;
-import com.zdx.common.FileIO;
+
 import com.zdx.common.TickerStandardFormat;
-import com.zdx.pair.PairSpoutConf;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
-import backtype.storm.tuple.Values;
 
 public class TriSpout extends BaseRichSpout implements MessageListenerConcurrently{  
 	private static final long serialVersionUID = -3085994102089532269L;   
@@ -72,7 +64,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 		consumer.registerMessageListener(this);
 		consumer.setConsumeThreadMin(1);
 		consumer.setConsumeThreadMax(1);
-		
+
 		for (int i = 0; i < TriSpoutConf.topicList.size(); i++){
 			try {
 				consumer.subscribe("ticker_" + TriSpoutConf.topicList.get(i).toLowerCase(), "*");
@@ -106,81 +98,65 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			ConsumeConcurrentlyContext context) {  
 		logger.debug("===========================TriSpout Begin=======================================");
 		for (MessageExt msg : msgs) {
-			String body = new String(msg.getBody());		
-			TickerStandardFormat tsf = new TickerStandardFormat();
-			tsf.formatJsonString(body);
-			logger.debug("message tsf format = " + tsf.toJsonString());
-			String pair = tsf.coinA + "/" + tsf.coinB;
-			String key1 = tsf.exchangeName + "@@" + pair;
-			pair = pair.toLowerCase();
-			key1 = key1.toLowerCase();
-			ArrayList<String> triList = new ArrayList<String>();
-			if (TriSpoutConf.TICKER_TRIPLE_MAP.containsKey(key1)){
-				triList = TriSpoutConf.TICKER_TRIPLE_MAP.get(key1);
-			} else {
-				//logger.debug("10 = " + "error");				
-				//logger.debug("11 = " + tickerTripleMap.keySet().toString());
-			}
-			logger.debug("======Key = " + key1);
-			logger.debug("======Value = " + triList.toString());
-			String path1 = "";
-			String path2 = "";
-			String path3 = "";
-
-			for (String tri : triList){
-				TriArbitrageInfo triInfo = TriSpoutConf.TRIPLE_INFO_MAP.get(tri);
-				logger.debug("======Triple=" + tri);
-				boolean isValid = false;
-				String[] tmp = tri.split("@@");
-				if (tmp.length == 3){
-					triInfo.groupId = tmp[2];
-					triInfo.fullPath = tmp[1];
-					logger.debug("======Triple groupId= " + triInfo.groupId);
-					logger.debug("======Triple fullPath= " + triInfo.fullPath);
-					String[] tmp2 = tmp[1].split("-");
-					if (tmp2.length == 3){
-						logger.debug("====== triInfo before update = " + triInfo.toString());
-						isValid = true;
-						//logger.debug("tmp2[0] = " + tmp2[0]);
-						//logger.debug("tmp2[1] = " + tmp2[1]);
-						//logger.debug("tmp2[2] = " + tmp2[2]);
-						if (pair.equals(tmp2[0])){
-							triInfo.ask1 = tsf.ask;
-							triInfo.bid1 = tsf.bid;
-							triInfo.exchangeName = tsf.exchangeName;
-							path1 = tmp2[0];
-						} else if (pair.equals(tmp2[1])){
-							triInfo.ask2 = tsf.ask;
-							triInfo.bid2 = tsf.bid;
-							triInfo.exchangeName = tsf.exchangeName;
-							path2 = tmp2[1];
-						} else if (pair.equals(tmp2[2])){
-							triInfo.ask3 = tsf.ask;
-							triInfo.bid3 = tsf.bid;
-							triInfo.exchangeName = tsf.exchangeName;
-							path3 = tmp2[2];
+			try{
+				String body = new String(msg.getBody());
+				logger.info("message body = " + body);
+				TickerStandardFormat tsf = new TickerStandardFormat();
+				tsf.formatJsonString(body);
+				Date date = new Date(tsf.timestamp*1000);
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				logger.info("message timestamp = " + simpleDateFormat.format(date));
+				// 5 min message discard
+				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
+					logger.warn("intime message handling..." );
+					String pair = tsf.coinA + "/" + tsf.coinB;
+					String key1 = tsf.exchangeName + "@@" + pair;
+					pair = pair.toLowerCase();
+					key1 = key1.toLowerCase();
+					ArrayList<String> triList = new ArrayList<String>();
+					if (TriSpoutConf.TICKER_TRIPLE_MAP.containsKey(key1)){
+						triList = TriSpoutConf.TICKER_TRIPLE_MAP.get(key1);
+					}
+					for (String tri : triList){
+						TriArbitrageInfo triInfo = TriSpoutConf.TRIPLE_INFO_MAP.get(tri);
+						String[] tmp = tri.split("@@");
+						if (tmp.length == 3){
+							triInfo.groupId = tmp[2];
+							triInfo.fullPath = tmp[1];
+							String[] tmp2 = tmp[1].split("-");
+							if (tmp2.length == 3){
+								logger.debug("====== triInfo before update ticker = " + triInfo.toString());
+								if (pair.equals(tmp2[0])){
+									triInfo.ask1 = tsf.ask;
+									triInfo.bid1 = tsf.bid;
+									triInfo.exchangeName = tsf.exchangeName;
+								} else if (pair.equals(tmp2[1])){
+									triInfo.ask2 = tsf.ask;
+									triInfo.bid2 = tsf.bid;
+									triInfo.exchangeName = tsf.exchangeName;
+								} else if (pair.equals(tmp2[2])){
+									triInfo.ask3 = tsf.ask;
+									triInfo.bid3 = tsf.bid;
+									triInfo.exchangeName = tsf.exchangeName;
+								}
+								logger.debug("====== triInfo after update ticker = " + triInfo.toString());
+							}
 						}
-						logger.debug("====== triInfo after update = " + triInfo.toString());
-					}
-				}
-				//logger.debug("isValid = " + isValid);
-				if (isValid){
-					logger.debug("----------- triInfo before update = " + triInfo.toString());
-					triInfo.updateProfitByGroupId();
-					
-					/*				if (triInfo.profitVal - 1 > = threshold){
-						collector.emit(new Values(tri, triInfo.toString()));
-					}*/
-					logger.debug("----------- triInfo after update = " + triInfo.toString());
-					if (triInfo.profitVal > 0){
+						logger.debug("----------- triInfo before update profit = " + triInfo.toString());
+						triInfo.updateProfitByGroupId();
+						//collector.emit(new Values(tri, triInfo.toString()));
+						logger.debug("----------- triInfo after update profit = " + triInfo.toString());						
 						logPriceDiff(triInfo);
+						TriSpoutConf.TRIPLE_INFO_MAP.put(tri, triInfo);
 					}
-					TriSpoutConf.TRIPLE_INFO_MAP.put(tri, triInfo);
-				}
-
+				}  else {
+					logger.warn("obsolete message discard..." );
+					return ConsumeConcurrentlyStatus.RECONSUME_LATER;  
+				} 
+			}catch (Exception e1){
+				logger.warn("Unexcepted exception.", e1.getMessage());
 			}
-
-		}  
+		}
 		logger.debug("===========================TriSpout End=======================================");
 		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;  
 	}
@@ -209,7 +185,4 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			logger.debug("===========================InfluxDB Insert Sucess=======================================");
 		}
 	}
-
-
-
 }  

@@ -74,32 +74,32 @@ public class TickerStandardFormat {
 		if (jsonObject.containsKey(CommonConst.COIN_B)){
 			this.coinB = jsonObject.getString(CommonConst.COIN_B);
 		}
-		if (jsonObject.containsKey("midUSD")){
-			this.midUSD = jsonObject.getDouble("midUSD");
+		if (jsonObject.containsKey(CommonConst.MIDUSD)){
+			this.midUSD = jsonObject.getDouble(CommonConst.MIDUSD);
 		}
-		if (jsonObject.containsKey("mid")){
-			this.mid = jsonObject.getDouble("mid");
+		if (jsonObject.containsKey(CommonConst.MID)){
+			this.mid = jsonObject.getDouble(CommonConst.MID);
 		}
-		if (jsonObject.containsKey("bid")){
-			this.bid = jsonObject.getDouble("bid");
+		if (jsonObject.containsKey(CommonConst.BID)){
+			this.bid = jsonObject.getDouble(CommonConst.BID);
 		}
-		if (jsonObject.containsKey("ask")){
-			this.ask = jsonObject.getDouble("ask");
+		if (jsonObject.containsKey(CommonConst.ASK)){
+			this.ask = jsonObject.getDouble(CommonConst.ASK);
 		}
-		if (jsonObject.containsKey("last_price")){
-			this.lastPrice = jsonObject.getDouble("last_price");
+		if (jsonObject.containsKey(CommonConst.LAST_PRICE)){
+			this.lastPrice = jsonObject.getDouble(CommonConst.LAST_PRICE);
 		}
-		if (jsonObject.containsKey("low")){
-			this.low = jsonObject.getDouble("low");
+		if (jsonObject.containsKey(CommonConst.LOW)){
+			this.low = jsonObject.getDouble(CommonConst.LOW);
 		}
-		if (jsonObject.containsKey("high")){
-			this.high = jsonObject.getDouble("high");
+		if (jsonObject.containsKey(CommonConst.HIGH)){
+			this.high = jsonObject.getDouble(CommonConst.HIGH);
 		}
-		if (jsonObject.containsKey("volume")){
-			this.volume = jsonObject.getDouble("volume");
+		if (jsonObject.containsKey(CommonConst.VOLUME)){
+			this.volume = jsonObject.getDouble(CommonConst.VOLUME);
 		}
-		if (jsonObject.containsKey("timestamp")){
-			this.timestamp = jsonObject.getLong("timestamp");
+		if (jsonObject.containsKey(CommonConst.TIMESTAMP)){
+			this.timestamp = jsonObject.getLong(CommonConst.TIMESTAMP);
 		}
 		return this;
 	}

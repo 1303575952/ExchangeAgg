@@ -354,50 +354,50 @@ class EnterPrice{
 	}
 	public EnterPrice(String jsonString){
 		JSONObject jsonObject = JSON.parseObject(jsonString);
-		if (jsonObject.containsKey("sellExchangeName")){
-			sellExchangeName = jsonObject.getString("sellExchangeName");
+		if (jsonObject.containsKey(CommonConst.SELLEXCHANGENAME)){
+			sellExchangeName = jsonObject.getString(CommonConst.SELLEXCHANGENAME);
 		}
-		if (jsonObject.containsKey("buyExchangeName")){
-			buyExchangeName = jsonObject.getString("buyExchangeName");
+		if (jsonObject.containsKey(CommonConst.BUYEXCHANGENAME)){
+			buyExchangeName = jsonObject.getString(CommonConst.BUYEXCHANGENAME);
 		}
-		if (jsonObject.containsKey("sellPath")){
-			sellPath = jsonObject.getString("sellPath");
+		if (jsonObject.containsKey(CommonConst.SELLPATH)){
+			sellPath = jsonObject.getString(CommonConst.SELLPATH);
 		}
-		if (jsonObject.containsKey("buyPath")){
-			buyPath = jsonObject.getString("buyPath");
+		if (jsonObject.containsKey(CommonConst.BUYPATH)){
+			buyPath = jsonObject.getString(CommonConst.BUYPATH);
 		}
-		if (jsonObject.containsKey("bid1")){
-			bid1 = jsonObject.getDouble("bid1");
+		if (jsonObject.containsKey(CommonConst.BID1)){
+			bid1 = jsonObject.getDouble(CommonConst.BID1);
 		}
-		if (jsonObject.containsKey("ask1")){
-			ask1 = jsonObject.getDouble("ask1");
+		if (jsonObject.containsKey(CommonConst.ASK1)){
+			ask1 = jsonObject.getDouble(CommonConst.ASK1);
 		}
-		if (jsonObject.containsKey("bid2")){
-			bid2 = jsonObject.getDouble("bid2");
+		if (jsonObject.containsKey(CommonConst.BID2)){
+			bid2 = jsonObject.getDouble(CommonConst.BID2);
 		}
-		if (jsonObject.containsKey("ask2")){
-			ask2 = jsonObject.getDouble("ask2");
+		if (jsonObject.containsKey(CommonConst.ASK2)){
+			ask2 = jsonObject.getDouble(CommonConst.ASK2);
 		}
-		if (jsonObject.containsKey("fee1")){
-			fee1 = jsonObject.getDouble("fee1");
+		if (jsonObject.containsKey(CommonConst.FEE1)){
+			fee1 = jsonObject.getDouble(CommonConst.FEE1);
 		}
-		if (jsonObject.containsKey("fee2")){
-			fee2 = jsonObject.getDouble("fee2");
+		if (jsonObject.containsKey(CommonConst.FEE2)){
+			fee2 = jsonObject.getDouble(CommonConst.FEE2);
 		}
-		if (jsonObject.containsKey("priceDiff")){
-			priceDiff = jsonObject.getDouble("priceDiff");
+		if (jsonObject.containsKey(CommonConst.PRICEDIFF)){
+			priceDiff = jsonObject.getDouble(CommonConst.PRICEDIFF);
 		}
-		if (jsonObject.containsKey("maxPriceDiff")){
-			maxPriceDiff = jsonObject.getDouble("maxPriceDiff");
+		if (jsonObject.containsKey(CommonConst.MAXPRICEDIFF)){
+			maxPriceDiff = jsonObject.getDouble(CommonConst.MAXPRICEDIFF);
 		}
-		if (jsonObject.containsKey("isSend")){
-			isSend = jsonObject.getBooleanValue("isSend");
+		if (jsonObject.containsKey(CommonConst.ISSEND)){
+			isSend = jsonObject.getBooleanValue(CommonConst.ISSEND);
 		}
-		if (jsonObject.containsKey("tradeFlag")){
-			tradeFlag = jsonObject.getString("tradeFlag");
+		if (jsonObject.containsKey(CommonConst.TRADEFLAG)){
+			tradeFlag = jsonObject.getString(CommonConst.TRADEFLAG);
 		}
-		if (jsonObject.containsKey("timestamp")){
-			timeStamp = jsonObject.getLong("timestamp");
+		if (jsonObject.containsKey(CommonConst.TIMESTAMP)){
+			timeStamp = jsonObject.getLong(CommonConst.TIMESTAMP);
 		}
 	}
 

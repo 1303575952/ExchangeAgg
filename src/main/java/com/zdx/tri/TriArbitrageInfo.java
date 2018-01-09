@@ -2,7 +2,7 @@ package com.zdx.tri;
 
 import org.apache.log4j.Logger;
 
-import com.zdx.demo.ToyConsumer;
+import com.zdx.common.CommonConst;
 
 public class TriArbitrageInfo {
 	private static Logger logger = Logger.getLogger(TriArbitrageInfo.class);
@@ -24,7 +24,7 @@ public class TriArbitrageInfo {
 
 	public void updateProfitByGroupId(){
 		if(bid1*bid2*bid3*ask1*ask2*ask3 > 0){
-			if ("abbcca".equals(groupId)){
+			if (CommonConst.ABBCCA.equals(groupId)){
 				if(((bid1 * bid2 * bid3) > (1.0 / (ask1 * ask2 * ask3)))&&((bid1 * bid2 * bid3)  > lowerLimit)){
 					profitVal = bid1 * bid2 * bid3;
 					path1 = "abc";
@@ -37,7 +37,7 @@ public class TriArbitrageInfo {
 					path3 = "bac";
 				}
 
-			} else if ("abcbca".equals(groupId)){
+			} else if (CommonConst.ABCBCA.equals(groupId)){
 				if(((bid1 * bid3 / ask2) > (bid2 / (ask1 * ask3)))&&((bid1 * bid3 / ask2) > lowerLimit)){
 					profitVal = bid1 * bid3 / ask2;
 					path1 = "abc";
@@ -49,7 +49,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if ("abbcac".equals(groupId)) {
+			}else if (CommonConst.ABBCAC.equals(groupId)) {
 				if(((bid1 * bid2 / ask3) > (bid3 / (ask1 * ask2)))&&((bid1 * bid2 / ask3) > lowerLimit)){
 					profitVal = bid1 * bid2 / ask3;
 					path1 = "abc";
@@ -61,7 +61,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if("abcbac".equals(groupId)){
+			}else if(CommonConst.ABCBAC.equals(groupId)){
 				if(((bid1 / (ask2 * ask3)) > (bid2 * bid3 / ask1))&&(bid1 / (ask2 * ask3) > lowerLimit)){
 					profitVal = bid1 / (ask2 * ask3);
 					path1 = "abc";
@@ -73,7 +73,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if("abcabc".equals(groupId)){
+			}else if(CommonConst.ABCABC.equals(groupId)){
 				if(((bid1 * bid2 * bid3) > (1.0 / (ask1 * ask2 * ask3)))&&((bid1 * bid2 * bid3) > lowerLimit)){
 					profitVal = bid1 * bid2 * bid3;
 					path1 = "abc";
@@ -85,7 +85,7 @@ public class TriArbitrageInfo {
 					path2 = "cba";
 					path3 = "bac";
 				}
-			}else if("abacbc".equals(groupId)){
+			}else if(CommonConst.ABACBC.equals(groupId)){
 				if(((bid1 * bid3 / ask2) > (bid2 / (ask1 * ask3)))&&((bid1 * bid3 / ask2) > lowerLimit)){
 					profitVal = bid1 * bid3 / ask2;
 					path1 = "abc";

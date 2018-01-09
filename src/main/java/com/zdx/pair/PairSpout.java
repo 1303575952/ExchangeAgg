@@ -193,16 +193,6 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 
 	public void logPriceDiff(EnterPrice ep){
 		int status = 0;
-		if (ep.priceDiff > 0.2){
-			//介入交易
-			status = 1;
-			ep.tradeFlag = "open";
-		}  else	if (ep.priceDiff < 0.1){
-			//退出交易
-			status = -1;
-			ep.tradeFlag = "close";
-		}
-
 		String tableName = DataFormat.removeShortTerm(ep.sellExchangeName) + "_" + DataFormat.removeShortTerm(ep.buyExchangeName);
 		Point point1 = Point.measurement(tableName)
 				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)

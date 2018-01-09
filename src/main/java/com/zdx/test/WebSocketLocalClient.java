@@ -9,7 +9,6 @@ import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.framing.Framedata;
 import org.java_websocket.handshake.ServerHandshake;
 
-import com.zdx.demo.ToyConsumer;
 
 /** This example demonstrates how to create a websocket connection to a server. 
  * Only the most important callbacks are overloaded. */

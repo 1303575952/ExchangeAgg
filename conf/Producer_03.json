@@ -1,59 +1,53 @@
 {
     "ProducerGroup": "ProducerGroup_03",
-	"GatewayURL":"49.51.37.51:9876",
-    "InfluxDBURL": "http://49.51.37.51:8086",
+    "GatewayURL": "123.207.232.38:9876",
+    "InfluxDBURL": "http://123.207.232.38:8086",
     "InfluxDbName": "ticker",
     "InfluxRpName": "aRetentionPolicy",
     "TickerConf": [
         {
-            "exchangeURL": "www.okex.com",
-            "exchangeName": "okex",
+            "exchangeURL": "api.bithumb.com",
+            "exchangeName": "bithumb",
             "endpoints": [
                 {
-                    "pairName": "BTC_USDT",
-                    "pairPath": "api/v1/ticker.do?symbol=btc_usdt"
+                    "pairName": "XRP_KRW",
+                    "pairPath": "public/ticker/xrp"
                 },
                 {
-                    "pairName": "ETH_USDT",
-                    "pairPath": "api/v1/ticker.do?symbol=eth_usdt"
+                    "pairName": "BTC_KRW",
+                    "pairPath": "public/ticker/btc"
                 },
                 {
-                    "pairName": "ETH_BTC",
-                    "pairPath": "api/v1/ticker.do?symbol=eth_btc"
-                }
-            ]
-        },
-        {
-            "exchangeURL": "api.huobi.pro",
-            "exchangeName": "huobi",
-            "endpoints": [
-                {
-                    "pairName": "ETH_USDT",
-                    "pairPath": "market/detail/merged?symbol=ethusdt"
+                    "pairName": "BCH_KRW",
+                    "pairPath": "public/ticker/bch"
                 },
                 {
-                    "pairName": "BTC_USDT",
-                    "pairPath": "market/detail/merged?symbol=btcusdt"
+                    "pairName": "QTUM_KRW",
+                    "pairPath": "public/ticker/qtum"
                 },
                 {
-                    "pairName": "XRP_USDT",
-                    "pairPath": "market/detail/merged?symbol=xrpusdt"
+                    "pairName": "ETH_KRW",
+                    "pairPath": "public/ticker/eth"
                 },
                 {
-                    "pairName": "XRP_BTC",
-                    "pairPath": "market/detail/merged?symbol=xrpbtc"
+                    "pairName": "EOS_KRW",
+                    "pairPath": "public/ticker/eos"
                 },
                 {
-                    "pairName": "BCH_USDT",
-                    "pairPath": "market/detail/merged?symbol=bchusdt"
+                    "pairName": "ETC_KRW",
+                    "pairPath": "public/ticker/etc"
                 },
                 {
-                    "pairName": "XRP_ETH",
-                    "pairPath": "market/detail/merged?symbol=xrpeth"
+                    "pairName": "BTG_KRW",
+                    "pairPath": "public/ticker/btg"
                 },
                 {
-                    "pairName": "ETH_BTC",
-                    "pairPath": "market/detail/merged?symbol=ethbtc"
+                    "pairName": "LTC_KRW",
+                    "pairPath": "public/ticker/ltc"
+                },
+                {
+                    "pairName": "ZEC_KRW",
+                    "pairPath": "public/ticker/zec"
                 }
             ]
         }

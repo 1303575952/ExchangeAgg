@@ -1,5 +1,6 @@
 package com.zdx.tri;
 
+
 import org.apache.log4j.Logger;
 
 import com.zdx.common.CommonConst;
@@ -8,17 +9,27 @@ public class TriArbitrageInfo {
 	private static Logger logger = Logger.getLogger(TriArbitrageInfo.class);
 	public String exchangeName = "";
 	public double bid1 = 0.0;
-	public double bid2 = 0.0;
-	public double bid3 = 0.0;
 	public double ask1 = 0.0;
+	public long ts1 = 0;
+	public String sdf1 = "";
+	public double bid2 = 0.0;
 	public double ask2 = 0.0;
+	public long ts2 = 0;
+	public String sdf2 = "";	
+	public double bid3 = 0.0;
 	public double ask3 = 0.0;
+	public long ts3 = 0;
+	public String sdf3 = "";
+	
 	public String groupId = "";
 	String path1 = "";
 	String path2 = "";
 	String path3 = "";
 	public String fullPath = "";
 	public double profitVal = 0.0;
+	public long ts4 = 0;
+	public String sdf4 = "";
+
 	double lowerLimit = 0.00;
 
 
@@ -111,16 +122,25 @@ public class TriArbitrageInfo {
 		return "{\"groupId\":\"" + groupId + 
 				"\",\"exchangeName\":\"" + exchangeName +
 				"\",\"fullPath\":\"" + fullPath +
-				"\",\"bid1\":\"" + bid1 +
-				"\",\"bid2\":\"" + bid2 +
-				"\",\"bid3\":\"" + bid3 +
-				"\",\"ask1\":\"" + ask1 +
-				"\",\"ask2\":\"" + ask2 +
-				"\",\"ask3\":\"" + ask3 +
 				"\",\"path1\":\"" + path1 +
+				"\",\"bid1\":\"" + bid1 +
+				"\",\"ask1\":\"" + ask1 +
+				"\",\"ts1\":\"" + ts1 +
+				"\",\"sdf1\":\"" + sdf1 +
 				"\",\"path2\":\"" + path2 +
+				"\",\"bid2\":\"" + bid2 +
+				"\",\"ask2\":\"" + ask2 +
+				"\",\"ts2\":\"" + ts2 +
+				"\",\"sdf2\":\"" + sdf2 +
 				"\",\"path3\":\"" + path3 +
+				"\",\"bid3\":\"" + bid3 +
+				"\",\"ask3\":\"" + ask3 +
+				"\",\"ts3\":\"" + ts3 +
+				"\",\"sdf3\":\"" + sdf3 +
 				"\",\"profitVal\":\"" + profitVal +
+				"\",\"ts4\":\"" + ts4 +
+				"\",\"sdf4\":\"" + sdf4 +
+				
 				"\"}";
 	}
 }

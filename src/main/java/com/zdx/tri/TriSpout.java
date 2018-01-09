@@ -104,9 +104,10 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 				logger.info("message body = " + body);
 				TickerStandardFormat tsf = new TickerStandardFormat();
 				tsf.formatJsonString(body);
-				Date date = new Date(tsf.timestamp*1000);
+				Date date = new Date(tsf.timestamp);
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				logger.info("message timestamp = " + simpleDateFormat.format(date));
+				String sdf = simpleDateFormat.format(date);
+				logger.info("message timestamp = " + sdf);
 				// 5 min message discard
 				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
 					logger.warn("intime message handling..." );
@@ -141,25 +142,32 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 							triInfo.groupId = tmp[2];
 							triInfo.fullPath = tmp[1];
 							String[] tmp2 = tmp[1].split("-");
+							
 							if (tmp2.length == 3){
+								triInfo.exchangeName = tsf.exchangeName;
 								logger.debug("====== triInfo before update ticker = " + triInfo.toString());
 								if (pair.equals(tmp2[0])){
 									triInfo.ask1 = tsf.ask;
 									triInfo.bid1 = tsf.bid;
-									triInfo.exchangeName = tsf.exchangeName;
+									triInfo.ts1 = tsf.timestamp;
+									triInfo.sdf1 = sdf;
 								} else if (pair.equals(tmp2[1])){
 									triInfo.ask2 = tsf.ask;
 									triInfo.bid2 = tsf.bid;
-									triInfo.exchangeName = tsf.exchangeName;
+									triInfo.ts2 = tsf.timestamp;
+									triInfo.sdf2 = sdf;
 								} else if (pair.equals(tmp2[2])){
 									triInfo.ask3 = tsf.ask;
 									triInfo.bid3 = tsf.bid;
-									triInfo.exchangeName = tsf.exchangeName;
+									triInfo.ts3 = tsf.timestamp;
+									triInfo.sdf3 = sdf;
 								}
 								logger.debug("====== triInfo after update ticker = " + triInfo.toString());
 							}
 						}
 						logger.debug("----------- triInfo before update profit = " + triInfo.toString());
+						triInfo.ts4 = System.currentTimeMillis();
+						triInfo.sdf4 = simpleDateFormat.format(new Date(triInfo.ts4));
 						triInfo.updateProfitByGroupId();
 						//collector.emit(new Values(tri, triInfo.toString()));
 						logger.debug("----------- triInfo after update profit = " + triInfo.toString());						
@@ -185,10 +193,13 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 				.tag("full_path", triInfo.fullPath)
 				.addField("bid1", triInfo.bid1)
 				.addField("ask1", triInfo.ask1)
+				.addField("sdf1", triInfo.sdf1)
 				.addField("bid2", triInfo.bid2)
 				.addField("ask2", triInfo.ask2)
+				.addField("sdf2", triInfo.sdf2)
 				.addField("bid3", triInfo.bid3)
 				.addField("ask3", triInfo.ask3)
+				.addField("sdf3", triInfo.sdf3)
 				.addField("priceDiff", triInfo.profitVal)
 				.build();
 		influxDB.write(TriSpoutConf.influxDbName, TriSpoutConf.influxRpName, point1);

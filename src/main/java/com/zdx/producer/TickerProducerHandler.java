@@ -1,5 +1,7 @@
 package com.zdx.producer;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,9 +42,8 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 		String hostName = res.getRequest().getHostUniform();
 		String pathName = res.getRequest().getResourcePath();
 		String url = hostName + pathName;
-		logger.debug("response = " + res.getResponseContent());
 		logger.info("Fetch URL= " + url);
-		logger.debug("response = " + res.getResponseContent());
+		logger.info("response = " + res.getResponseContent());
 		if (res.getError()){
 			logger.warn("Parallec Fetch error. API Response = "+res);
 			failedTickerMap.put(url,"ParallecError");
@@ -89,10 +90,13 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			}
 			if ((hashCodeOld == null)||(!hashCodeOld.equals(CommonConst.HASHCODE_PREFIX + hashCode))){
 				failedTickerMap.put(url, CommonConst.HASHCODE_PREFIX + hashCode);
-
+				long timeToSet = System.currentTimeMillis();
+				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				logger.info("System time = " + simpleDateFormat.format(new Date(timeToSet)));
+				logger.info("Ticker time = " + simpleDateFormat.format(tsf.timestamp));
 				String tableName = DataFormat.removeShortTerm(tsf.exchangeName);
 				Point point1 = Point.measurement(tableName)
-						.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+						.time(timeToSet, TimeUnit.MILLISECONDS)
 						.addField("exchangeName", tsf.exchangeName)	
 						.tag("coinA", tsf.coinA)
 						.tag("coinB", tsf.coinB)

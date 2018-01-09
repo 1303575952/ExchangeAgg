@@ -101,9 +101,11 @@ function ins_rocketmq()
     if [ ! -d "/usr/local/rocketmq" ];  
     then  
         echo "Begin to install RocketMQ, Please waiting..."
-
-        wget http://mirror.bit.edu.cn/apache/rocketmq/4.2.0/rocketmq-all-4.2.0-bin-release.zip
-
+        if [ ! -f "rocketmq-all-4.2.0-bin-release.zip" ];  
+        then
+            wget http://mirror.bit.edu.cn/apache/rocketmq/4.2.0/rocketmq-all-4.2.0-bin-release.zip
+        fi
+        
         unzip rocketmq-all-4.2.0-bin-release.zip -d rocketmq
 
         rm -rf /usr/local/rocketmq

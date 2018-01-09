@@ -321,7 +321,7 @@ public class TickerFormat {
 	private static void huobiFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		// {"status":"ok","ch":"market.ethusdt.detail.merged","ts":1514547024042,"tick":{"amount":45957.304744189411111707,"open":668.510000000000000000,"close":720.000000000000000000,"high":745.000000000000000000,"id":880684657,"count":36712,"low":658.000000000000000000,"version":880684657,"ask":[720.000000000000000000,44.548320432738661691],"vol":32702954.096220878944713067540000000000000000,"bid":[719.430000000000000000,0.580000000000000000]}}
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("tick"));
-		x.timestamp = System.currentTimeMillis();
+		x.timestamp = jsonObject.getLong("ts");
 		String t1 = tickerJsonObject.getString("bid");
 		t1 = t1.substring(t1.indexOf("[") + 1, t1.indexOf(","));
 		x.bid = Double.valueOf(t1);

@@ -66,7 +66,7 @@
          APR (HTTP/AJP) Connector: /docs/apr.html
          Define a non-SSL/TLS HTTP/1.1 Connector on port 8080
     -->
-    <Connector port="8081" protocol="HTTP/1.1"
+    <Connector port="8080" protocol="HTTP/1.1"
                connectionTimeout="20000"
                redirectPort="8443" />
     <!-- A "Connector" using the shared thread pool-->
@@ -145,9 +145,9 @@
                resourceName="UserDatabase"/>
       </Realm>
 
-      <Host name="123.207.232.38"  appBase="webapps"
+      <Host name="localhost"  appBase="webapps"
             unpackWARs="true" autoDeploy="true">
-        <Context docBase="/root/Coin/tomcat/webapps/jstorm-ui-2.2.1.war" path="/jstorm" reloadable="true" />
+
         <!-- SingleSignOn valve, share authentication between web applications
              Documentation at: /docs/config/valve.html -->
         <!--

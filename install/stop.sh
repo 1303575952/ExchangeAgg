@@ -130,7 +130,7 @@ function stop_aio()
 function clean_logs()
 {
     echo "Delete RocketMQ logs at ~/logs/rocketmqlogs/"
-    rm -rf ~/logs/rocketmqlogs/*
+    rm -rf ~/logs/*
 
     echo "Delete Jstorm logs at /usr/local/jstorm/logs/"
     rm -rf /usr/local/jstorm/logs/*

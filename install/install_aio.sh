@@ -47,7 +47,7 @@ function ins_jdk()
 
         source /etc/profile
 
-        #rm -rf jdk-8u151-linux-x64.tar.gz
+        rm -rf jdk-8u151-linux-x64.tar.gz
 
         echo "JDK安装成功"
     else
@@ -89,7 +89,7 @@ function ins_maven()
 
         source /etc/profile
 
-        # rm -rf apache-maven-3.3.9-bin.tar.gz
+        rm -rf apache-maven-3.3.9-bin.tar.gz
         echo "MAVEN安装成功"
     else
         echo "本机已安装maven无需再次安装"
@@ -110,7 +110,7 @@ function ins_rocketmq()
 
         mv -f rocketmq /usr/local/rocketmq
 
-        #rm -rf rocketmq-all-4.2.0-bin-release.zip
+        rm -rf rocketmq-all-4.2.0-bin-release.zip
         
         echo "RocketMQ安装成功"
     else
@@ -160,7 +160,7 @@ function ins_rocketmq_ui()
     
         cd ~
 
-        #rm -rf rocketmq-externals
+        rm -rf rocketmq-externals
 
         echo "RocketMQ WebUI安装成功"
     else
@@ -197,7 +197,7 @@ function ins_zookeeper()
     
         echo "PATH=$PATH:$ZOOKEEPER_HOME/bin" >>/etc/profile
 
-        #rm -rf zookeeper-3.4.10.tar.gz
+        rm -rf zookeeper-3.4.10.tar.gz
 
         echo "Zookeeper安装成功"
     else
@@ -232,7 +232,7 @@ function ins_jstorm()
         
         source /etc/profile
 
-	    #rm -rf jstorm-2.2.1.zip
+	    rm -rf jstorm-2.2.1.zip
 
         echo "Jstorm安装成功"
     else
@@ -257,7 +257,7 @@ function ins_tomcat()
 
     	mv -f apache-tomcat-9.0.2 /usr/local/tomcat
 
-        #rm -rf apache-tomcat-9.0.2.tar.gz
+        rm -rf apache-tomcat-9.0.2.tar.gz
         echo "Tomcat安装成功"
     else
         echo "本机已安装Tomcat无需再次安装"
@@ -292,7 +292,7 @@ function ins_influxdb()
 
         yum -y localinstall influxdb-1.4.2.x86_64.rpm
 
-        #rm -y influxdb-1.4.2.x86_64.rpm
+        rm -y influxdb-1.4.2.x86_64.rpm
         echo "InfluxDB安装成功"
     else
         echo "本机已安装InfluxDB无需再次安装"
@@ -311,7 +311,7 @@ function ins_grafana()
 
         yum -y localinstall grafana-4.6.3-1.x86_64.rpm
 
-        #rm -y grafana-4.6.3-1.x86_64.rpm
+        rm -y grafana-4.6.3-1.x86_64.rpm
         echo "Grafana安装成功"
     else
         echo "本机已安装Grafana无需再次安装"

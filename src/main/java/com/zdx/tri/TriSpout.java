@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
@@ -117,6 +118,22 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 					if (TriSpoutConf.TICKER_TRIPLE_MAP.containsKey(key1)){
 						triList = TriSpoutConf.TICKER_TRIPLE_MAP.get(key1);
 					}
+					logger.debug("====== influxURL = " + TriSpoutConf.influxURL);
+					logger.debug("-------------------Content of TICKER_TRIPLE_MAP---------------------");
+					for (Entry<String, ArrayList<String>> x: TriSpoutConf.TICKER_TRIPLE_MAP.entrySet()){
+						logger.debug("---------TICKER_TRIPLE_MAP.key=" + x.getKey());
+						logger.debug("---------TICKER_TRIPLE_MAP.val=" + x.getValue().toString());
+					}
+					logger.debug("----------------------------------------");
+					logger.debug("-------------------Content of TRIPLE_INFO_MAP---------------------");
+					for (Entry<String, TriArbitrageInfo> x: TriSpoutConf.TRIPLE_INFO_MAP.entrySet()){
+						logger.debug("---------TRIPLE_INFO_MAP.key=" + x.getKey());
+						logger.debug("---------TRIPLE_INFO_MAP.val=" + x.getValue().toString());
+					}
+					logger.debug("----------------------------------------");
+					logger.debug("====== key1 = " + key1);
+					logger.debug("====== pair = " + pair);
+					logger.debug("====== triList = " + triList.toString());
 					for (String tri : triList){
 						TriArbitrageInfo triInfo = TriSpoutConf.TRIPLE_INFO_MAP.get(tri);
 						String[] tmp = tri.split("@@");

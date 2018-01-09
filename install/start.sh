@@ -91,7 +91,7 @@ function start_jstorm_nimbus()
 {
     if [ `ps -ef |grep com.alibaba.jstorm.daemon.nimbus.NimbusServer |grep java |wc -l` -eq 0 ];
     then
-        if [ `hostname -i` = "127.0.0.1" ];
+        if [ `hostname -i`="127.0.0.1" ];
         then
             echo "Reset hostname to wufeng ..."
             `hostname wufeng`
@@ -121,7 +121,7 @@ function start_jstorm_supervisor()
 {
     if [ `ps -ef |grep com.alibaba.jstorm.daemon.supervisor.Supervisor |grep java |wc -l` -eq 0 ];
     then
-        if [ `hostname -i` = "127.0.0.1" ];
+        if [ `hostname -i`="127.0.0.1" ];
         then
             echo "Reset hostname to wufeng ..."
             `hostname wufeng`

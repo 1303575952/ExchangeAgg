@@ -146,10 +146,12 @@ public class TriSpoutConf {
 			for (String s1 : tickerPairSet){
 				ArrayList<String> res = new ArrayList<String> ();
 				String newKey = exchangeName + "@@" + s1;
+				newKey = newKey.toLowerCase();
 				for (String s2 : trList){
 					if (s2.contains(s1)){
 						String flag = regulateTriList(s2);
-						res.add(exchangeName + "@@" + s2 +"@@" +flag);
+						String t1 = exchangeName + "@@" + s2 +"@@" +flag;
+						res.add(t1.toLowerCase());
 					}
 				}
 				TICKER_TRIPLE_MAP.put(newKey, res);				
@@ -226,9 +228,6 @@ public class TriSpoutConf {
 				TriArbitrageInfo m = new TriArbitrageInfo();
 				TRIPLE_INFO_MAP.put(s, m);
 			}
-			System.out.println(e.getKey());
-			System.out.println(e.getValue().toString());
-
 		}
 
 	}

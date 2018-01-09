@@ -3,16 +3,13 @@ package com.zdx.producer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.log4j.Logger;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
-import org.influxdb.InfluxDB;
 
 import com.zdx.common.JsonFormatTool;
-import com.zdx.common.LoadConfig;
 
 import io.parallec.core.ParallelClient;
 import io.parallec.core.ParallelTaskBuilder;
@@ -39,8 +36,9 @@ public class TickerProducer {
 	}
 
 	public static void execute() throws InterruptedException{
-		DefaultMQProducer producer = new DefaultMQProducer(TickerProducerConf.producerGroup);		
-		producer.setNamesrvAddr(TickerProducerConf.serverUrl);		
+		DefaultMQProducer producer = new DefaultMQProducer();		
+		producer.setNamesrvAddr(TickerProducerConf.serverUrl);	
+		producer.setProducerGroup(TickerProducerConf.producerGroup);
 		try {
 			producer.start();
 			//FileHandler.writeFile(destDir + File.separator + "failed.json", failedToString());

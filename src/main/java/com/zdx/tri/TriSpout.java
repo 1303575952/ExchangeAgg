@@ -180,7 +180,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 							logPriceDiff(triInfo);							
 							//collector.emit(new Values(tri, triInfo.toString()));
 						} else {
-							logger.info("---- Message is in time");
+							logger.info("---- Message is out-dated");
 							logger.info("---- Triple info is reset to = " + triInfo.toString());
 							triInfo = new TriArbitrageInfo();
 						}

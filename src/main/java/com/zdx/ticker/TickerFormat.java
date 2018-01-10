@@ -140,7 +140,8 @@ public class TickerFormat {
 
 	private static void bitfinexFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		String tmp = jsonObject.getString("timestamp");
-		x.timestamp = Long.parseLong(tmp.substring(0, tmp.indexOf(".")));
+		tmp = tmp.substring(0, tmp.indexOf(".")) + tmp.substring(tmp.indexOf(".")+1, tmp.indexOf(".")+4);
+		x.timestamp = Long.parseLong(tmp);
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
 		x.mid = jsonObject.getDouble("mid");
@@ -153,7 +154,7 @@ public class TickerFormat {
 	}
 
 	public static void bitstampFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		x.timestamp = jsonObject.getLong("timestamp");
+		x.timestamp = jsonObject.getLong("timestamp") * 1000;
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
 		x.mid = (x.bid + x.ask) / 2;

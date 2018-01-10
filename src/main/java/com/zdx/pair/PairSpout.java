@@ -1,4 +1,5 @@
 package com.zdx.pair;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,36 +37,35 @@ import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
 import backtype.storm.tuple.Fields;
 
-public class PairSpout extends BaseRichSpout implements MessageListenerConcurrently{  
-	private static final long serialVersionUID = -3085994102089532269L;   
-	private SpoutOutputCollector collector;  
-	private transient DefaultMQPushConsumer consumer; 
+public class PairSpout extends BaseRichSpout implements MessageListenerConcurrently {
+	private static final long serialVersionUID = -3085994102089532269L;
+	private SpoutOutputCollector collector;
+	private transient DefaultMQPushConsumer consumer;
 	private static final Logger logger = LoggerFactory.getLogger(PairSpout.class);
 
-
-	//public static PairStormConf PairSpoutConf;
-	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice> ();
+	// public static PairStormConf PairSpoutConf;
+	public static HashMap<String, LowestPrice> pairPriceMap = new HashMap<String, LowestPrice>();
 
 	public static InfluxDB influxDB = null;
 
-
-	@SuppressWarnings("rawtypes") 
+	@SuppressWarnings("rawtypes")
 	@Override
-	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) { 
+	public void open(Map conf, TopologyContext context, SpoutOutputCollector collector) {
 		logger.debug("===========================PairSpout prepare Begin=======================================");
 		logger.debug("========================== Conf=" + conf.get("SpoutData").toString());
 
 		PairSpoutConf.buildSpoutConfig(conf.get("SpoutData").toString());
 
 		influxDB = InfluxDBFactory.connect(PairSpoutConf.influxURL);
-		if (!influxDB.databaseExists(PairSpoutConf.influxDbName)){
-			logger.debug("==================================================================Database" + PairSpoutConf.influxDbName + " not Exist");
+		if (!influxDB.databaseExists(PairSpoutConf.influxDbName)) {
+			logger.debug("==================================================================Database"
+					+ PairSpoutConf.influxDbName + " not Exist");
 			influxDB.createDatabase(PairSpoutConf.influxDbName);
 		}
 		influxDB.setDatabase(PairSpoutConf.influxDbName);
 		influxDB.createRetentionPolicy(PairSpoutConf.influxRpName, PairSpoutConf.influxDbName, "30d", "30m", 2, true);
 
-		consumer = new DefaultMQPushConsumer(PairSpoutConf.consumerGroup); 
+		consumer = new DefaultMQPushConsumer(PairSpoutConf.consumerGroup);
 		consumer.setNamesrvAddr(PairSpoutConf.mqAddress);
 		consumer.setConsumeFromWhere(ConsumeFromWhere.CONSUME_FROM_FIRST_OFFSET);
 		consumer.setMessageModel(MessageModel.BROADCASTING);
@@ -73,42 +73,40 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 		consumer.setConsumeThreadMax(1);
 		consumer.setConsumeMessageBatchMaxSize(1);
 		consumer.registerMessageListener(this);
-		
-		for (int i = 0; i < PairSpoutConf.topicList.size(); i++){
+
+		for (int i = 0; i < PairSpoutConf.topicList.size(); i++) {
 			try {
 				consumer.subscribe("ticker_" + PairSpoutConf.topicList.get(i).toLowerCase(), "*");
-			} catch (MQClientException e) {  
-				e.printStackTrace();  
-			}  
+			} catch (MQClientException e) {
+				e.printStackTrace();
+			}
 		}
 
-		try {  
-			consumer.start();  
-		} catch (MQClientException e) {  
-			e.printStackTrace();  
-		} 
+		try {
+			consumer.start();
+		} catch (MQClientException e) {
+			e.printStackTrace();
+		}
 		logger.debug("Consumer Started.");
 
-		this.collector = collector; 
+		this.collector = collector;
 		logger.debug("===========================PairSpout prepare End=======================================");
-	}  
-
-	@Override  
-	public void nextTuple() {  
-		//do nothing  
-	}
-
-
-	@Override  
-	public void declareOutputFields(OutputFieldsDeclarer declarer) {  
-		//declarer.declare(new Fields("pairArbitrage"));
 	}
 
 	@Override
-	public ConsumeConcurrentlyStatus  consumeMessage(List<MessageExt> msgs,
-			ConsumeConcurrentlyContext context) {  
+	public void nextTuple() {
+		// do nothing
+	}
+
+	@Override
+	public void declareOutputFields(OutputFieldsDeclarer declarer) {
+		// declarer.declare(new Fields("pairArbitrage"));
+	}
+
+	@Override
+	public ConsumeConcurrentlyStatus consumeMessage(List<MessageExt> msgs, ConsumeConcurrentlyContext context) {
 		logger.info("===========================PairSpout Begin=======================================");
-		
+
 		for (MessageExt msg : msgs) {
 			try {
 				String body = new String(msg.getBody());
@@ -119,66 +117,71 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String sdf = simpleDateFormat.format(date);
 				logger.info("message timestamp = " + sdf);
-				if (!tsf.isValid){
+				if (!tsf.isValid) {
 					logger.info("message is invalid, discard....");
-				}
-				// 5 min message discard
-				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
-					logger.warn("intime message handling..." );
-					updatePrice(tsf);
-					updateForwardPairPrice(tsf);
 				} else {
-					logger.warn("obsolete message discard..." );
-					return ConsumeConcurrentlyStatus.RECONSUME_LATER;  
+					// 5 min message discard
+					if (System.currentTimeMillis() < (tsf.timestamp + 300 * 1000)) {
+						logger.warn("intime message handling...");
+						updatePrice(tsf);
+						updateForwardPairPrice(tsf);
+					} else {
+						logger.warn("obsolete message discard...");
+						return ConsumeConcurrentlyStatus.RECONSUME_LATER;
+					}
 				}
-			} catch (Exception e1){
+			} catch (Exception e1) {
 				logger.warn("Unexcepted exception.", e1.getMessage());
 			}
 		}
 		logger.info("===========================PairSpout End=======================================");
-		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;  
+		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;
 	}
 
-	public void updateForwardPairPrice(TickerStandardFormat tsf){
+	public void updateForwardPairPrice(TickerStandardFormat tsf) {
 		logger.debug("updateForwardPairPrice: ... ...");
 		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();
 		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;
 		logger.debug("updateForwardPairPrice: exchangePairName = " + exchangePairName);
-		logger.debug("updateForwardPairPrice: keyset of pc.pairFourthMap = " + PairSpoutConf.pairFourthMap.keySet().toString());
-		//logger.debug("updateForwardPairPrice: Ticker Data = "+ tsf.toJsonString());
-		if (PairSpoutConf.pairFourthMap.containsKey(exchangePairName)){			
+		logger.debug("updateForwardPairPrice: keyset of pc.pairFourthMap = "
+				+ PairSpoutConf.pairFourthMap.keySet().toString());
+		// logger.debug("updateForwardPairPrice: Ticker Data = "+
+		// tsf.toJsonString());
+		if (PairSpoutConf.pairFourthMap.containsKey(exchangePairName)) {
 			ArrayList<String> tmp1 = PairSpoutConf.pairFourthMap.get(exchangePairName);
-			logger.debug("updateForwardPairPrice: Candidate FourthList = "+ tmp1.toString());
-			for (String x : tmp1){
-				logger.debug("updateForwardPairPrice: Candidate Fourth =  "+ x);
-				if (PairSpoutConf.fourthPriceMap.containsKey(x)){
+			logger.debug("updateForwardPairPrice: Candidate FourthList = " + tmp1.toString());
+			for (String x : tmp1) {
+				logger.debug("updateForwardPairPrice: Candidate Fourth =  " + x);
+				if (PairSpoutConf.fourthPriceMap.containsKey(x)) {
 					EnterPrice ep = PairSpoutConf.fourthPriceMap.get(x);
 
-					logger.debug("updateForwardPairPrice: Candidate Fourth profit before update = "+ ep.toJsonString());					
-					if (ep.sellExchangeName.equals(tsf.exchangeName.toLowerCase())){
+					logger.debug(
+							"updateForwardPairPrice: Candidate Fourth profit before update = " + ep.toJsonString());
+					if (ep.sellExchangeName.equals(tsf.exchangeName.toLowerCase())) {
 						ep.bid1 = tsf.bid;
 						ep.ask1 = tsf.ask;
 						ep.sellPath = pair;
-					} else if (ep.buyExchangeName.equals(tsf.exchangeName.toLowerCase())){
+					} else if (ep.buyExchangeName.equals(tsf.exchangeName.toLowerCase())) {
 						ep.bid2 = tsf.bid;
 						ep.ask2 = tsf.ask;
 						ep.buyPath = pair;
 					}
-					if (ep.ask2 > 0.0 && ep.ask1 > 0.0){
+					if (ep.ask2 > 0.0 && ep.ask1 > 0.0) {
 						ep.priceDiff = ep.bid1 / ep.ask2 - 1.0;
 					}
-					if (ep.priceDiff > ep.maxPriceDiff){
+					if (ep.priceDiff > ep.maxPriceDiff) {
 						ep.maxPriceDiff = ep.priceDiff;
 					}
 
-					//if (ep.priceDiff > threshold ){
-					//	ep.isSend = true;
-					//}
+					// if (ep.priceDiff > threshold ){
+					// ep.isSend = true;
+					// }
 					ep.isSend = true;
-					if (ep.isSend){	
-						/*						if (ep.priceDiff < thresholdNeglect ){
-							ep.isSend = false;
-						}*/
+					if (ep.isSend) {
+						/*
+						 * if (ep.priceDiff < thresholdNeglect ){ ep.isSend =
+						 * false; }
+						 */
 						String[] t1 = x.split("@@");
 						logger.info("-----Sell at = " + t1[0]);
 						logger.info("-----Buy at = " + t1[1]);
@@ -186,7 +189,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 						ep.timeStamp = System.currentTimeMillis();
 						logPriceDiff(ep);
 					}
-					logger.debug("updateForwardPairPrice: Candidate Fourth profit after update = "+ ep.toJsonString());
+					logger.debug("updateForwardPairPrice: Candidate Fourth profit after update = " + ep.toJsonString());
 					PairSpoutConf.fourthPriceMap.put(x, ep);
 				}
 
@@ -194,24 +197,19 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 		}
 	}
 
-	public void logPriceDiff(EnterPrice ep){
+	public void logPriceDiff(EnterPrice ep) {
 		int status = 0;
-		String tableName = DataFormat.removeShortTerm(ep.sellExchangeName) + "_" + DataFormat.removeShortTerm(ep.buyExchangeName);
-		Point point1 = Point.measurement(tableName)
-				.time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
-				.addField("sellExchangeName", ep.sellExchangeName)	
-				.tag("sellPath", ep.sellPath)
-				.addField("sellPrice", ep.bid1)
-				.addField("buyExchangeName", ep.buyExchangeName)
-				.tag("buyPath", ep.buyPath)
-				.addField("buyPrice", ep.ask2)
-				.addField("priceDiff", ep.priceDiff)
-				.addField("status", status)
-				.build();
+		String tableName = DataFormat.removeShortTerm(ep.sellExchangeName) + "_"
+				+ DataFormat.removeShortTerm(ep.buyExchangeName);
+		Point point1 = Point.measurement(tableName).time(System.currentTimeMillis(), TimeUnit.MILLISECONDS)
+				.addField("sellExchangeName", ep.sellExchangeName).tag("sellPath", ep.sellPath)
+				.addField("sellPrice", ep.bid1).addField("buyExchangeName", ep.buyExchangeName)
+				.tag("buyPath", ep.buyPath).addField("buyPrice", ep.ask2).addField("priceDiff", ep.priceDiff)
+				.addField("status", status).build();
 		influxDB.write(PairSpoutConf.influxDbName, PairSpoutConf.influxRpName, point1);
 		Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", PairSpoutConf.influxDbName);
 		QueryResult result = influxDB.query(query);
-		if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true){
+		if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true) {
 			logger.debug("===========================InfluxDB Insert Failed=======================================");
 			influxDB.close();
 			influxDB = InfluxDBFactory.connect(PairSpoutConf.influxURL);
@@ -220,30 +218,30 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 		}
 	}
 
-
-	public void updatePrice(TickerStandardFormat tsf){
+	public void updatePrice(TickerStandardFormat tsf) {
 		String pair = tsf.coinA.toLowerCase() + "_" + tsf.coinB.toLowerCase();
 		logger.debug("updatePrice: pair = " + pair);
 		String exchangePairName = tsf.exchangeName.toLowerCase() + "_" + pair;
 		logger.debug("updatePrice: exchangePairName = " + exchangePairName);
-		//用ticker直接值更新最低价，如BTC-USD，给BTC-USD自身pair用
+		// 用ticker直接值更新最低价，如BTC-USD，给BTC-USD自身pair用
 		updateLowestPrice(exchangePairName, pair, tsf.ask);
 		logger.debug("updatePrice: Direct LowestPrice = " + tsf.ask);
-		logger.debug("updatePrice: Indirect ... keySet of pairPathMap = " + PairSpoutConf.pairPathMap.keySet().toString()); 
+		logger.debug(
+				"updatePrice: Indirect ... keySet of pairPathMap = " + PairSpoutConf.pairPathMap.keySet().toString());
 
-		//更新x-btc-usd间接价格，给x_usd用
-		if (PairSpoutConf.pairPathMap.containsKey(exchangePairName)){
+		// 更新x-btc-usd间接价格，给x_usd用
+		if (PairSpoutConf.pairPathMap.containsKey(exchangePairName)) {
 			ArrayList<String> pathNameList = PairSpoutConf.pairPathMap.get(exchangePairName);
 			logger.debug("updatePrice: Candidate Indirect Paths = " + pathNameList.toString());
-			for (String pathName : pathNameList){
+			for (String pathName : pathNameList) {
 				logger.debug("updatePrice: Current Candidate Indirect Path = " + pathName);
-				PathPrice pp =  PairSpoutConf.pathPriceMap.get(pathName);
+				PathPrice pp = PairSpoutConf.pathPriceMap.get(pathName);
 				logger.debug("updatePrice: Current Candidate Indirect PathPrice Before Update = " + pp.toJsonString());
-				if (pair.equals(pp.path1)){
+				if (pair.equals(pp.path1)) {
 					pp.bid1 = tsf.bid;
 					pp.ask1 = tsf.ask;
 				}
-				if (pair.equals(pp.path2)){
+				if (pair.equals(pp.path2)) {
 					pp.bid2 = tsf.bid;
 					pp.ask2 = tsf.ask;
 				}
@@ -252,25 +250,26 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 				logger.debug("updatePrice: Indirect Price of Path = " + pathName + " = " + pp.price);
 
 				PairSpoutConf.pathPriceMap.put(pathName, pp);
-				//用间接价格更新最低价，如etc-usd
+				// 用间接价格更新最低价，如etc-usd
 				String exchangePairName2 = tsf.exchangeName.toLowerCase() + "_" + pp.pair;
-				logger.debug("updatePrice: updateLowestPrice with inDirect Price from Path = " + pathName + " with price = " + pp.price);
+				logger.debug("updatePrice: updateLowestPrice with inDirect Price from Path = " + pathName
+						+ " with price = " + pp.price);
 				updateLowestPrice(exchangePairName2, pp.pair, pp.price);
 
 			}
 		}
 	}
 
-	public static void updateLowestPrice(String tickerName, String lowestPath, double lowestPrice){
+	public static void updateLowestPrice(String tickerName, String lowestPath, double lowestPrice) {
 		logger.debug("updateLowestPrice: KeySet of pairPriceMap = " + pairPriceMap.keySet().toString());
 		logger.debug("updateLowestPrice: Input Data tickerName = " + tickerName);
 		logger.debug("updateLowestPrice: Input Data lowestPath = " + lowestPath);
 		logger.debug("updateLowestPrice: Input Data lowestPrice = " + lowestPrice);
-		if (pairPriceMap.containsKey(tickerName)){
+		if (pairPriceMap.containsKey(tickerName)) {
 			LowestPrice lp = pairPriceMap.get(tickerName);
 			logger.debug("updateLowestPrice: Before Update lowestPath = " + lp.lowestPath);
 			logger.debug("updateLowestPrice: Before Update lowestPrice = " + lp.lowestPrice);
-			if (lowestPrice < lp.lowestPrice){
+			if (lowestPrice < lp.lowestPrice) {
 				lp.lowestPath = lowestPath;
 				lp.lowestPrice = lowestPrice;
 			}
@@ -281,12 +280,8 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 			LowestPrice lp = new LowestPrice();
 			lp.lowestPath = lowestPath;
 			lp.lowestPrice = lowestPrice;
-			pairPriceMap.put(tickerName, lp);			
+			pairPriceMap.put(tickerName, lp);
 		}
 	}
 
-
-
-
-
-}  
+}

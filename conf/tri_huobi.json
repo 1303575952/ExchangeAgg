@@ -1,0 +1,58 @@
+{
+    "StormData": [
+        {
+            "topology.name": "tri_huobi",
+            "storm.cluster.mode": "local",
+            "topology.bolt.parallel": "1",
+            "topology.spout.parallel": "1",
+            "topology.optimize": "true"
+        }
+    ],
+    "SpoutData": [
+        {
+            "ConsumerGroup": "tri_huobi",
+            "RocketMQNameServerAddress": "49.51.37.51:9876",
+            "TopicList": [
+                "huobi"
+            ],
+            "InfluxDBURL": "http://49.51.37.51:8086",
+            "InfluxDbName": "tri",
+            "InfluxRpName": "aRetentionPolicy",
+            "TickerData": [
+                {
+                    "exchangeName": "huobi",
+                    "tickerPair": [                        
+                        "BTC/USDT",
+                        "ETH/USDT",
+                        "XRP/USDT",
+                        "BCH/USDT",
+                        "LTC/USDT",
+                        "QTUM/USDT",
+                        "EOS/USDT",
+                        "ETC/USDT",
+                        "HSR/USDT",
+                        "NEO/USDT",
+                        "OMG/USDT",
+                        "ZEC/USDT",
+                        "DASH/USDT",
+                        "SNT/USDT",
+                        "ETH/BTC",
+                        "QTUM/BTC",
+                        "XRP/BTC",
+                        "ZEC/BTC",
+                        "NEO/BTC",
+                        "HSR/BTC",
+                        "EOS/BTC",
+                        "ETC/BTC",
+                        "OMG/BTC",
+                        "DASH/BTC",
+                        "EOS/ETH",
+                        "QTUM/ETH",
+                        "OMG/ETH",
+                        "HSR/ETH"
+                    ]
+                }
+            ]
+        }
+    ]
+}

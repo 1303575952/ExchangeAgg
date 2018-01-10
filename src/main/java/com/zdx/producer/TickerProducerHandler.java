@@ -22,8 +22,8 @@ import org.influxdb.dto.QueryResult;
 
 import com.zdx.common.CommonConst;
 import com.zdx.common.DataFormat;
-import com.zdx.common.TickerFormat;
-import com.zdx.common.TickerStandardFormat;
+import com.zdx.ticker.TickerFormat;
+import com.zdx.ticker.TickerStandardFormat;
 
 import io.parallec.core.ParallecResponseHandler;
 import io.parallec.core.ResponseOnSingleTask;
@@ -65,8 +65,6 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			influxDB.setDatabase(influxDbName);
 			influxDB.createRetentionPolicy(influxRpName, influxDbName, "30d", "30m", 2, true);
 
-
-
 			TickerStandardFormat tsf = new TickerStandardFormat();
 			String host = res.getRequest().getHostUniform();
 			String exchangeName = hostMap.get(host);
@@ -78,73 +76,76 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			TickerFormat.format(res.getResponseContent(), exchangeName, tsf);
 
 
-			int hashCode = tsf.hashCodeWithoutTimeStamp();
 
 			logger.debug("======API host="+host);
 			logger.debug("======API path="+path);
 			logger.debug("======API Response="+res);			
 			logger.info("TickerInfo="+tsf.toJsonString());
-			String hashCodeOld = "";
-			if (failedTickerMap.containsKey(url)){
-				hashCodeOld = failedTickerMap.get(url);
+
+			long timeToSet = System.currentTimeMillis();
+			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			logger.info("System time = " + simpleDateFormat.format(new Date(timeToSet)));
+			logger.info("Ticker time = " + simpleDateFormat.format(tsf.timestamp));
+			if(Math.abs(timeToSet - tsf.timestamp) < 1000 * 10){
+				logger.info("in Time ticker");
+				tsf.isValid = true;
+			} else {
+				logger.info("out dated ticker");
+				tsf = new TickerStandardFormat();
+				tsf.timestamp = timeToSet;
+				tsf.isValid = false;
 			}
-			if ((hashCodeOld == null)||(!hashCodeOld.equals(CommonConst.HASHCODE_PREFIX + hashCode))){
-				failedTickerMap.put(url, CommonConst.HASHCODE_PREFIX + hashCode);
-				long timeToSet = System.currentTimeMillis();
-				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				logger.info("System time = " + simpleDateFormat.format(new Date(timeToSet)));
-				logger.info("Ticker time = " + simpleDateFormat.format(tsf.timestamp));
-				String tableName = DataFormat.removeShortTerm(tsf.exchangeName);
-				Point point1 = Point.measurement(tableName)
-						.time(timeToSet, TimeUnit.MILLISECONDS)
-						.addField("exchangeName", tsf.exchangeName)	
-						.tag("coinA", tsf.coinA)
-						.tag("coinB", tsf.coinB)
-						.addField("bid", tsf.bid)
-						.addField("ask", tsf.ask)
-						.addField("low", tsf.low)
-						.addField("high", tsf.high)
-						.addField("midUSD", tsf.midUSD)
-						.build();
-				influxDB.write(influxDbName, influxRpName, point1);
-				Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", influxDbName);
-				QueryResult result = influxDB.query(query);
-				if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true){
-					logger.debug("===========================InfluxDB Insert Failed=======================================");
-					influxDB.close();
-					influxDB = InfluxDBFactory.connect(influxURL);
-				} else {
-					logger.debug("===========================InfluxDB Insert Sucess=======================================");
-				}
-
-				try {
-					Message msg = new Message();
-					msg.setTopic("ticker_" + tsf.exchangeName.toLowerCase());
-					msg.setTags("TagA");
-					msg.setBody(tsf.toJsonString().getBytes());
-					logger.debug("======producer send message : " + tsf.toJsonString());
-					DefaultMQProducer producer = (DefaultMQProducer)responseContext.get("producer");
-					String tmp = tsf.exchangeName + "-" + tsf.coinA + "-" + tsf.coinB;
-					int id = Math.abs(tmp.hashCode()%10);
-					logger.debug("======Message ID=" + id);
-					producer.sendOneway(msg,new MessageQueueSelector() {
-						@Override
-						public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
-							int index = (Integer) arg % mqs.size();
-							logger.debug("======Message quene info = " + mqs.get(index));
-							return mqs.get(index);
-						}
-					}, id);
-
-
-				} catch (MQClientException e1) {
-					logger.info("MQClientException Exception1 ==================================================================" + e1.getMessage());
-				} catch (RemotingException e2) {
-					logger.info("RemotingException Exception2 ==================================================================" + e2.getMessage());
-				} catch (InterruptedException e3) {
-					logger.info("InterruptedException Exception3 ==================================================================" + e3.getMessage());
-				}
+			String tableName = DataFormat.removeShortTerm(tsf.exchangeName);
+			Point point1 = Point.measurement(tableName)
+					.time(timeToSet, TimeUnit.MILLISECONDS)
+					.addField("exchangeName", tsf.exchangeName)	
+					.tag("coinA", tsf.coinA)
+					.tag("coinB", tsf.coinB)
+					.addField("bid", tsf.bid)
+					.addField("ask", tsf.ask)
+					.addField("low", tsf.low)
+					.addField("high", tsf.high)
+					.addField("midUSD", tsf.midUSD)
+					.build();
+			influxDB.write(influxDbName, influxRpName, point1);
+			Query query = new Query("SELECT * FROM " + tableName + " GROUP BY *", influxDbName);
+			QueryResult result = influxDB.query(query);
+			if (result.getResults().get(0).getSeries().get(0).getTags().isEmpty() == true){
+				logger.debug("===========================InfluxDB Insert Failed=======================================");
+				influxDB.close();
+				influxDB = InfluxDBFactory.connect(influxURL);
+			} else {
+				logger.debug("===========================InfluxDB Insert Sucess=======================================");
 			}
+
+			try {
+				Message msg = new Message();
+				msg.setTopic("ticker_" + tsf.exchangeName.toLowerCase());
+				msg.setTags("TagA");
+				msg.setBody(tsf.toJsonString().getBytes());
+				logger.debug("======producer send message : " + tsf.toJsonString());
+				DefaultMQProducer producer = (DefaultMQProducer)responseContext.get("producer");
+				String tmp = tsf.exchangeName + "-" + tsf.coinA + "-" + tsf.coinB;
+				int id = Math.abs(tmp.hashCode()%10);
+				logger.debug("======Message ID=" + id);
+				producer.sendOneway(msg,new MessageQueueSelector() {
+					@Override
+					public MessageQueue select(List<MessageQueue> mqs, Message msg, Object arg) {
+						int index = (Integer) arg % mqs.size();
+						logger.debug("======Message quene info = " + mqs.get(index));
+						return mqs.get(index);
+					}
+				}, id);
+
+
+			} catch (MQClientException e1) {
+				logger.info("MQClientException Exception1 ==================================================================" + e1.getMessage());
+			} catch (RemotingException e2) {
+				logger.info("RemotingException Exception2 ==================================================================" + e2.getMessage());
+			} catch (InterruptedException e3) {
+				logger.info("InterruptedException Exception3 ==================================================================" + e3.getMessage());
+			}
+
 			logger.debug("====================End Handle Message====================");
 		} else {
 			logger.warn("Parallec Fetch Unkonw error. API Response = "+res);

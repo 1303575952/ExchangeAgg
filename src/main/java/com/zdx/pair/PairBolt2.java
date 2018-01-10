@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
-import com.zdx.common.TickerFormat;
+import com.zdx.ticker.TickerFormat;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;

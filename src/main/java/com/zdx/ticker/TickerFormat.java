@@ -1,9 +1,12 @@
-package com.zdx.common;
+package com.zdx.ticker;
 
 import org.apache.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.zdx.common.CoinCashCommon;
+import com.zdx.exchange.CashExchange;
+import com.zdx.exchange.ExchangeName;
 
 public class TickerFormat {
 	private static Logger logger = Logger.getLogger(TickerFormat.class);

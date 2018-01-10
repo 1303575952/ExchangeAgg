@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import com.zdx.common.DataFormat;
-import com.zdx.common.TickerStandardFormat;
+import com.zdx.ticker.TickerStandardFormat;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -115,10 +115,13 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 				logger.info("message body = " + body);
 				TickerStandardFormat tsf = new TickerStandardFormat();
 				tsf.formatJsonString(body);
-				Date date = new Date(tsf.timestamp*1000);
+				Date date = new Date(tsf.timestamp);
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				logger.info("message timestamp = " + simpleDateFormat.format(date));
-
+				String sdf = simpleDateFormat.format(date);
+				logger.info("message timestamp = " + sdf);
+				if (!tsf.isValid){
+					logger.info("message is invalid, discard....");
+				}
 				// 5 min message discard
 				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
 					logger.warn("intime message handling..." );

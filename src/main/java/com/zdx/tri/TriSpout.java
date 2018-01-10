@@ -25,8 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 
 import com.zdx.common.DataFormat;
-
-import com.zdx.common.TickerStandardFormat;
+import com.zdx.ticker.TickerStandardFormat;
 
 import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
@@ -52,7 +51,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 
 		influxDB = InfluxDBFactory.connect(TriSpoutConf.influxURL);
 		if (!influxDB.databaseExists(TriSpoutConf.influxDbName)){
-			logger.debug("==================================================================Database" + TriSpoutConf.influxDbName + " not Exist");
+			logger.debug("==================================================================Database=" + TriSpoutConf.influxDbName + " not Exist");
 			influxDB.createDatabase(TriSpoutConf.influxDbName);
 		}
 		influxDB.setDatabase(TriSpoutConf.influxDbName);
@@ -108,6 +107,9 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				String sdf = simpleDateFormat.format(date);
 				logger.info("message timestamp = " + sdf);
+				if (!tsf.isValid){
+					logger.info("message is invalid, discard....");
+				}
 				// 5 min message discard
 				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
 					logger.warn("intime message handling..." );
@@ -169,9 +171,19 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 						triInfo.ts4 = System.currentTimeMillis();
 						triInfo.sdf4 = simpleDateFormat.format(new Date(triInfo.ts4));
 						triInfo.updateProfitByGroupId();
-						//collector.emit(new Values(tri, triInfo.toString()));
 						logger.debug("----------- triInfo after update profit = " + triInfo.toString());						
-						logPriceDiff(triInfo);
+						
+						boolean isIntime = isInTime(triInfo);
+						if (isIntime){
+							logger.info("---- Message is in time");
+							logger.info("---- Triple info = " + triInfo.toString());
+							logPriceDiff(triInfo);							
+							//collector.emit(new Values(tri, triInfo.toString()));
+						} else {
+							logger.info("---- Message is in time");
+							logger.info("---- Triple info is reset to = " + triInfo.toString());
+							triInfo = new TriArbitrageInfo();
+						}
 						TriSpoutConf.TRIPLE_INFO_MAP.put(tri, triInfo);
 					}
 				}  else {
@@ -185,7 +197,42 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 		logger.debug("===========================TriSpout End=======================================");
 		return ConsumeConcurrentlyStatus.CONSUME_SUCCESS;  
 	}
-
+	public boolean isInTime(TriArbitrageInfo triInfo){
+		long maxStamp = 0;
+		long minStamp = Long.MAX_VALUE;
+		if ((triInfo.ts1 > 0) && (triInfo.ts1 > maxStamp)){
+			maxStamp = triInfo.ts1;
+		}
+		if ((triInfo.ts2 > 0) && (triInfo.ts2 > maxStamp)){
+			maxStamp = triInfo.ts2;
+		}
+		if ((triInfo.ts3 > 0) && (triInfo.ts3 > maxStamp)){
+			maxStamp = triInfo.ts3;
+		}
+		if ((triInfo.ts4 > 0) && (triInfo.ts4 > maxStamp)){
+			maxStamp = triInfo.ts4;
+		}
+		if ((triInfo.ts1 > 0) && (triInfo.ts1 < minStamp)){
+			minStamp = triInfo.ts1;
+		}
+		if ((triInfo.ts2 > 0) && (triInfo.ts2 < minStamp)){
+			minStamp = triInfo.ts2;
+		}
+		if ((triInfo.ts3 > 0) && (triInfo.ts3 < minStamp)){
+			minStamp = triInfo.ts3;
+		}
+		if ((triInfo.ts4 > 0) && (triInfo.ts4 < minStamp)){
+			minStamp = triInfo.ts4;
+		}
+		long maxDiff = Math.abs(maxStamp - minStamp);
+		if (maxDiff < 1000*10){
+			return true;
+		} else {
+			return false;
+		}
+		
+	}
+	
 	public void logPriceDiff(TriArbitrageInfo triInfo){
 		String tableName = "tri_" + DataFormat.removeShortTerm(triInfo.exchangeName);
 		Point point1 = Point.measurement(tableName)

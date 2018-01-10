@@ -14,9 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.zdx.common.DataFormat;
-import com.zdx.common.TickerPair;
-import com.zdx.common.TickerStandardFormat;
 import com.zdx.test.WebSocketLocalClient;
+import com.zdx.ticker.TickerPair;
+import com.zdx.ticker.TickerStandardFormat;
 
 import backtype.storm.task.OutputCollector;
 import backtype.storm.task.TopologyContext;

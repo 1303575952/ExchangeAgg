@@ -4,6 +4,8 @@ import java.util.Comparator;
 
 import org.apache.log4j.Logger;
 
+import com.zdx.ticker.TickerStandardFormat;
+
 public class SortByPrice implements Comparator<Object> {
 	private static Logger logger = Logger.getLogger(SortByPrice.class);
 	@Override

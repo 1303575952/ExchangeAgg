@@ -313,7 +313,12 @@ class PathPrice{
 	double fee1 = 0.002;
 	double fee2 = 0.002;
 	double price = 0.0;
-
+	public long ts1 = 0;
+	public String sdf1 = "";
+	public long ts2 = 0;
+	public String sdf2 = "";
+	public long ts3 = 0;
+	public String sdf3 = "";
 
 	public String toJsonString(){
 		return "{\"exchangeName\":\"" + exchangeName + 
@@ -348,7 +353,11 @@ class EnterPrice{
 	long timeStamp = 0; 
 	boolean isSend = false;
 	String tradeFlag = "";
-
+	public long ts1 = 0;
+	public String sdf1 = "";
+	public long ts2 = 0;
+	public String sdf2 = "";
+	
 	public EnterPrice(){
 
 	}

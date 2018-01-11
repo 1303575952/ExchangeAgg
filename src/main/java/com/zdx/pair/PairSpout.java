@@ -7,15 +7,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-
 import org.apache.rocketmq.client.consumer.DefaultMQPushConsumer;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyContext;
 import org.apache.rocketmq.client.consumer.listener.ConsumeConcurrentlyStatus;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyContext;
-import org.apache.rocketmq.client.consumer.listener.ConsumeOrderlyStatus;
 import org.apache.rocketmq.client.consumer.listener.MessageListenerConcurrently;
-import org.apache.rocketmq.client.consumer.listener.MessageListenerOrderly;
 import org.apache.rocketmq.client.exception.MQClientException;
 import org.apache.rocketmq.common.consumer.ConsumeFromWhere;
 import org.apache.rocketmq.common.message.MessageExt;
@@ -35,7 +30,6 @@ import backtype.storm.spout.SpoutOutputCollector;
 import backtype.storm.task.TopologyContext;
 import backtype.storm.topology.OutputFieldsDeclarer;
 import backtype.storm.topology.base.BaseRichSpout;
-import backtype.storm.tuple.Fields;
 
 public class PairSpout extends BaseRichSpout implements MessageListenerConcurrently {
 	private static final long serialVersionUID = -3085994102089532269L;
@@ -115,16 +109,19 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 				tsf.formatJsonString(body);
 				Date date = new Date(tsf.timestamp);
 				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				String sdf = simpleDateFormat.format(date);
-				logger.info("message timestamp = " + sdf);
+				tsf.sdf = simpleDateFormat.format(date);
+				logger.info("message timestamp = " + tsf.sdf);
+
 				if (!tsf.isValid) {
 					logger.info("message is invalid, discard....");
 				} else {
 					// 5 min message discard
-					if (System.currentTimeMillis() < (tsf.timestamp + 300 * 1000)) {
+					long ts3 = System.currentTimeMillis();
+					if (ts3 < (tsf.timestamp + 300 * 1000)) {
 						logger.warn("intime message handling...");
 						updatePrice(tsf);
-						updateForwardPairPrice(tsf);
+						updateForwardPairPrice(tsf);						
+
 					} else {
 						logger.warn("obsolete message discard...");
 						return ConsumeConcurrentlyStatus.RECONSUME_LATER;
@@ -160,11 +157,15 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 					if (ep.sellExchangeName.equals(tsf.exchangeName.toLowerCase())) {
 						ep.bid1 = tsf.bid;
 						ep.ask1 = tsf.ask;
+						ep.ts1 = tsf.timestamp;
+						ep.sdf1 = tsf.sdf;
 						ep.sellPath = pair;
 					} else if (ep.buyExchangeName.equals(tsf.exchangeName.toLowerCase())) {
 						ep.bid2 = tsf.bid;
 						ep.ask2 = tsf.ask;
 						ep.buyPath = pair;
+						ep.ts2 = tsf.timestamp;
+						ep.sdf2 = tsf.sdf;
 					}
 					if (ep.ask2 > 0.0 && ep.ask1 > 0.0) {
 						ep.priceDiff = ep.bid1 / ep.ask2 - 1.0;
@@ -186,14 +187,51 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 						logger.info("-----Sell at = " + t1[0]);
 						logger.info("-----Buy at = " + t1[1]);
 						logger.info("-----Price Diff = " + ep.priceDiff);
+
 						ep.timeStamp = System.currentTimeMillis();
-						logPriceDiff(ep);
+
+						boolean isIntime = isInTime(ep);
+						if (isIntime){
+							logger.info("-----in Ticker, log it into DB");
+							logPriceDiff(ep);
+						} else {
+							logger.info("-----outdated Ticker, discard...");
+						}
 					}
 					logger.debug("updateForwardPairPrice: Candidate Fourth profit after update = " + ep.toJsonString());
 					PairSpoutConf.fourthPriceMap.put(x, ep);
 				}
 
 			}
+		}
+	}
+
+	public boolean isInTime(EnterPrice ep){
+		long maxStamp = 0;
+		long minStamp = Long.MAX_VALUE;
+		if ((ep.ts1 > 0) && (ep.ts1 > maxStamp)){
+			maxStamp = ep.ts1;
+		}
+		if ((ep.ts2 > 0) && (ep.ts2 > maxStamp)){
+			maxStamp = ep.ts2;
+		}
+		if ((ep.timeStamp > 0) && (ep.timeStamp > maxStamp)){
+			maxStamp = ep.timeStamp;
+		}
+		if ((ep.ts1 > 0) && (ep.ts1 < maxStamp)){
+			minStamp = ep.ts1;
+		}
+		if ((ep.ts2 > 0) && (ep.ts2 < maxStamp)){
+			minStamp = ep.ts2;
+		}
+		if ((ep.timeStamp > 0) && (ep.timeStamp < maxStamp)){
+			minStamp = ep.timeStamp;
+		}
+		long maxDiff = Math.abs(maxStamp - minStamp);
+		if (maxDiff < 1000*10){
+			return true;
+		} else {
+			return false;
 		}
 	}
 
@@ -240,14 +278,19 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 				if (pair.equals(pp.path1)) {
 					pp.bid1 = tsf.bid;
 					pp.ask1 = tsf.ask;
+					pp.ts1 = tsf.timestamp;
+					pp.sdf1 = tsf.sdf;
 				}
 				if (pair.equals(pp.path2)) {
 					pp.bid2 = tsf.bid;
 					pp.ask2 = tsf.ask;
+					pp.ts2 = tsf.timestamp;
+					pp.sdf2 = tsf.sdf;
 				}
 				logger.debug("updatePrice: Current Candidate Indirect PathPrice After Update = " + pp.toJsonString());
 				pp.price = (1 + pp.fee1) * pp.ask1 * (1 + pp.fee2) * pp.ask2;
 				logger.debug("updatePrice: Indirect Price of Path = " + pathName + " = " + pp.price);
+
 
 				PairSpoutConf.pathPriceMap.put(pathName, pp);
 				// 用间接价格更新最低价，如etc-usd

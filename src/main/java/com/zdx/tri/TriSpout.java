@@ -109,87 +109,88 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 				logger.info("message timestamp = " + sdf);
 				if (!tsf.isValid){
 					logger.info("message is invalid, discard....");
-				}
-				// 5 min message discard
-				if (System.currentTimeMillis() < (tsf.timestamp + 300) * 1000){
-					logger.warn("intime message handling..." );
-					String pair = tsf.coinA + "/" + tsf.coinB;
-					String key1 = tsf.exchangeName + "@@" + pair;
-					pair = pair.toLowerCase();
-					key1 = key1.toLowerCase();
-					ArrayList<String> triList = new ArrayList<String>();
-					if (TriSpoutConf.TICKER_TRIPLE_MAP.containsKey(key1)){
-						triList = TriSpoutConf.TICKER_TRIPLE_MAP.get(key1);
-					}
-					logger.debug("====== influxURL = " + TriSpoutConf.influxURL);
-					logger.debug("-------------------Content of TICKER_TRIPLE_MAP---------------------");
-					for (Entry<String, ArrayList<String>> x: TriSpoutConf.TICKER_TRIPLE_MAP.entrySet()){
-						logger.debug("---------TICKER_TRIPLE_MAP.key=" + x.getKey());
-						logger.debug("---------TICKER_TRIPLE_MAP.val=" + x.getValue().toString());
-					}
-					logger.debug("----------------------------------------");
-					logger.debug("-------------------Content of TRIPLE_INFO_MAP---------------------");
-					for (Entry<String, TriArbitrageInfo> x: TriSpoutConf.TRIPLE_INFO_MAP.entrySet()){
-						logger.debug("---------TRIPLE_INFO_MAP.key=" + x.getKey());
-						logger.debug("---------TRIPLE_INFO_MAP.val=" + x.getValue().toString());
-					}
-					logger.debug("----------------------------------------");
-					logger.debug("====== key1 = " + key1);
-					logger.debug("====== pair = " + pair);
-					logger.debug("====== triList = " + triList.toString());
-					for (String tri : triList){
-						TriArbitrageInfo triInfo = TriSpoutConf.TRIPLE_INFO_MAP.get(tri);
-						String[] tmp = tri.split("@@");
-						if (tmp.length == 3){
-							triInfo.groupId = tmp[2];
-							triInfo.fullPath = tmp[1];
-							String[] tmp2 = tmp[1].split("-");
-							
-							if (tmp2.length == 3){
-								triInfo.exchangeName = tsf.exchangeName;
-								logger.debug("====== triInfo before update ticker = " + triInfo.toString());
-								if (pair.equals(tmp2[0])){
-									triInfo.ask1 = tsf.ask;
-									triInfo.bid1 = tsf.bid;
-									triInfo.ts1 = tsf.timestamp;
-									triInfo.sdf1 = sdf;
-								} else if (pair.equals(tmp2[1])){
-									triInfo.ask2 = tsf.ask;
-									triInfo.bid2 = tsf.bid;
-									triInfo.ts2 = tsf.timestamp;
-									triInfo.sdf2 = sdf;
-								} else if (pair.equals(tmp2[2])){
-									triInfo.ask3 = tsf.ask;
-									triInfo.bid3 = tsf.bid;
-									triInfo.ts3 = tsf.timestamp;
-									triInfo.sdf3 = sdf;
+				} else {
+					// 5 min message discard
+					if (System.currentTimeMillis() < (tsf.timestamp + 300 * 1000)){
+						logger.warn("intime message handling..." );
+						String pair = tsf.coinA + "/" + tsf.coinB;
+						String key1 = tsf.exchangeName + "@@" + pair;
+						pair = pair.toLowerCase();
+						key1 = key1.toLowerCase();
+						ArrayList<String> triList = new ArrayList<String>();
+						if (TriSpoutConf.TICKER_TRIPLE_MAP.containsKey(key1)){
+							triList = TriSpoutConf.TICKER_TRIPLE_MAP.get(key1);
+						}
+						logger.debug("====== influxURL = " + TriSpoutConf.influxURL);
+						logger.debug("-------------------Content of TICKER_TRIPLE_MAP---------------------");
+						for (Entry<String, ArrayList<String>> x: TriSpoutConf.TICKER_TRIPLE_MAP.entrySet()){
+							logger.debug("---------TICKER_TRIPLE_MAP.key=" + x.getKey());
+							logger.debug("---------TICKER_TRIPLE_MAP.val=" + x.getValue().toString());
+						}
+						logger.debug("----------------------------------------");
+						logger.debug("-------------------Content of TRIPLE_INFO_MAP---------------------");
+						for (Entry<String, TriArbitrageInfo> x: TriSpoutConf.TRIPLE_INFO_MAP.entrySet()){
+							logger.debug("---------TRIPLE_INFO_MAP.key=" + x.getKey());
+							logger.debug("---------TRIPLE_INFO_MAP.val=" + x.getValue().toString());
+						}
+						logger.debug("----------------------------------------");
+						logger.debug("====== key1 = " + key1);
+						logger.debug("====== pair = " + pair);
+						logger.debug("====== triList = " + triList.toString());
+						for (String tri : triList){
+							TriArbitrageInfo triInfo = TriSpoutConf.TRIPLE_INFO_MAP.get(tri);
+							String[] tmp = tri.split("@@");
+							if (tmp.length == 3){
+								triInfo.groupId = tmp[2];
+								triInfo.fullPath = tmp[1];
+								String[] tmp2 = tmp[1].split("-");
+
+								if (tmp2.length == 3){
+									triInfo.exchangeName = tsf.exchangeName;
+									logger.debug("====== triInfo before update ticker = " + triInfo.toString());
+									if (pair.equals(tmp2[0])){
+										triInfo.ask1 = tsf.ask;
+										triInfo.bid1 = tsf.bid;
+										triInfo.ts1 = tsf.timestamp;
+										triInfo.sdf1 = sdf;
+									} else if (pair.equals(tmp2[1])){
+										triInfo.ask2 = tsf.ask;
+										triInfo.bid2 = tsf.bid;
+										triInfo.ts2 = tsf.timestamp;
+										triInfo.sdf2 = sdf;
+									} else if (pair.equals(tmp2[2])){
+										triInfo.ask3 = tsf.ask;
+										triInfo.bid3 = tsf.bid;
+										triInfo.ts3 = tsf.timestamp;
+										triInfo.sdf3 = sdf;
+									}
+									logger.debug("====== triInfo after update ticker = " + triInfo.toString());
 								}
-								logger.debug("====== triInfo after update ticker = " + triInfo.toString());
 							}
+							logger.debug("----------- triInfo before update profit = " + triInfo.toString());
+							triInfo.ts4 = System.currentTimeMillis();
+							triInfo.sdf4 = simpleDateFormat.format(new Date(triInfo.ts4));
+							triInfo.updateProfitByGroupId();
+							logger.debug("----------- triInfo after update profit = " + triInfo.toString());						
+
+							boolean isIntime = isInTime(triInfo);
+							if (isIntime){
+								logger.info("---- Message is in time");
+								logger.info("---- Triple info = " + triInfo.toString());
+								logPriceDiff(triInfo);							
+								//collector.emit(new Values(tri, triInfo.toString()));
+							} else {
+								logger.info("---- Message is out-dated");
+								logger.info("---- Triple info is reset to = " + triInfo.toString());
+								//triInfo = new TriArbitrageInfo();
+							}
+							TriSpoutConf.TRIPLE_INFO_MAP.put(tri, triInfo);
 						}
-						logger.debug("----------- triInfo before update profit = " + triInfo.toString());
-						triInfo.ts4 = System.currentTimeMillis();
-						triInfo.sdf4 = simpleDateFormat.format(new Date(triInfo.ts4));
-						triInfo.updateProfitByGroupId();
-						logger.debug("----------- triInfo after update profit = " + triInfo.toString());						
-						
-						boolean isIntime = isInTime(triInfo);
-						if (isIntime){
-							logger.info("---- Message is in time");
-							logger.info("---- Triple info = " + triInfo.toString());
-							logPriceDiff(triInfo);							
-							//collector.emit(new Values(tri, triInfo.toString()));
-						} else {
-							logger.info("---- Message is out-dated");
-							logger.info("---- Triple info is reset to = " + triInfo.toString());
-							triInfo = new TriArbitrageInfo();
-						}
-						TriSpoutConf.TRIPLE_INFO_MAP.put(tri, triInfo);
+					}  else {
+						logger.warn("obsolete message discard..." );
+						return ConsumeConcurrentlyStatus.RECONSUME_LATER;  
 					}
-				}  else {
-					logger.warn("obsolete message discard..." );
-					return ConsumeConcurrentlyStatus.RECONSUME_LATER;  
-				} 
+				}
 			}catch (Exception e1){
 				logger.warn("Unexcepted exception.", e1.getMessage());
 			}
@@ -230,9 +231,9 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 		} else {
 			return false;
 		}
-		
+
 	}
-	
+
 	public void logPriceDiff(TriArbitrageInfo triInfo){
 		String tableName = "tri_" + DataFormat.removeShortTerm(triInfo.exchangeName);
 		Point point1 = Point.measurement(tableName)

@@ -58,13 +58,14 @@
 #   http://t.cn/8s7nexU
 # supervisor.enable.cgroup: false
 
+ supervisor.childopts: "-Xms512m -Xmx512m -Xmn256m"  
 
 ### Netty will send multiple messages in one batch  
 ### Setting true will improve throughput, but more latency
 # storm.messaging.netty.transfer.async.batch: true
  
 ### default worker memory size, unit is byte
-# worker.memory.size: 2147483648
+ worker.memory.size: 214748364
 
 # Metrics Monitor
 # topology.performance.metrics: it is the switch flag for performance 

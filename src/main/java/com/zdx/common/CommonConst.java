@@ -17,7 +17,7 @@ public class CommonConst {
 	public static String LOW = "low";
 	public static String HIGH = "high";
 	public static String VOLUME = "volume";
-	
+	public static String ISVALID = "isValid";
 		
 	public static int MAXPRICE = 1000000;
 	

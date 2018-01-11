@@ -24,7 +24,8 @@ public class TickerStandardFormat {
 	public Long timestamp;	
 	public Double midUSD = 0.0;
 	public boolean isValid = false;
-
+	public String sdf = "";
+	
 	public TickerStandardFormat(){
 	}
 
@@ -105,6 +106,9 @@ public class TickerStandardFormat {
 		}
 		if (jsonObject.containsKey(CommonConst.TIMESTAMP)){
 			this.timestamp = jsonObject.getLong(CommonConst.TIMESTAMP);
+		}
+		if (jsonObject.containsKey(CommonConst.ISVALID)){
+			this.isValid = jsonObject.getBoolean(CommonConst.ISVALID);
 		}
 		return this;
 	}

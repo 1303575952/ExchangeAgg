@@ -201,6 +201,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 	public boolean isInTime(TriArbitrageInfo triInfo){
 		long maxStamp = 0;
 		long minStamp = Long.MAX_VALUE;
+		int validInterval = TriSpoutConf.validInterval;
 		if ((triInfo.ts1 > 0) && (triInfo.ts1 > maxStamp)){
 			maxStamp = triInfo.ts1;
 		}
@@ -226,7 +227,7 @@ public class TriSpout extends BaseRichSpout implements MessageListenerConcurrent
 			minStamp = triInfo.ts4;
 		}
 		long maxDiff = Math.abs(maxStamp - minStamp);
-		if (maxDiff < 1000*10){
+		if (maxDiff < 1000*validInterval){
 			return true;
 		} else {
 			return false;

@@ -52,6 +52,7 @@ public class TickerProducer {
 		RESPONSE_CONTEXT.put("influxURL", TickerProducerConf.influxURL);
 		RESPONSE_CONTEXT.put("influxDbName", TickerProducerConf.influxDbName);
 		RESPONSE_CONTEXT.put("influxRpName", TickerProducerConf.influxRpName);
+		RESPONSE_CONTEXT.put("validInterval", TickerProducerConf.validInterval);
 		while (true){
 			oneFullBathWithoutRetry();
 			try {

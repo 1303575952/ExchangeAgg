@@ -19,7 +19,6 @@ public class CashExchange {
 		priceToUSD.put("MXN", 0.05259);
 		priceToUSD.put("PLN", 0.2776);
 		priceToUSD.put("USD", 1.0);
-		priceToUSD.put("USDT", 1.0);
 		
 	}
 	public Double toUSD(String cashType, Double amount){

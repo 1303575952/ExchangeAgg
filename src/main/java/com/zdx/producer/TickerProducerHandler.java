@@ -86,7 +86,8 @@ public class TickerProducerHandler implements ParallecResponseHandler {
 			SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			logger.info("System time = " + simpleDateFormat.format(new Date(timeToSet)));
 			logger.info("Ticker time = " + simpleDateFormat.format(tsf.timestamp));
-			if(Math.abs(timeToSet - tsf.timestamp) < 1000 * 10){
+			int validInterval = (int) responseContext.get("validInterval");
+			if(Math.abs(timeToSet - tsf.timestamp) < 1000 * validInterval){
 				logger.info("in Time ticker");
 				tsf.isValid = true;
 			} else {

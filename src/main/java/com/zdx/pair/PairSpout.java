@@ -198,7 +198,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 							logger.info("-----outdated Ticker, discard...");
 						}
 					}
-					logger.debug("updateForwardPairPrice: Candidate Fourth profit after update = " + ep.toJsonString());
+					logger.info("updateForwardPairPrice: Candidate Fourth profit after update = " + ep.toJsonString());
 					PairSpoutConf.fourthPriceMap.put(x, ep);
 				}
 
@@ -209,6 +209,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 	public boolean isInTime(EnterPrice ep){
 		long maxStamp = 0;
 		long minStamp = Long.MAX_VALUE;
+		int validInterval = PairSpoutConf.validInterval;
 		if ((ep.ts1 > 0) && (ep.ts1 > maxStamp)){
 			maxStamp = ep.ts1;
 		}
@@ -228,7 +229,7 @@ public class PairSpout extends BaseRichSpout implements MessageListenerConcurren
 			minStamp = ep.timeStamp;
 		}
 		long maxDiff = Math.abs(maxStamp - minStamp);
-		if (maxDiff < 1000*10){
+		if (maxDiff < 1000*validInterval){
 			return true;
 		} else {
 			return false;

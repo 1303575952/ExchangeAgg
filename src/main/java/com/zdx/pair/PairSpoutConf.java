@@ -52,7 +52,7 @@ public class PairSpoutConf {
 	public static String influxURL = "";
 	public static String influxDbName = "";
 	public static String influxRpName = "";	
-
+	public static int validInterval = Integer.MAX_VALUE;
 	public static double threshold = 0.0;
 
 
@@ -67,6 +67,7 @@ public class PairSpoutConf {
 			influxURL = String.valueOf(j1.get("InfluxDBURL"));
 			influxDbName = String.valueOf(j1.get("InfluxDbName"));
 			influxRpName = String.valueOf(j1.get("InfluxRpName"));
+			validInterval = Integer.valueOf(j1.getString("ValidInterval"));
 			String tickerData = String.valueOf(j1.get("TickerData"));
 			ArrayList<String> exchangeTickerList2 = JSON.parseObject(tickerData, new TypeReference<ArrayList<String>>(){});
 			for (String e2 : exchangeTickerList2){

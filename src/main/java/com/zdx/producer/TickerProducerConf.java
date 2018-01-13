@@ -27,6 +27,7 @@ public class TickerProducerConf {
 	
 	public static String confFilePath = "";
 
+	public static int validInterval = Integer.MAX_VALUE;
 	public static String serverUrl = "";
 	public static String producerGroup = "";
 
@@ -45,6 +46,7 @@ public class TickerProducerConf {
 		}
 		JSONObject j1 = JSON.parseObject(fileContent);
 		serverUrl = String.valueOf(j1.get("GatewayURL"));
+		validInterval = Integer.valueOf(j1.getString("ValidInterval"));
 		producerGroup = String.valueOf(j1.get("ProducerGroup"));
 		influxURL = String.valueOf(j1.get("InfluxDBURL"));
 		influxDbName = String.valueOf(j1.get("InfluxDbName"));

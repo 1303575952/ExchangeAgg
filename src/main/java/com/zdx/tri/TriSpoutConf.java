@@ -32,7 +32,8 @@ public class TriSpoutConf {
 
 	public static String influxURL = "";
 	public static String influxDbName = "";
-	public static String influxRpName = "";	
+	public static String influxRpName = "";
+	public static int validInterval = Integer.MAX_VALUE;
 
 	public static void buildSpoutConfig(String spoutData){
 		ArrayList<String> spoutDataList = JSON.parseObject(spoutData, new TypeReference<ArrayList<String>>(){});
@@ -45,6 +46,7 @@ public class TriSpoutConf {
 			influxURL = String.valueOf(j1.get("InfluxDBURL"));
 			influxDbName = String.valueOf(j1.get("InfluxDbName"));
 			influxRpName = String.valueOf(j1.get("InfluxRpName"));
+			validInterval = Integer.valueOf(j1.getString("ValidInterval"));
 			String tickerData = String.valueOf(j1.get("TickerData"));
 			ArrayList<String> exchangeTickerList2 = JSON.parseObject(tickerData, new TypeReference<ArrayList<String>>(){});
 			for (String e2 : exchangeTickerList2){

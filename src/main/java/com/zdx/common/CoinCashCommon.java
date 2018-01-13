@@ -70,6 +70,7 @@ public class CoinCashCommon {
 		coinSet.add("TIME");
 		coinSet.add("TKS");
 		coinSet.add("TRCT");
+		coinSet.add("USDT");
 		coinSet.add("WAVES");
 		coinSet.add("WCT");
 		coinSet.add("WGE");
@@ -103,9 +104,6 @@ public class CoinCashCommon {
 		cashSet.add("THB");
 		cashSet.add("TRY");
 		cashSet.add("USD");
-		cashSet.add("USDT");
-		cashSet.add("USD");
-		cashSet.add("USDT");
 		cashSet.add("ZAR");
 		
 		return cashSet;

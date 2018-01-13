@@ -39,10 +39,12 @@ public class TickerFormat {
 			dsxFormat(jsonObject, x);
 		} else if (ExchangeName.EASYCOIN.equals(exchangeName)) {
 			easycoinFormat(jsonObject, x);
-		} else if (ExchangeName.GATEIO.equals(exchangeName)) {
+		} else if (ExchangeName.GATE.equals(exchangeName)) {
 			gateFormat(jsonObject, x);
 		} else if (ExchangeName.GDAX.equals(exchangeName)) {
 			gdaxFormat(jsonObject, x);
+		} else if (ExchangeName.GEMINI.equals(exchangeName)) {
+			geminiFormat(jsonObject, x);
 		} else if (ExchangeName.HITBTC.equals(exchangeName)) {
 			hitbtcFormat(jsonObject, x);
 		} else if (ExchangeName.HUOBI.equals(exchangeName)) {
@@ -73,7 +75,7 @@ public class TickerFormat {
 	}
 
 	private static void bithumbFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.bithumb.com/public/ticker/xrp
+		// api.bithumb.com/public/ticker/xrp
 		// {"status":"0000","data":{"opening_price":"458800","closing_price":"453200","min_price":"450000","max_price":"494900","average_price":"467505.6145","units_traded":"70743.7257746","volume_1day":"70743.7257746","volume_7day":"714723.516295370000000000","buy_price":"453200","sell_price":"453300","date":"1514544065677"}}
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("data"));
 		x.timestamp = System.currentTimeMillis();
@@ -89,7 +91,7 @@ public class TickerFormat {
 	}
 
 	private static void binanceFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.binance.com/api/v3/ticker/bookTicker?symbol=TRXBTC
+		// api.binance.com/api/v3/ticker/bookTicker?symbol=TRXBTC
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bidPrice");
 		x.ask = jsonObject.getDouble("askPrice");
@@ -103,7 +105,7 @@ public class TickerFormat {
 	}
 
 	private static void bittrexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//bittrex.com/api/v1.1/public/getmarketsummary?market=btc-xrp
+		// bittrex.com/api/v1.1/public/getmarketsummary?market=btc-xrp
 		String jsonA = jsonObject.toJSONString();
 		String[] str1 = jsonA.split("\\{");
 		String[] str2 = str1[2].split("\\}");
@@ -120,28 +122,10 @@ public class TickerFormat {
 		x = setToUSD(x);
 	}
 
-	private static void poloniexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//poloniex.com/public?command=returnOrderBook&currencyPair=BTC_XRP&depth=1
-		x.timestamp = System.currentTimeMillis();
-		String jsonA = jsonObject.get("bids").toString();
-		String[] bidss = jsonA.split("\"");
-		x.bid = Double.parseDouble(bidss[1]);
-		String asks_00 = jsonObject.get("asks").toString();
-		String[] askss = asks_00.split("\"");
-		x.ask = Double.parseDouble(askss[1]);
-		x.mid = (x.bid + x.ask) / 2;
-		x.low = jsonObject.getDouble("low");
-		x.high = jsonObject.getDouble("high");
-		x.volume = jsonObject.getDouble("volume");
-		x.lastPrice = jsonObject.getDouble("last");
-		x.setExchangeType();
-		x = setToUSD(x);
-	}
-
 	private static void bitfinexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.bitfinex.com/v1/pubticker/BTCUSD
+		// api.bitfinex.com/v1/pubticker/BTCUSD
 		String tmp = jsonObject.getString("timestamp");
-		tmp = tmp.substring(0, tmp.indexOf(".")) + tmp.substring(tmp.indexOf(".")+1, tmp.indexOf(".")+4);
+		tmp = tmp.substring(0, tmp.indexOf(".")) + tmp.substring(tmp.indexOf(".") + 1, tmp.indexOf(".") + 4);
 		x.timestamp = Long.parseLong(tmp);
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -155,7 +139,7 @@ public class TickerFormat {
 	}
 
 	public static void bitstampFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//www.bitstamp.net/api/v2/ticker/xrpusd
+		// www.bitstamp.net/api/v2/ticker/xrpusd
 		x.timestamp = jsonObject.getLong("timestamp") * 1000;
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -169,8 +153,8 @@ public class TickerFormat {
 	}
 
 	public static void coinoneFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.coinone.co.kr/ticker/?currency=xrp&amp;format=json
-		x.timestamp = jsonObject.getLong("timestamp")*1000;
+		// api.coinone.co.kr/ticker/?currency=xrp&amp;format=json
+		x.timestamp = jsonObject.getLong("timestamp") * 1000;
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
 		x.mid = (x.bid + x.ask) / 2;
@@ -183,7 +167,7 @@ public class TickerFormat {
 	}
 
 	public static void bitkonanFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//bitkonan.com/api/ltc_ticker
+		// bitkonan.com/api/ltc_ticker
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -197,7 +181,7 @@ public class TickerFormat {
 	}
 
 	public static void bitsoFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.bitso.com/v3/ticker/?book=xrp_btc
+		// api.bitso.com/v3/ticker/?book=xrp_btc
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -218,8 +202,8 @@ public class TickerFormat {
 	}
 
 	public static void cexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//cex.io/api/ticker/BTC/USD
-		x.timestamp = jsonObject.getLong("timestamp")*1000;
+		// cex.io/api/ticker/BTC/USD
+		x.timestamp = jsonObject.getLong("timestamp") * 1000;
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
 		x.mid = (x.bid + x.ask) / 2;
@@ -232,7 +216,7 @@ public class TickerFormat {
 	}
 
 	public static void coinroomFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//coinroom.com/api/ticker/ETH/PLN
+		// coinroom.com/api/ticker/ETH/PLN
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -246,7 +230,7 @@ public class TickerFormat {
 	}
 
 	public static void cryptopiaFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//cryptopia.co.nz/api/GetMarket/1337_DOGE
+		// cryptopia.co.nz/api/GetMarket/1337_DOGE
 		x.timestamp = System.currentTimeMillis();
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("Data"));
 		x.bid = tickerJsonObject.getDouble("BidPrice");
@@ -261,11 +245,11 @@ public class TickerFormat {
 	}
 
 	public static void dsxFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//dsx.uk/mapi/ticker/btcusd
+		// dsx.uk/mapi/ticker/btcusd
 		String[] str = jsonObject.toString().split("\\{");
 		String jsonStr = ("{" + str[2]).substring(0, ("{" + str[2]).length() - 1);
 		JSONObject tickerJsonObject = JSON.parseObject(jsonStr);
-		x.timestamp = tickerJsonObject.getLong("updated")*1000;
+		x.timestamp = tickerJsonObject.getLong("updated") * 1000;
 		x.bid = tickerJsonObject.getDouble("buy");
 		x.ask = tickerJsonObject.getDouble("sell");
 		x.mid = (x.bid + x.ask) / 2;
@@ -278,7 +262,7 @@ public class TickerFormat {
 	}
 
 	public static void easycoinFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//easycoin.pl/BTCPLN/ticker.json
+		// easycoin.pl/BTCPLN/ticker.json
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -292,7 +276,7 @@ public class TickerFormat {
 	}
 
 	public static void gateFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//gate.io/api2/1/ticker/eth_usdt
+		// gate.io/api2/1/ticker/eth_usdt
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("highestBid");
 		x.ask = jsonObject.getDouble("lowestAsk");
@@ -307,7 +291,7 @@ public class TickerFormat {
 	}
 
 	private static void gdaxFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.hitbtc.com/api/2/public/ticker/BCHBTC
+		// api.hitbtc.com/api/2/public/ticker/BCHBTC
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -320,8 +304,23 @@ public class TickerFormat {
 		x = setToUSD(x);
 	}
 
+	private static void geminiFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		// api.gemini.com/v1/pubticker/btcusd
+		JSONObject volumeJsonObject = JSON.parseObject(jsonObject.getString("volume"));
+		x.timestamp = volumeJsonObject.getLong("timestamp");
+		x.bid = jsonObject.getDouble("bid");
+		x.ask = jsonObject.getDouble("ask");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = x.bid;
+		x.high = x.ask;
+		x.volume = volumeJsonObject.getDouble("USD");
+		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
+
 	public static void hitbtcFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.hitbtc.com/api/2/public/ticker/ICXBTC
+		// api.hitbtc.com/api/2/public/ticker/ICXBTC
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -335,7 +334,7 @@ public class TickerFormat {
 	}
 
 	private static void huobiFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.huobi.pro/market/detail/merged?symbol=btcusdt
+		// api.huobi.pro/market/detail/merged?symbol=btcusdt
 		// {"status":"ok","ch":"market.ethusdt.detail.merged","ts":1514547024042,"tick":{"amount":45957.304744189411111707,"open":668.510000000000000000,"close":720.000000000000000000,"high":745.000000000000000000,"id":880684657,"count":36712,"low":658.000000000000000000,"version":880684657,"ask":[720.000000000000000000,44.548320432738661691],"vol":32702954.096220878944713067540000000000000000,"bid":[719.430000000000000000,0.580000000000000000]}}
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("tick"));
 		x.timestamp = jsonObject.getLong("ts");
@@ -355,7 +354,7 @@ public class TickerFormat {
 	}
 
 	public static void korbitFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.korbit.co.kr/v1/ticker/detailed?currency_pair=bch_krw
+		// api.korbit.co.kr/v1/ticker/detailed?currency_pair=bch_krw
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -367,10 +366,10 @@ public class TickerFormat {
 		x.setExchangeType();
 		x = setToUSD(x);
 	}
-	
+
 	public static void krakenFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.kraken.com/0/public/Ticker?pair=bcheur
-		//API不稳定
+		// api.kraken.com/0/public/Ticker?pair=bcheur
+		// API不稳定
 		x.timestamp = System.currentTimeMillis();
 		JSONObject resultJsonObject = JSON.parseObject(jsonObject.getString("result"));
 		String tmp1 = resultJsonObject.toJSONString();
@@ -402,7 +401,7 @@ public class TickerFormat {
 	}
 
 	public static void livecoinFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//http://api.livecoin.net/exchange/ticker?currencyPair=PIVX/BTC
+		// api.livecoin.net/exchange/ticker?currencyPair=PIVX/BTC
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("best_bid");
 		x.ask = jsonObject.getDouble("best_ask");
@@ -416,8 +415,8 @@ public class TickerFormat {
 	}
 
 	public static void okcoinFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//okcoin.com/api/v1/ticker.do?symbol=btc_usd
-		x.timestamp = jsonObject.getLong("date")*1000;
+		// okcoin.com/api/v1/ticker.do?symbol=btc_usd
+		x.timestamp = jsonObject.getLong("date") * 1000;
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("ticker"));
 		x.bid = tickerJsonObject.getDouble("buy");
 		x.ask = tickerJsonObject.getDouble("sell");
@@ -431,8 +430,8 @@ public class TickerFormat {
 	}
 
 	public static void okexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//okex.com/api/v1/ticker.do?symbol=btc_ltc
-		x.timestamp = jsonObject.getLong("date")*1000;
+		// okex.com/api/v1/ticker.do?symbol=btc_ltc
+		x.timestamp = jsonObject.getLong("date") * 1000;
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("ticker"));
 		x.bid = tickerJsonObject.getDouble("buy");
 		x.ask = tickerJsonObject.getDouble("sell");
@@ -445,9 +444,27 @@ public class TickerFormat {
 		x = setToUSD(x);
 	}
 
+	private static void poloniexFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		// poloniex.com/public?command=returnOrderBook&currencyPair=BTC_XRP&depth=1
+		x.timestamp = System.currentTimeMillis();
+		String jsonA = jsonObject.get("bids").toString();
+		String[] bidss = jsonA.split("\"");
+		x.bid = Double.parseDouble(bidss[1]);
+		String asks_00 = jsonObject.get("asks").toString();
+		String[] askss = asks_00.split("\"");
+		x.ask = Double.parseDouble(askss[1]);
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("volume");
+		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
+
 	public static void quadrigacxFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.quadrigacx.com/v2/ticker?book=eth_cad
-		x.timestamp = jsonObject.getLong("timestamp")*1000;
+		// api.quadrigacx.com/v2/ticker?book=eth_cad
+		x.timestamp = jsonObject.getLong("timestamp") * 1000;
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
 		x.mid = (x.bid + x.ask) / 2;
@@ -460,7 +477,7 @@ public class TickerFormat {
 	}
 
 	public static void therocktradingFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.therocktrading.com/v1/funds/ZECBTC/ticker
+		// api.therocktrading.com/v1/funds/ZECBTC/ticker
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
@@ -474,8 +491,8 @@ public class TickerFormat {
 	}
 
 	public static void tidexFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.tidex.com/api/3/ticker/eth_usdt
-		//API不稳定
+		// api.tidex.com/api/3/ticker/eth_usdt
+		// API不稳定
 		String[] str = jsonObject.toString().split("\\{");
 		String jsonStr = ("{" + str[2]).substring(0, ("{" + str[2]).length() - 1);
 		JSONObject tickerJsonObject = JSON.parseObject(jsonStr);
@@ -499,7 +516,7 @@ public class TickerFormat {
 	}
 
 	public static void zaifFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		//api.zaif.jp/api/1/trades/xcp_jpy
+		// api.zaif.jp/api/1/trades/xcp_jpy
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");

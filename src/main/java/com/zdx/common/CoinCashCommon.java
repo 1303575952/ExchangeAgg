@@ -35,7 +35,9 @@ public class CoinCashCommon {
 		coinSet.add("ETH");
 		coinSet.add("EVX");
 		coinSet.add("GNT");
+		coinSet.add("HSR");
 		coinSet.add("INCENT");
+		coinSet.add("INK");
 		coinSet.add("INPAY");
 		coinSet.add("KNC");
 		coinSet.add("KOLION");
@@ -61,6 +63,7 @@ public class CoinCashCommon {
 		coinSet.add("SJCX");
 		coinSet.add("SNM");
 		coinSet.add("SNT");
+		coinSet.add("SRN");
 		coinSet.add("STA");
 		coinSet.add("STR");
 		coinSet.add("STEEM");
@@ -70,6 +73,7 @@ public class CoinCashCommon {
 		coinSet.add("TIME");
 		coinSet.add("TKS");
 		coinSet.add("TRCT");
+		coinSet.add("TRX");
 		coinSet.add("USDT");
 		coinSet.add("WAVES");
 		coinSet.add("WCT");
@@ -78,6 +82,7 @@ public class CoinCashCommon {
 		coinSet.add("WGR");
 		coinSet.add("XCP");
 		coinSet.add("XEM");
+		coinSet.add("XLM");
 		coinSet.add("XMR");
 		coinSet.add("XRP");
 		coinSet.add("ZEC");

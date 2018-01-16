@@ -21,6 +21,7 @@ public class ExchangeName {
 	public static String HUOBI = "huobi";
 	public static String KRAKEN = "kraken";
 	public static String KORBIT = "korbit";
+	public static String LIQUI = "liqui";
 	public static String LIVECOIN = "livecoin";
 	public static String OKCOIN = "okcoin";
 	public static String OKEX = "okex";
@@ -30,6 +31,7 @@ public class ExchangeName {
 	public static String TIDEX = "tidex";
 	public static String WEX = "wex";
 	public static String ZAIF = "zaif";
+	public static String ZB = "zb";
 	
 }
 

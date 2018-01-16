@@ -53,6 +53,8 @@ public class TickerFormat {
 			korbitFormat(jsonObject, x);
 		} else if (ExchangeName.KRAKEN.equals(exchangeName)) {
 			krakenFormat(jsonObject, x);
+		} else if (ExchangeName.LIQUI.equals(exchangeName)) {
+			liquiFormat(jsonObject, x);
 		} else if (ExchangeName.LIVECOIN.equals(exchangeName)) {
 			livecoinFormat(jsonObject, x);
 		} else if (ExchangeName.OKCOIN.equals(exchangeName)) {
@@ -71,6 +73,8 @@ public class TickerFormat {
 			wexFormat(jsonObject, x);
 		} else if (ExchangeName.ZAIF.equals(exchangeName)) {
 			zaifFormat(jsonObject, x);
+		} else if (ExchangeName.ZB.equals(exchangeName)) {
+			zbFormat(jsonObject, x);
 		}
 	}
 
@@ -414,6 +418,23 @@ public class TickerFormat {
 		x = setToUSD(x);
 	}
 
+	public static void liquiFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		// api.liqui.io/api/3/ticker/ltc_btc
+		String[] str = jsonObject.toString().split("\\{");
+		String jsonStr = ("{" + str[2]).substring(0, ("{" + str[2]).length() - 1);
+		JSONObject tickerJsonObject = JSON.parseObject(jsonStr);
+		x.timestamp = tickerJsonObject.getLong("updated") * 1000;
+		x.bid = tickerJsonObject.getDouble("buy");
+		x.ask = tickerJsonObject.getDouble("sell");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = tickerJsonObject.getDouble("low");
+		x.high = tickerJsonObject.getDouble("high");
+		x.volume = tickerJsonObject.getDouble("vol_cur");
+		x.lastPrice = tickerJsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
+	
 	public static void okcoinFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		// okcoin.com/api/v1/ticker.do?symbol=btc_usd
 		x.timestamp = jsonObject.getLong("date") * 1000;
@@ -525,6 +546,21 @@ public class TickerFormat {
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
 		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
+	
+	public static void zbFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		// api.zb.com/data/v1/ticker?market=qtum_usdt
+		x.timestamp = System.currentTimeMillis();
+		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("ticker"));
+		x.bid = tickerJsonObject.getDouble("buy");
+		x.ask = tickerJsonObject.getDouble("sell");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = tickerJsonObject.getDouble("low");
+		x.high = tickerJsonObject.getDouble("high");
+		x.volume = tickerJsonObject.getDouble("vol");
+		x.lastPrice = tickerJsonObject.getDouble("last");
 		x.setExchangeType();
 		x = setToUSD(x);
 	}

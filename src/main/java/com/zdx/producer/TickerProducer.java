@@ -111,8 +111,8 @@ public class TickerProducer {
 	public static void oneBatch(List<String> targetHostsLeft, List<List<String>> replaceListsLeft){
 		ParallelClient pc = new ParallelClient();		
 		ParallelTaskBuilder ptb = pc.prepareHttpGet("/$JOB_ID")
-				.setProtocol(RequestProtocol.HTTPS)
-				.setHttpPort(443)
+				.setProtocol(TickerProducerConf.httpProtocol)
+				.setHttpPort(TickerProducerConf.httpPort)
 				.setReplaceVarMapToMultipleTarget("JOB_ID", replaceListsLeft, targetHostsLeft)
 				.setResponseContext(RESPONSE_CONTEXT);
 		RESPONSE_CONTEXT.put("startTime", START_TIME);

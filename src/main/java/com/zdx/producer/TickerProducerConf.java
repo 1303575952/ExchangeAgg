@@ -11,6 +11,8 @@ import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
 import com.zdx.common.FileIO;
 
+import io.parallec.core.RequestProtocol;
+
 public class TickerProducerConf {
 	private static Logger logger = Logger.getLogger(TickerProducerConf.class);
 	public static HashMap<String, ArrayList<String>>  exchangeTickerListMap = new HashMap<String, ArrayList<String>>();
@@ -22,9 +24,9 @@ public class TickerProducerConf {
 	public static List<String> targetHosts = new ArrayList<String>();
 
 	public static List<List<String>> replaceLists = new ArrayList<List<String>>();
-	
+
 	public static ArrayList<String> tickerNames = new ArrayList<String>();
-	
+
 	public static String confFilePath = "";
 
 	public static int validInterval = Integer.MAX_VALUE;
@@ -34,6 +36,8 @@ public class TickerProducerConf {
 	public static String influxURL = "";
 	public static String influxDbName = "";
 	public static String influxRpName = "";
+	public static RequestProtocol httpProtocol = RequestProtocol.HTTPS;
+	public static int httpPort = 443;
 
 	public TickerProducerConf(){
 
@@ -51,6 +55,14 @@ public class TickerProducerConf {
 		influxURL = String.valueOf(j1.get("InfluxDBURL"));
 		influxDbName = String.valueOf(j1.get("InfluxDbName"));
 		influxRpName = String.valueOf(j1.get("InfluxRpName"));
+		if (j1.containsKey("HttpProtocol") && j1.getString("HttpProtocol").toLowerCase().equals("http")){
+			httpProtocol = RequestProtocol.HTTP;
+		} else if (j1.containsKey("HttpProtocol") && j1.getString("HttpProtocol").toLowerCase().equals("https")){
+			httpProtocol = RequestProtocol.HTTPS;
+		}
+		if (j1.containsKey("HttpPort")){
+			httpPort = j1.getIntValue("HttpPort");
+		}
 
 		String tickerConf = String.valueOf(j1.get("TickerConf"));
 		ArrayList<String> exchangeTickerList = JSON.parseObject(tickerConf, new TypeReference<ArrayList<String>>(){});

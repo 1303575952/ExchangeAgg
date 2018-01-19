@@ -4,6 +4,8 @@
     "InfluxDBURL": "http://123.207.232.38:8086",
     "InfluxDbName": "ticker",
     "InfluxRpName": "aRetentionPolicy",
+    "HttpProtocol": "https",
+    "HttpPort": 443,
     "TickerConf": [
         {
             "exchangeURL": "api.binance.com",

@@ -113,6 +113,8 @@ public class TickerProducerConf {
 				+ "influxURL = " + influxURL + "\n"
 				+ "influxDbName = " + influxDbName + "\n"
 				+ "influxRpName = " + influxRpName + "\n"
+				+ "httpProtocol = " + httpProtocol.toString() + "\n"
+				+ "httpPort = " + httpPort + "\n"
 				+ s1 + "\n" + s2 + "\n" + s3 + "\n" + s4 + "\n" + s5;
 	}
 }

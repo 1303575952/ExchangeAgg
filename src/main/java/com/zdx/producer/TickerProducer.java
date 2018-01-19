@@ -13,7 +13,6 @@ import com.zdx.common.JsonFormatTool;
 
 import io.parallec.core.ParallelClient;
 import io.parallec.core.ParallelTaskBuilder;
-import io.parallec.core.RequestProtocol;
 
 public class TickerProducer {
 	private static Logger logger = Logger.getLogger(TickerProducer.class);

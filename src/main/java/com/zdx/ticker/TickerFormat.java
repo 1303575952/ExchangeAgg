@@ -551,8 +551,8 @@ public class TickerFormat {
 	}
 	
 	public static void zbFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		// api.zb.com/data/v1/ticker?market=qtum_usdt
-		x.timestamp = System.currentTimeMillis();
+		// api.zb.com/data/v1/ticker?market=qtum_usdt		
+		x.timestamp = jsonObject.getLong("date");
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("ticker"));
 		x.bid = tickerJsonObject.getDouble("buy");
 		x.ask = tickerJsonObject.getDouble("sell");

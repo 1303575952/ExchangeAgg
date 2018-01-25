@@ -14,6 +14,7 @@ public class ExchangeName {
 	public static String COINROOM = "coinroom";
 	public static String DSX = "dsx";
 	public static String EASYCOIN = "easycoin";
+	public static String EXX = "exx";
 	public static String GATE = "gate";
 	public static String GDAX = "gdax";
 	public static String GEMINI = "gemini";

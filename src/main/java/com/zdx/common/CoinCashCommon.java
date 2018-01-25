@@ -17,12 +17,14 @@ public class CoinCashCommon {
 		coinSet.add("BCC");
 		coinSet.add("BCH");
 		coinSet.add("BCY");
+		coinSet.add("BOT");
 		coinSet.add("BTC");
 		coinSet.add("BTG");
 		coinSet.add("BMC");
 		coinSet.add("BNB");
 		coinSet.add("BTS");
 		coinSet.add("B@");
+		coinSet.add("CHAT");
 		coinSet.add("DASH");
 		coinSet.add("DOGE");
 		coinSet.add("DRCT");
@@ -35,6 +37,7 @@ public class CoinCashCommon {
 		coinSet.add("ETH");
 		coinSet.add("EVX");
 		coinSet.add("GNT");
+		coinSet.add("HPY");
 		coinSet.add("HSR");
 		coinSet.add("INCENT");
 		coinSet.add("INK");

@@ -35,6 +35,8 @@ public class TickerFormat {
 			coinoneFormat(jsonObject, x);
 		} else if (ExchangeName.COINROOM.equals(exchangeName)) {
 			coinroomFormat(jsonObject, x);
+		} else if (ExchangeName.CRYPTOPIA.equals(exchangeName)) {
+			cryptopiaFormat(jsonObject, x);
 		} else if (ExchangeName.DSX.equals(exchangeName)) {
 			dsxFormat(jsonObject, x);
 		} else if (ExchangeName.EASYCOIN.equals(exchangeName)) {
@@ -236,7 +238,7 @@ public class TickerFormat {
 	}
 
 	public static void cryptopiaFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		// cryptopia.co.nz/api/GetMarket/1337_DOGE
+		// www.cryptopia.co.nz/api/GetMarket/1337_DOGE
 		x.timestamp = System.currentTimeMillis();
 		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("Data"));
 		x.bid = tickerJsonObject.getDouble("BidPrice");

@@ -12,6 +12,7 @@ public class ExchangeName {
 	public static String CEXIO = "cex-io";
 	public static String COINONE = "coinone";
 	public static String COINROOM = "coinroom";
+	public static String CRYPTOPIA = "cryptopia";
 	public static String DSX = "dsx";
 	public static String EASYCOIN = "easycoin";
 	public static String EXX = "exx";

@@ -35,6 +35,8 @@ public class TickerFormat {
 			coinoneFormat(jsonObject, x);
 		} else if (ExchangeName.COINROOM.equals(exchangeName)) {
 			coinroomFormat(jsonObject, x);
+		} else if (ExchangeName.COOLCOIN.equals(exchangeName)) {
+			coolcoinFormat(jsonObject, x);
 		} else if (ExchangeName.CRYPTOPIA.equals(exchangeName)) {
 			cryptopiaFormat(jsonObject, x);
 		} else if (ExchangeName.DSX.equals(exchangeName)) {
@@ -236,7 +238,19 @@ public class TickerFormat {
 		x.setExchangeType();
 		x = setToUSD(x);
 	}
-
+	public static void coolcoinFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		// coolcoin.com/api/v1/ticker/
+		x.timestamp = System.currentTimeMillis();
+		x.bid = jsonObject.getDouble("buy");
+		x.ask = jsonObject.getDouble("sell");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = jsonObject.getDouble("low");
+		x.high = jsonObject.getDouble("high");
+		x.volume = jsonObject.getDouble("vol");
+		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
 	public static void cryptopiaFormat(JSONObject jsonObject, TickerStandardFormat x) {
 		// www.cryptopia.co.nz/api/GetMarket/1337_DOGE
 		x.timestamp = System.currentTimeMillis();

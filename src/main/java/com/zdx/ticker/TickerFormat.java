@@ -27,6 +27,8 @@ public class TickerFormat {
 			bitstampFormat(jsonObject, x);
 		} else if (ExchangeName.BITTREX.equals(exchangeName)) {
 			bittrexFormat(jsonObject, x);
+		} else if (ExchangeName.BITZ.equals(exchangeName)) {
+			bitzFormat(jsonObject, x);
 		} else if (ExchangeName.BTCALPHA.equals(exchangeName)) {
 			btcalphaFormat(jsonObject, x);
 		} else if (ExchangeName.CEXIO.equals(exchangeName)) {
@@ -186,6 +188,21 @@ public class TickerFormat {
 		x.high = jsonObject.getDouble("high");
 		x.volume = jsonObject.getDouble("volume");
 		x.lastPrice = jsonObject.getDouble("last");
+		x.setExchangeType();
+		x = setToUSD(x);
+	}
+	
+	public static void bitzFormat(JSONObject jsonObject, TickerStandardFormat x) {
+		// bit-z.com/api_v1/ticker?coin=mzc_btc
+		JSONObject tickerJsonObject = JSON.parseObject(jsonObject.getString("data"));
+		x.timestamp = tickerJsonObject.getLong("date") * 1000;
+		x.bid = tickerJsonObject.getDouble("buy");
+		x.ask = tickerJsonObject.getDouble("sell");
+		x.mid = (x.bid + x.ask) / 2;
+		x.low = tickerJsonObject.getDouble("low");
+		x.high = tickerJsonObject.getDouble("high");
+		x.volume = tickerJsonObject.getDouble("vol");
+		x.lastPrice = tickerJsonObject.getDouble("last");
 		x.setExchangeType();
 		x = setToUSD(x);
 	}

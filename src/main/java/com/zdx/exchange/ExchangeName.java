@@ -8,6 +8,7 @@ public class ExchangeName {
 	public static String BITSO = "bitso";
 	public static String BITSTAMP = "bitstamp";
 	public static String BITTREX = "bittrex";
+	public static String BITZ = "bitz";
 	public static String BTCALPHA = "btc-alpha";
 	public static String CEXIO = "cex-io";
 	public static String COINONE = "coinone";

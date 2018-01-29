@@ -23,6 +23,7 @@ public class CoinCashCommon {
 		coinSet.add("BMC");
 		coinSet.add("BNB");
 		coinSet.add("BTS");
+		coinSet.add("BTX");
 		coinSet.add("B@");
 		coinSet.add("CHAT");
 		coinSet.add("DASH");
@@ -37,7 +38,9 @@ public class CoinCashCommon {
 		coinSet.add("ETH");
 		coinSet.add("ETN");
 		coinSet.add("EVX");
+		coinSet.add("FCT");
 		coinSet.add("GNT");
+		coinSet.add("GXS");
 		coinSet.add("HPY");
 		coinSet.add("HSR");
 		coinSet.add("INCENT");
@@ -46,8 +49,10 @@ public class CoinCashCommon {
 		coinSet.add("KBR");
 		coinSet.add("KNC");
 		coinSet.add("KOLION");
+		coinSet.add("LSK");
 		coinSet.add("LTC");
 		coinSet.add("LUX");
+		coinSet.add("MCO");
 		coinSet.add("MER");
 		coinSet.add("MGO");
 		coinSet.add("MONA");
@@ -64,6 +69,7 @@ public class CoinCashCommon {
 		coinSet.add("PPC");
 		coinSet.add("PRG");
 		coinSet.add("PROC");
+		coinSet.add("PUT");
 		coinSet.add("QRL");
 		coinSet.add("QTUM");
 		coinSet.add("RBX");
@@ -82,11 +88,13 @@ public class CoinCashCommon {
 		coinSet.add("TRCT");
 		coinSet.add("TRX");
 		coinSet.add("USDT");
+		coinSet.add("VIU");
 		coinSet.add("WAVES");
 		coinSet.add("WCT");
 		coinSet.add("WGE");
 		coinSet.add("WGO");
 		coinSet.add("WGR");
+		coinSet.add("XAS");
 		coinSet.add("XCP");
 		coinSet.add("XEM");
 		coinSet.add("XLM");
@@ -95,6 +103,7 @@ public class CoinCashCommon {
 		coinSet.add("ZCL");
 		coinSet.add("ZEC");
 		coinSet.add("ZRC");
+		coinSet.add("ZSC");
 		
 		
 		return coinSet;

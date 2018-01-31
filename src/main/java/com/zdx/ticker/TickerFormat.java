@@ -31,7 +31,7 @@ public class TickerFormat {
 			bitzFormat(jsonObject, x);
 		} else if (ExchangeName.BTCALPHA.equals(exchangeName)) {
 			btcalphaFormat(jsonObject, x);
-		} else if (ExchangeName.CEXIO.equals(exchangeName)) {
+		} else if (ExchangeName.CEX.equals(exchangeName)) {
 			cexFormat(jsonObject, x);
 		} else if (ExchangeName.COINONE.equals(exchangeName)) {
 			coinoneFormat(jsonObject, x);
@@ -340,18 +340,17 @@ public class TickerFormat {
 		x.volume = jsonObject.getDouble("baseVolume");
 		x.lastPrice = jsonObject.getDouble("last");
 		x.setExchangeType();
-		logger.info("x.exchangetype:" + x.exchangeType);
 		x = setToUSD(x);
 	}
 
 	private static void gdaxFormat(JSONObject jsonObject, TickerStandardFormat x) {
-		// api.hitbtc.com/api/2/public/ticker/BCHBTC
+		// api.gdax.com/products/BTC-USD/ticker
 		x.timestamp = System.currentTimeMillis();
 		x.bid = jsonObject.getDouble("bid");
 		x.ask = jsonObject.getDouble("ask");
 		x.mid = (x.bid + x.ask) / 2;
-		x.low = jsonObject.getDouble("low");
-		x.high = jsonObject.getDouble("high");
+		x.low = 0.0;
+		x.high = 0.0;
 		x.volume = jsonObject.getDouble("volume");
 		x.lastPrice = jsonObject.getDouble("price");
 		x.setExchangeType();

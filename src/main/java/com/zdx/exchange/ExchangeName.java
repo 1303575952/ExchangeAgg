@@ -10,7 +10,7 @@ public class ExchangeName {
 	public static String BITTREX = "bittrex";
 	public static String BITZ = "bitz";
 	public static String BTCALPHA = "btc-alpha";
-	public static String CEXIO = "cex-io";
+	public static String CEX = "cex";
 	public static String COINONE = "coinone";
 	public static String COINROOM = "coinroom";
 	public static String COOLCOIN = "coolcoin";

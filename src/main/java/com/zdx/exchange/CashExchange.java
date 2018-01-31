@@ -14,6 +14,7 @@ public class CashExchange {
 		priceToUSD.put("CAD", 0.7813);
 		priceToUSD.put("CNY", 0.1512);
 		priceToUSD.put("EUR", 1.1941);
+		priceToUSD.put("GBP", 1.3996);
 		priceToUSD.put("JPY", 0.008892);
 		priceToUSD.put("KRW", 0.000939);
 		priceToUSD.put("MXN", 0.05259);
